@@ -182,3 +182,6 @@ npm run lib
 ## License
 
 [MIT](LICENSE) © 2019-present, Xu Liangzhan
+
+
+#### 注意vscode使用volar插件格式化和禁用prettier插件校验

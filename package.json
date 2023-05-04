@@ -98,5 +98,11 @@
   "bugs": {
     "url": "https://github.com/x-extends/vxe-table/issues"
   },
-  "homepage": "https://vxetable.cn/"
+  "homepage": "https://vxetable.cn/",
+  "dependencies": {
+    "highlight.js": "^11.8.0",
+    "pinia": "^2.0.35",
+    "vxe-table": "^4.3.13-beta.1",
+    "xe-clipboard": "^1.10.2"
+  }
 }

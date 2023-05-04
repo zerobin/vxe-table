@@ -77,8 +77,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeGridProps, VxeGridInstance } from '../../../../types/index'
+import { VXETable, VxeGridProps, VxeGridInstance } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -87,14 +86,16 @@ export default defineComponent({
       selectRow: null
     })
 
-    const xGrid = ref({} as VxeGridInstance)
+    const xGrid = ref<VxeGridInstance>()
 
     const gridOptions = reactive({
       border: true,
-      resizable: true,
       showOverflow: true,
       loading: false,
       height: 400,
+      columnConfig: {
+        resizable: true
+      },
       toolbarConfig: {
         custom: true,
         slots: {
@@ -143,8 +144,8 @@ export default defineComponent({
       VXETable.modal.alert(`address点击事件：${row.address}`)
     }
 
-    const changeFilterEvent = (evnt: Event, option: any, $panel: any) => {
-      $panel.changeOption(evnt, !!option.data, option)
+    const changeFilterEvent = (event: Event, option: any, $panel: any) => {
+      $panel.changeOption(event, !!option.data, option)
     }
 
     const mockList = (size: number): Promise<any[]> => {
@@ -158,7 +159,7 @@ export default defineComponent({
             age: 18,
             num2: 234,
             rate: 3,
-            img1: '/vxe-table/static/other/img1.gif',
+            img1: 'https://5b0988e595225.cdn.sohucs.com/images/20181014/dce7cdaa130440e8b609fad083877ef3.gif',
             html2: `<span style="color:red">HTML标签${index}</span>`,
             address: `test abc系列${index}`
           })
@@ -261,14 +262,16 @@ export default defineComponent({
               selectRow: null
             })
 
-            const xGrid = ref({} as VxeGridInstance)
+            const xGrid = ref<VxeGridInstance>()
 
             const gridOptions = reactive({
               border: true,
-              resizable: true,
               showOverflow: true,
               loading: false,
               height: 400,
+              columnConfig: {
+                resizable: true
+              },
               toolbarConfig: {
                 custom: true,
                 slots: {
@@ -317,8 +320,8 @@ export default defineComponent({
               VXETable.modal.alert(\`address点击事件：\${row.address}\`)
             }
 
-            const changeFilterEvent = (evnt: Event, option: any, $panel: any) => {
-              $panel.changeOption(evnt, !!option.data, option)
+            const changeFilterEvent = (event: Event, option: any, $panel: any) => {
+              $panel.changeOption(event, !!option.data, option)
             }
 
             const mockList = (size: number): Promise<any[]> => {
@@ -332,7 +335,7 @@ export default defineComponent({
                     age: 18,
                     num2: 234,
                     rate: 3,
-                    img1: '/vxe-table/static/other/img1.gif',
+                    img1: 'https://5b0988e595225.cdn.sohucs.com/images/20181014/dce7cdaa130440e8b609fad083877ef3.gif',
                     html2: \`<span style="color:red">HTML标签\${index}</span>\`,
                     address: \`test abc系列\${index}\`
                   })

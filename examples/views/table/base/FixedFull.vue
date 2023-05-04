@@ -4,9 +4,9 @@
 
     <vxe-table
       border
-      resizable
       height="300"
-      highlight-hover-row
+      :column-config="{resizable: true}"
+      :row-config="{isHover: true}"
       :data="demo1.tableData">
       <vxe-column type="seq" width="60" fixed="left"></vxe-column>
       <vxe-column field="name" title="Name" width="300"></vxe-column>
@@ -43,8 +43,8 @@
       border
       ref="xTable2"
       height="300"
-      highlight-hover-row
       show-overflow
+      :row-config="{isHover: true}"
       :data="demo2.tableData">
       <vxe-column type="seq" width="60" :fixed="demo2.colFixeds.col0"></vxe-column>
       <vxe-column field="name" title="Name" width="300" :fixed="demo2.colFixeds.col1"></vxe-column>
@@ -103,7 +103,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance } from '../../../../types/index'
+import { VxeTableInstance } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -169,17 +169,19 @@ export default defineComponent({
       ]
     })
 
-    const xTable2 = ref({} as VxeTableInstance)
+    const xTable2 = ref<VxeTableInstance>()
 
     const toggleFixedColumn = (index: number, type: 'left' | 'right') => {
       const $table = xTable2.value
-      const tableColumns = $table.getColumns()
-      const fxColumn = tableColumns[index]
-      if (fxColumn) {
-        fxColumn.fixed = fxColumn.fixed ? null : type
+      if ($table) {
+        const tableColumns = $table.getColumns()
+        const fxColumn = tableColumns[index]
+        if (fxColumn) {
+          fxColumn.fixed = fxColumn.fixed ? null : type
+        }
+        // 刷新列
+        $table.refreshColumn()
       }
-      // 刷新列
-      $table.refreshColumn()
     }
 
     const demo3 = reactive({
@@ -223,9 +225,9 @@ export default defineComponent({
         `
         <vxe-table
           border
-          resizable
           height="300"
-          highlight-hover-row
+          :column-config="{resizable: true}"
+          :row-config="{isHover: true}"
           :data="demo1.tableData">
           <vxe-column type="seq" width="60" fixed="left"></vxe-column>
           <vxe-column field="name" title="Name" width="300"></vxe-column>
@@ -290,8 +292,8 @@ export default defineComponent({
           border
           ref="xTable2"
           height="300"
-          highlight-hover-row
           show-overflow
+          :row-config="{isHover: true}"
           :data="demo2.tableData">
           <vxe-column type="seq" width="60" :fixed="demo2.colFixeds.col0"></vxe-column>
           <vxe-column field="name" title="Name" width="300" :fixed="demo2.colFixeds.col1"></vxe-column>
@@ -343,7 +345,7 @@ export default defineComponent({
               ]
             })
 
-            const xTable2 = ref({} as VxeTableInstance)
+            const xTable2 = ref<VxeTableInstance>()
 
             const toggleFixedColumn = (index: number, type: 'left' | 'right') => {
               const $table = xTable2.value

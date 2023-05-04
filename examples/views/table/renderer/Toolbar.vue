@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      工具栏-左侧按钮 <grid-api-link prop="buttonRender"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/master/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
+      工具栏-左侧按钮 <grid-api-link prop="buttonRender"/>，查看 <a class="link" href="https://github.com/x-extends/vxe-table-docs/tree/main/v4/src/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
       renderToolbarButton (renderOpts: any, params: { button, $table }) 左侧按钮<br>
       renderToolbarTool (renderOpts: any, params: { tool, $table }) 右侧工具<br>
@@ -9,9 +9,9 @@
 
     <vxe-grid
       border
-      resizable
       ref="xGrid"
       height="400"
+      :column-config="{resizable: true}"
       :export-config="{}"
       :toolbar-config="demo1.tableToolbar"
       :proxy-config="demo1.tableProxy"
@@ -30,11 +30,11 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeGridInstance } from '../../../../types/index'
+import { VxeGridInstance } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xGrid = ref({} as VxeGridInstance)
+    const xGrid = ref<VxeGridInstance>()
 
     const findList = () => {
       return new Promise(resolve => {
@@ -56,7 +56,9 @@ export default defineComponent({
 
     const btnDownEvent = () => {
       const $grid = xGrid.value
-      $grid.exportData()
+      if ($grid) {
+        $grid.exportData()
+      }
     }
 
     const demo1 = reactive({
@@ -71,12 +73,12 @@ export default defineComponent({
         export: true,
         custom: true,
         buttons: [
-          { name: '刷新', code: 'reload', icon: 'fa fa-refresh' },
-          { name: '自定义1', code: 'custom1', icon: 'fa fa-bell' },
+          { name: '刷新', code: 'reload', icon: 'vxe-icon-question-circle-fill' },
+          { name: '自定义1', code: 'custom1', icon: 'vxe-icon-question-circle-fill' },
           { buttonRender: { name: 'ToolbarButtonDownload', events: { click: btnDownEvent } } }
         ],
         tools: [
-          { name: '自定义2', code: 'custom2', icon: 'fa fa-bug' },
+          { name: '自定义2', code: 'custom2', icon: 'vxe-icon-question-circle-fill' },
           { toolRender: { name: 'ToolbarToolPrint' } }
         ]
       },
@@ -99,13 +101,11 @@ export default defineComponent({
           renderToolbarButton (renderOpts, params) {
             const { events = {} } = renderOpts
             const { button } = params
-            return [
-              <vxe-button circle icon="fa fa-cloud-download" onClick={
-                () => {
-                  events.click(button)
-                }
-              }></vxe-button>
-            ]
+            return <vxe-button circle icon="vxe-icon-question-circle-fill" onClick={
+              () => {
+                events.click(button)
+              }
+            }></vxe-button>
           }
         })
 
@@ -113,22 +113,20 @@ export default defineComponent({
         VXETable.renderer.add('ToolbarToolPrint', {
           renderToolbarTool (renderOpts, params) {
             const { $table } = params
-            return [
-              <vxe-button circle icon="fa fa-print" onClick={
-                () => {
-                  $table.print()
-                }
-              }></vxe-button>
-            ]
+            return <vxe-button circle icon="vxe-icon-question-circle-fill" onClick={
+              () => {
+                $table.print()
+              }
+            }></vxe-button>
           }
         })
         `,
         `
         <vxe-grid
           border
-          resizable
           ref="xGrid"
           height="400"
+          :column-config="{resizable: true}"
           :export-config="{}"
           :toolbar-config="tableToolbar"
           :proxy-config="tableProxy"
@@ -141,7 +139,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xGrid = ref({} as VxeGridInstance)
+            const xGrid = ref<VxeGridInstance>()
 
             const findList = () => {
               return new Promise(resolve => {
@@ -178,12 +176,12 @@ export default defineComponent({
                 export: true,
                 custom: true,
                 buttons: [
-                  { name: '刷新', code: 'reload', icon: 'fa fa-refresh' },
-                  { name: '自定义1', code: 'custom1', icon: 'fa fa-bell' },
+                  { name: '刷新', code: 'reload', icon: 'vxe-icon-question-circle-fill' },
+                  { name: '自定义1', code: 'custom1', icon: 'vxe-icon-question-circle-fill' },
                   { buttonRender: { name: 'ToolbarButtonDownload', events: { click: btnDownEvent } } }
                 ],
                 tools: [
-                  { name: '自定义2', code: 'custom2', icon: 'fa fa-bug' },
+                  { name: '自定义2', code: 'custom2', icon: 'vxe-icon-question-circle-fill' },
                   { toolRender: { name: 'ToolbarToolPrint' } }
                 ]
               },

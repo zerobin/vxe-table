@@ -12,20 +12,37 @@
 
     <vxe-table
       border
-      resizable
       show-overflow
       keep-source
       ref="xTable"
       height="400"
+      :column-config="{resizable: true}"
       :loading="demo1.loading"
       :data="demo1.tableData"
       :menu-config="demo1.tableMenu"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @menu-click="contextMenuClickEvent">
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{autofocus: '.myinput'}">
+        <template #edit="{ row }">
+          <input v-model="row.name" type="text" class="myinput" />
+        </template>
+      </vxe-column>
+      <vxe-column field="sex" title="Sex" :edit-render="{}">
+        <template #default="{ row }">
+          <span>{{ formatSex(row.sex) }}</span>
+        </template>
+        <template #edit="{ row }">
+          <vxe-select v-model="row.sex" transfer>
+            <vxe-option v-for="item in demo1.sexList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+          </vxe-select>
+        </template>
+      </vxe-column>
+      <vxe-column field="age" title="Age" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.age" type="number"></vxe-input>
+        </template>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -39,12 +56,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTablePropTypes, VxeTableEvents } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeTablePropTypes, VxeTableEvents } from 'vxe-table'
+import XEClipboard from 'xe-clipboard'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const demo1 = reactive({
       loading: false,
@@ -61,11 +78,11 @@ export default defineComponent({
         body: {
           options: [
             [
-              { code: 'copy', name: '复制', prefixIcon: 'fa fa-copy', disabled: false },
+              { code: 'copy', name: '复制', prefixIcon: 'vxe-icon-question-circle-fill', disabled: false },
               { code: 'reload', name: '刷新', disabled: false },
               { code: 'insertAt', name: '插入', disabled: false },
               { code: 'remove', name: '删除', disabled: false },
-              { code: 'save', name: '保存', prefixIcon: 'fa fa-save', disabled: false }
+              { code: 'save', name: '保存', prefixIcon: 'vxe-icon-question-circle-fill', disabled: false }
             ]
           ]
         },
@@ -78,8 +95,22 @@ export default defineComponent({
           })
           return true
         }
-      } as VxeTablePropTypes.MenuConfig
+      } as VxeTablePropTypes.MenuConfig,
+      sexList: [
+        { label: '女', value: '0' },
+        { label: '男', value: '1' }
+      ]
     })
+
+    const formatSex = (value: any) => {
+      if (value === '1') {
+        return '男'
+      }
+      if (value === '0') {
+        return '女'
+      }
+      return ''
+    }
 
     const findList = () => {
       demo1.loading = true
@@ -104,50 +135,60 @@ export default defineComponent({
 
     const contextMenuClickEvent: VxeTableEvents.MenuClick = ({ menu, row, column }) => {
       const $table = xTable.value
-      switch (menu.code) {
-        case 'hideColumn':
-          $table.hideColumn(column)
-          break
-        case 'showAllColumn':
-          $table.resetColumn(true)
-          break
-        case 'copy':
-          VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
-          break
-        case 'reload':
-          findList()
-          break
-        case 'insertAt':
-          $table.insertAt({}, row || -1).then(({ row }) => {
-            $table.setActiveCell(row, column || 'name')
-          })
-          break
-        case 'remove':
-          $table.remove(row)
-          break
-        case 'save':
-          VXETable.modal.message({ content: '保存成功', status: 'success' })
-          findList()
-          break
+      if ($table) {
+        switch (menu.code) {
+          case 'hideColumn':
+            $table.hideColumn(column)
+            break
+          case 'showAllColumn':
+            $table.resetColumn(true)
+            break
+          case 'copy':
+            if (XEClipboard.copy(row[column.field])) {
+              VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
+            }
+            break
+          case 'reload':
+            findList()
+            break
+          case 'insertAt':
+            $table.insertAt({}, row || -1).then(({ row }) => {
+              $table.setEditCell(row, column || 'name')
+            })
+            break
+          case 'remove':
+            $table.remove(row)
+            break
+          case 'save':
+            VXETable.modal.message({ content: '保存成功', status: 'success' })
+            findList()
+            break
+        }
       }
     }
 
     const getInsertEvent = () => {
       const $table = xTable.value
-      const insertRecords = $table.getInsertRecords()
-      VXETable.modal.alert(insertRecords.length)
+      if ($table) {
+        const insertRecords = $table.getInsertRecords()
+        VXETable.modal.alert(insertRecords.length)
+      }
     }
 
     const getRemoveEvent = () => {
       const $table = xTable.value
-      const removeRecords = $table.getRemoveRecords()
-      VXETable.modal.alert(removeRecords.length)
+      if ($table) {
+        const removeRecords = $table.getRemoveRecords()
+        VXETable.modal.alert(removeRecords.length)
+      }
     }
 
     const getUpdateEvent = () => {
       const $table = xTable.value
-      const updateRecords = $table.getUpdateRecords()
-      VXETable.modal.alert(updateRecords.length)
+      if ($table) {
+        const updateRecords = $table.getUpdateRecords()
+        VXETable.modal.alert(updateRecords.length)
+      }
     }
 
     findList()
@@ -155,6 +196,7 @@ export default defineComponent({
     return {
       demo1,
       xTable,
+      formatSex,
       contextMenuClickEvent,
       getInsertEvent,
       getRemoveEvent,
@@ -171,29 +213,47 @@ export default defineComponent({
 
         <vxe-table
           border
-          resizable
           show-overflow
           keep-source
           ref="xTable"
           height="400"
+          :column-config="{resizable: true}"
           :loading="demo1.loading"
           :data="demo1.tableData"
           :menu-config="demo1.tableMenu"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @menu-click="contextMenuClickEvent">
           <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{autofocus: '.myinput'}">
+            <template #edit="{ row }">
+              <input v-model="row.name" type="text" class="myinput" />
+            </template>
+          </vxe-column>
+          <vxe-column field="sex" title="Sex" :edit-render="{}">
+            <template #default="{ row }">
+              <span>{{ formatSex(row.sex) }}</span>
+            </template>
+            <template #edit="{ row }">
+              <vxe-select v-model="row.sex" transfer>
+                <vxe-option v-for="item in demo1.sexList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+              </vxe-select>
+            </template>
+          </vxe-column>
+          <vxe-column field="age" title="Age" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.age" type="number"></vxe-input>
+            </template>
+          </vxe-column>
         </vxe-table>
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
         import { VXETable, VxeTableInstance, VxeTablePropTypes, VxeTableEvents } from 'vxe-table'
+        import XEClipboard from 'xe-clipboard'
 
         export default defineComponent({
           setup () {
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const demo1 = reactive({
               loading: false,
@@ -210,11 +270,11 @@ export default defineComponent({
                 body: {
                   options: [
                     [
-                      { code: 'copy', name: '复制', prefixIcon: 'fa fa-copy', disabled: false },
+                      { code: 'copy', name: '复制', prefixIcon: 'vxe-icon-question-circle-fill', disabled: false },
                       { code: 'reload', name: '刷新', disabled: false },
                       { code: 'insertAt', name: '插入', disabled: false },
                       { code: 'remove', name: '删除', disabled: false },
-                      { code: 'save', name: '保存', prefixIcon: 'fa fa-save', disabled: false }
+                      { code: 'save', name: '保存', prefixIcon: 'vxe-icon-question-circle-fill', disabled: false }
                     ]
                   ]
                 },
@@ -229,6 +289,16 @@ export default defineComponent({
                 }
               } as VxeTablePropTypes.MenuConfig
             })
+
+            const formatSex = (value: any) => {
+              if (value === '1') {
+                return '男'
+              }
+              if (value === '0') {
+                return '女'
+              }
+              return ''
+            }
 
             const findList = () => {
               demo1.loading = true
@@ -261,14 +331,16 @@ export default defineComponent({
                   $table.resetColumn(true)
                   break
                 case 'copy':
-                  VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
+                  if (XEClipboard.copy(row[column.field])) {
+                    VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
+                  }
                   break
                 case 'reload':
                   findList()
                   break
                 case 'insertAt':
                   $table.insertAt({}, row || -1).then(({ row }) => {
-                    $table.setActiveCell(row, column || 'name')
+                    $table.setEditCell(row, column || 'name')
                   })
                   break
                 case 'remove':
@@ -304,6 +376,7 @@ export default defineComponent({
             return {
               demo1,
               xTable,
+              formatSex,
               contextMenuClickEvent,
               getInsertEvent,
               getRemoveEvent,

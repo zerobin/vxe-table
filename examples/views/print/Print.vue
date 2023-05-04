@@ -2,134 +2,135 @@
   <div>
     <p class="tip">
       高级打印，可以将任意视图的 HTML 片段输出打印<br>
-      给 vue 实例挂载属性：<br>
-      app.config.globalProperties.$XPrint = VXETable.print<br>
     </p>
 
-    <vxe-toolbar ref="xToolbar" print>
-      <template #buttons>
-        <vxe-button content="打印表格" @click="printEvent1"></vxe-button>
-        <vxe-button content="打印勾选行" @click="printSelectEvent1"></vxe-button>
+    <h3>{{ $t('表格打印') }}</h3>
+    <demo-block>
+      <template v-slot:source>
+        <vxe-toolbar ref="xToolbar" print>
+          <template #buttons>
+            <vxe-button content="打印表格" @click="printEvent1"></vxe-button>
+            <vxe-button content="打印勾选行" @click="printSelectEvent1"></vxe-button>
+          </template>
+        </vxe-toolbar>
+
+        <vxe-table
+          border
+          ref="xTable"
+          height="300"
+          :print-config="{}"
+          :data="demo1.tableData">
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address"></vxe-column>
+        </vxe-table>
       </template>
-    </vxe-toolbar>
+      <template v-slot:highlight>
+        <pre>
+        <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+        <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      </pre></template>
+    </demo-block>
 
-    <vxe-table
-      border
-      ref="xTable"
-      height="300"
-      :print-config="{}"
-      :data="demo1.tableData">
-      <vxe-column type="checkbox" width="60"></vxe-column>
-      <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-column field="name" title="Name"></vxe-column>
-      <vxe-column field="role" title="Role"></vxe-column>
-      <vxe-column field="age" title="Age"></vxe-column>
-      <vxe-column field="address" title="Address"></vxe-column>
-    </vxe-table>
-
-    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+    <!-- <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
       <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
-    </pre>
+    </pre> -->
 
-    <p class="tip">打印 HTML 元素</p>
+    <h3>{{ $t('HTML打印') }}</h3>
+    <demo-block>
+      <template v-slot:source>
+        <vxe-toolbar>
+          <template #buttons>
+            <vxe-button content="打印下面的区域" @click="printEvent5"></vxe-button>
+          </template>
+        </vxe-toolbar>
 
-    <vxe-toolbar>
-      <template #buttons>
-        <vxe-button content="打印下面的区域" @click="printEvent5"></vxe-button>
+        <div id="myPrint5">
+          <div>
+            <p>将当前渲染的<span style="color: #20f320">内容</span>打印出来，仅<span style="color: blue;font-size: 20px">打印</span>内联<span style="color: red">样式</span></p>
+            <p>内容<span style="font-size: 30px;font-weight: 700">区域</span></p>
+          </div>
+        </div>
       </template>
-    </vxe-toolbar>
+      <template v-slot:highlight>
+        <pre>
+        <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+        <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      </pre></template>
+    </demo-block>
 
-    <div id="myPrint5">
-      <div>
-        <p>将当前渲染的<span style="color: #20f320">内容</span>打印出来，仅<span style="color: blue;font-size: 20px">打印</span>内联<span style="color: red">样式</span></p>
-        <p>内容<span style="font-size: 30px;font-weight: 700">区域</span></p>
-      </div>
-    </div>
-
-    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+    <!-- <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
       <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
       <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
-    </pre>
+    </pre> -->
 
-    <p class="tip">打印条形码：先用第三方 <a class="link" href="https://www.npmjs.com/package/jsbarcode" target="_blank">jsbarcode</a> 库生成条形码，再用打印模块输出打印</p>
-
-    <vxe-toolbar>
-      <template #buttons>
-        <vxe-button content="打印条形码" @click="printEvent2"></vxe-button>
+    <h3>{{ $t('自定义模板打印') }}</h3>
+    <demo-block>
+      <template v-slot:source>
+        <vxe-toolbar>
+          <template #buttons>
+            <vxe-button content="打印自定义模板" @click="printEvent4"></vxe-button>
+          </template>
+        </vxe-toolbar>
       </template>
-    </vxe-toolbar>
+      <template v-slot:highlight>
+        <pre>
+        <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
+        <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
+      </pre></template>
+    </demo-block>
 
-    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+    <!-- <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
       <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
       <pre-code class="typescript">{{ demoCodes[5] }}</pre-code>
-    </pre>
+    </pre> -->
 
-    <p class="tip">打印二维码：先用第三方 <a class="link" href="https://www.npmjs.com/package/qrcode" target="_blank">qrcode</a> 库生成二维码，再用打印模块输出打印</p>
+    <h3>{{ $t('图片打印') }}</h3>
+    <demo-block>
+      <template v-slot:source>
+        <vxe-toolbar>
+          <template #buttons>
+            <vxe-button content="打印图片" @click="printEvent6"></vxe-button>
+          </template>
+        </vxe-toolbar>
 
-    <vxe-toolbar>
-      <template #buttons>
-        <vxe-button content="打印二维码" @click="printEvent3"></vxe-button>
+        <img id="myPrint6" src="../../assets/image/invoice.png" style="width: 300px">
       </template>
-    </vxe-toolbar>
+      <template v-slot:highlight>
+        <pre>
+        <pre-code class="xml">{{ demoCodes[6] }}</pre-code>
+        <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
+      </pre></template>
+    </demo-block>
 
-    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+    <!-- <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
       <pre-code class="xml">{{ demoCodes[6] }}</pre-code>
       <pre-code class="typescript">{{ demoCodes[7] }}</pre-code>
-    </pre>
-
-    <p class="tip">打印自定义模板</p>
-
-    <vxe-toolbar>
-      <template #buttons>
-        <vxe-button content="打印自定义模板" @click="printEvent4"></vxe-button>
-      </template>
-    </vxe-toolbar>
-
-    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
-
-    <pre>
-      <pre-code class="xml">{{ demoCodes[8] }}</pre-code>
-      <pre-code class="typescript">{{ demoCodes[9] }}</pre-code>
-    </pre>
-
-    <p class="tip">打印图片</p>
-
-    <vxe-toolbar>
-      <template #buttons>
-        <vxe-button content="打印图片" @click="printEvent6"></vxe-button>
-      </template>
-    </vxe-toolbar>
-
-    <img id="myPrint6" src="/vxe-table/static/other/invoice.png" style="width: 300px">
-
-    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
-
-    <pre>
-      <pre-code class="xml">{{ demoCodes[10] }}</pre-code>
-      <pre-code class="typescript">{{ demoCodes[11] }}</pre-code>
-    </pre>
+    </pre> -->
 
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
-import { VXETable } from '../../../packages/all'
-import { VxeTableInstance, VxeToolbarInstance } from '../../../types/index'
+import { VXETable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
-    const xToolbar = ref({} as VxeToolbarInstance)
+    const xTable = ref<VxeTableInstance>()
+    const xToolbar = ref<VxeToolbarInstance>()
 
     // 打印样式
     const printStyle = `
@@ -202,114 +203,53 @@ export default defineComponent({
 
     const printEvent1 = () => {
       const $table = xTable.value
-      $table.print({
-        sheetName: '打印出货单据',
-        style: printStyle,
-        columns: [
-          { type: 'seq' },
-          { field: 'name' },
-          { field: 'role' },
-          { field: 'address' }
-        ],
-        beforePrintMethod: ({ content }) => {
-          // 拦截打印之前，返回自定义的 html 内容
-          return topHtml + content + bottomHtml
-        }
-      })
+      if ($table) {
+        $table.print({
+          sheetName: '打印出货单据',
+          style: printStyle,
+          columns: [
+            { type: 'seq' },
+            { field: 'name' },
+            { field: 'role' },
+            { field: 'address' }
+          ],
+          beforePrintMethod: ({ content }) => {
+            // 拦截打印之前，返回自定义的 html 内容
+            return topHtml + content + bottomHtml
+          }
+        })
+      }
     }
 
     const printSelectEvent1 = () => {
       const $table = xTable.value
-      $table.print({
-        sheetName: '打印勾选行',
-        style: printStyle,
-        mode: 'selected',
-        columns: [
-          { type: 'seq' },
-          { field: 'name' },
-          { field: 'role' },
-          { field: 'address' }
-        ],
-        beforePrintMethod: ({ content }) => {
-          // 拦截打印之前，返回自定义的 html 内容
-          return topHtml + content + bottomHtml
-        }
-      })
+      if ($table) {
+        $table.print({
+          sheetName: '打印勾选行',
+          style: printStyle,
+          mode: 'selected',
+          columns: [
+            { type: 'seq' },
+            { field: 'name' },
+            { field: 'role' },
+            { field: 'address' }
+          ],
+          beforePrintMethod: ({ content }) => {
+            // 拦截打印之前，返回自定义的 html 内容
+            return topHtml + content + bottomHtml
+          }
+        })
+      }
     }
 
     nextTick(() => {
       // 将表格和工具栏进行关联
       const $table = xTable.value
       const $toolbar = xToolbar.value
-      $table.connect($toolbar)
+      if ($table && $toolbar) {
+        $table.connect($toolbar)
+      }
     })
-
-    const codeList = [
-      { name: '某年xx1', price: 340, code: '1201545742000' },
-      { name: 'vue 开发指南', price: 99, code: '1271545042006' },
-      { name: 'test abc', price: 288, code: '1001545847781' },
-      { name: 'vue 进阶用法', price: 188, code: '1201511842009' },
-      { name: '某某xx2', price: 860, code: '1201543242003' },
-      { name: 'js 从入门到精通', price: 99, code: '1201775849605' },
-      { name: 'vxe-table pro test abc', price: 888, code: '1201775112606' },
-      { name: 'js 进阶宝典', price: 166, code: '1201775849608' }
-    ]
-
-    const printEvent2 = () => {
-      // 打印样式
-      const printStyle = `
-      .barcode {
-        display: inline-block;
-        width: 50%;
-        height: 240px;
-        float: left;
-        text-align: center;
-      }
-      `
-      // 打印模板
-      const printTmpls: string[] = []
-      codeList.forEach(item => {
-        const img = document.createElement('img')
-        // 生成条形码
-        const tmpl = `
-        <div class="barcode">
-          <p>${item.name}</p>
-          ${img.outerHTML}
-          <p>统一售价：￥${item.price}</p>
-        </div>
-        `
-        printTmpls.push(tmpl)
-      })
-      VXETable.print({
-        sheetName: '打印条形码模板',
-        style: printStyle,
-        content: printTmpls.join('')
-      })
-    }
-
-    const printEvent3 = () => {
-      // 打印样式
-      const printStyle = `
-      .title,
-      .qrcode {
-        text-align: center;
-      }
-      `
-      // 生成二维码
-      // 打印模板
-      const printTmpl = `
-      <p class="title">扫一扫二维码</p>
-      <div class="qrcode">
-        <img src="">
-        <div style="margin-top: 15px;">如果对您有帮助，点击右上角支持我们吧！</div>
-      </div>
-      `
-      VXETable.print({
-        sheetName: '打印二维码模板',
-        style: printStyle,
-        content: printTmpl
-      })
-    }
 
     const printEvent4 = () => {
       // 打印样式
@@ -471,8 +411,6 @@ export default defineComponent({
       demo1,
       printEvent1,
       printSelectEvent1,
-      printEvent2,
-      printEvent3,
       printEvent4,
       printEvent5,
       printEvent6,
@@ -505,8 +443,8 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTable = ref({} as VxeTableInstance)
-            const xToolbar = ref({} as VxeToolbarInstance)
+            const xTable = ref<VxeTableInstance>()
+            const xToolbar = ref<VxeToolbarInstance>()
 
             // 打印样式
             const printStyle = \`
@@ -659,111 +597,6 @@ export default defineComponent({
             }
             return {
               printEvent5
-            }
-          }
-        })
-        `,
-        `
-        <vxe-toolbar>
-          <template #buttons>
-            <vxe-button content="打印条形码" @click="printEvent2"></vxe-button>
-          </template>
-        </vxe-toolbar>
-        `,
-        `
-        import { defineComponent, reactive, ref } from 'vue'
-        import { VXETable } from 'vxe-table'
-
-        export default defineComponent({
-          setup () {
-            const codeList = [
-              { name: '某年xx1', price: 340, code: '1201545742000' },
-              { name: 'vue 开发指南', price: 99, code: '1271545042006' },
-              { name: 'test abc', price: 288, code: '1001545847781' },
-              { name: 'vue 进阶用法', price: 188, code: '1201511842009' },
-              { name: '某某xx2', price: 860, code: '1201543242003' },
-              { name: 'js 从入门到精通', price: 99, code: '1201775849605' },
-              { name: 'vxe-table pro test abc', price: 888, code: '1201775112606' },
-              { name: 'js 进阶宝典', price: 166, code: '1201775849608' }
-            ]
-
-            const printEvent2 = () => {
-              // 打印样式
-              const printStyle = \`
-              .barcode {
-                display: inline-block;
-                width: 50%;
-                height: 240px;
-                float: left;
-                text-align: center;
-              }
-              \`
-              // 打印模板
-              const printTmpls: string[] = []
-              codeList.forEach(item => {
-                const img = document.createElement('img')
-                // 生成条形码
-                const tmpl = \`
-                <div class="barcode">
-                  <p>\${item.name}</p>
-                  \${img.outerHTML}
-                  <p>统一售价：￥\${item.price}</p>
-                </div>
-                \`
-                printTmpls.push(tmpl)
-              })
-              VXETable.print({
-                sheetName: '打印条形码模板',
-                style: printStyle,
-                content: printTmpls.join('')
-              })
-            }
-
-            return {
-              printEvent2
-            }
-          }
-        })
-        `,
-        `
-        <vxe-toolbar>
-          <template #buttons>
-            <vxe-button content="打印二维码" @click="printEvent3"></vxe-button>
-          </template>
-        </vxe-toolbar>
-        `,
-        `
-        import { defineComponent, reactive, ref } from 'vue'
-        import { VXETable } from 'vxe-table'
-
-        export default defineComponent({
-          setup () {
-            const printEvent3 = () => {
-              // 打印样式
-              const printStyle = \`
-              .title,
-              .qrcode {
-                text-align: center;
-              }
-              \`
-              // 生成二维码
-              // 打印模板
-              const printTmpl = \`
-              <p class="title">扫一扫二维码</p>
-              <div class="qrcode">
-                <img src="">
-                <div style="margin-top: 15px;">如果对您有帮助，点击右上角支持我们吧！</div>
-              </div>
-              \`
-              VXETable.print({
-                sheetName: '打印二维码模板',
-                style: printStyle,
-                content: printTmpl
-              })
-            }
-
-            return {
-              printEvent3
             }
           }
         })
@@ -927,7 +760,7 @@ export default defineComponent({
           </template>
         </vxe-toolbar>
 
-        <img id="myPrint6" src="/vxe-table/static/other/invoice.png" style="width: 300px">
+        <img id="myPrint6" src="../../assets/image/invoice.png" style="width: 300px">
         `,
         `
         import { defineComponent } from 'vue'

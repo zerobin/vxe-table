@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      树表格的懒加载，通过配置 <table-api-link prop="row-id"/> 和 <table-api-link prop="tree-config"/>={<table-api-link prop="lazy"/>, <table-api-link prop="loadMethod"/>} 加载方法来开启树形懒加载<br>
+      树表格的懒加载，通过配置 <table-api-link prop="row-config"/>.<table-api-link prop="keyField"/> 和 <table-api-link prop="tree-config"/>={<table-api-link prop="lazy"/>, <table-api-link prop="loadMethod"/>} 加载方法来开启树形懒加载<br>
       当启用懒加载后，必须通过 <table-api-link prop="hasChild"/> 属性来标识是否存在子节点，从而控制该节点是否允许被点击<br>
       <span class="red">（注：懒加载启用后一次只允许异步加载一层根节点）</span>
     </p>
@@ -17,10 +17,10 @@
 
     <vxe-table
       border
-      resizable
       ref="xTree"
       :row-config="{keyField: 'id'}"
-      :tree-config="{lazy: true, hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
+      :column-config="{resizable: true}"
+      :tree-config="{transform: true, rowField: 'id', parentField: 'parentId', lazy: true, hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       :data="demo1.tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name" width="400" tree-node></vxe-column>
@@ -40,8 +40,8 @@
 
     <vxe-table
       border
-      resizable
       :row-config="{keyField: 'id'}"
+      :column-config="{resizable: true}"
       :loading="demo2.loading"
       :checkbox-config="{labelField: 'name'}"
       :tree-config="demo2.tableTree"
@@ -63,7 +63,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeTablePropTypes } from '../../../../types/index'
+import { VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -96,8 +96,8 @@ export default defineComponent({
         transform: true,
         hasChild: 'hasChild',
         expandRowKeys: [],
-        iconOpen: 'fa fa-minus-square-o',
-        iconClose: 'fa fa-plus-square-o',
+        iconOpen: 'vxe-icon-question-circle-fill',
+        iconClose: 'vxe-icon-question-circle-fill',
         loadMethod ({ row }) {
           // 异步加载子节点
           return new Promise(resolve => {
@@ -144,11 +144,12 @@ export default defineComponent({
 
         <vxe-table
           border
-          resizable
           ref="xTree"
-          row-id="id"
+          :row-config="{keyField: 'id'}"
+          :column-config="{resizable: true}"
           :tree-config="{transform: true, rowField: 'id', parentField: 'parentId', lazy: true, hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
           :data="demo1.tableData">
+          <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column field="name" title="Name" width="400" tree-node></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>
           <vxe-column field="type" title="Type"></vxe-column>
@@ -193,8 +194,8 @@ export default defineComponent({
         `
         <vxe-table
           border
-          resizable
-          row-id="id"
+          :row-config="{keyField: 'id'}"
+          :column-config="{resizable: true}"
           :loading="demo2.loading"
           :checkbox-config="{labelField: 'name'}"
           :tree-config="demo2.tableTree"
@@ -218,8 +219,8 @@ export default defineComponent({
                 transform: true,
                 hasChild: 'hasChild',
                 expandRowKeys: [],
-                iconOpen: 'fa fa-minus-square-o',
-                iconClose: 'fa fa-plus-square-o',
+                iconOpen: 'vxe-icon-question-circle-fill',
+                iconClose: 'vxe-icon-question-circle-fill',
                 loadMethod ({ row }) {
                   // 异步加载子节点
                   return new Promise(resolve => {

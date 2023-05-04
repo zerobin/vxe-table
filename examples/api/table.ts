@@ -406,6 +406,15 @@ const importDataAPI = [
     list: []
   },
   {
+    name: 'encoding',
+    desc: '导入的文件的编码类型',
+    version: '4.2.1',
+    type: 'string',
+    enum: '',
+    defVal: 'utf-8',
+    list: []
+  },
+  {
     name: 'remote',
     desc: '是否服务端导入',
     version: '',
@@ -529,8 +538,8 @@ const apis = [
       },
       {
         name: 'resizable',
-        abandoned: true,
-        descKey: 'app.api.table.desc.resizable',
+        disabled: true,
+        desc: '已废弃，被 column-config.resizable 替换',
         version: '',
         type: 'boolean',
         enum: '',
@@ -629,8 +638,8 @@ const apis = [
       },
       {
         name: 'highlight-current-row',
-        abandoned: true,
-        descKey: 'app.api.table.desc.highlightCurrentRow',
+        disabled: true,
+        desc: '已废弃，被 row-config.isCurrent 替换',
         version: '',
         type: 'boolean',
         enum: '',
@@ -639,8 +648,8 @@ const apis = [
       },
       {
         name: 'highlight-hover-row',
-        abandoned: true,
-        descKey: 'app.api.table.desc.highlightHoverRow',
+        disabled: true,
+        desc: '已废弃，被 row-config.isHover 替换',
         version: '',
         type: 'boolean',
         enum: '',
@@ -649,8 +658,8 @@ const apis = [
       },
       {
         name: 'highlight-current-column',
-        abandoned: true,
-        descKey: 'app.api.table.desc.highlightCurrentColumn',
+        disabled: true,
+        desc: '已废弃，被 column-config.isCurrent 替换',
         version: '',
         type: 'boolean',
         enum: '',
@@ -659,8 +668,8 @@ const apis = [
       },
       {
         name: 'highlight-hover-column',
-        abandoned: true,
-        descKey: 'app.api.table.desc.highlightHoverColumn',
+        disabled: true,
+        desc: '已废弃，被 column-config.isHover 替换',
         version: '',
         type: 'boolean',
         enum: '',
@@ -669,7 +678,7 @@ const apis = [
       },
       // {
       //   name: 'highlight-cell',
-      //   abandoned: true,
+      //   disabled: true,
       //   descKey: 'app.api.table.desc.highlightCell',
       //   version: '',
       //   type: 'boolean',
@@ -876,7 +885,8 @@ const apis = [
       },
       {
         name: 'column-key',
-        descKey: 'app.api.table.desc.columnKey',
+        disabled: true,
+        desc: '已废弃，被 column-config.useKey 替换',
         version: '',
         type: 'boolean',
         enum: '',
@@ -885,7 +895,8 @@ const apis = [
       },
       {
         name: 'row-key',
-        descKey: 'app.api.table.desc.rowKey',
+        disabled: true,
+        desc: '已废弃，被 row-config.useKey 替换',
         version: '',
         type: 'boolean',
         enum: '',
@@ -894,11 +905,12 @@ const apis = [
       },
       {
         name: 'row-id',
-        descKey: 'app.api.table.desc.rowId',
+        disabled: true,
+        desc: '已废弃，被 row-config.keyField 替换',
         version: '',
         type: 'string',
         enum: '',
-        defVal: '默认 _XID，继承 setup.table.rowId',
+        defVal: '默认 _X_ROW_KEY，继承 setup.table.rowId',
         list: []
       },
       {
@@ -929,6 +941,15 @@ const apis = [
         defVal: '继承 setup.table.columnConfig',
         list: [
           {
+            name: 'useKey',
+            desc: '是否需要为每一列的 VNode 设置 key 属性（非特殊情况下不需要使用）',
+            version: '4.2.0',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'isCurrent',
             desc: '当鼠标点击列头时，是否要高亮当前列',
             version: '4.1.5',
@@ -949,7 +970,7 @@ const apis = [
           {
             name: 'resizable',
             desc: '每一列是否启用列宽调整',
-            version: '',
+            version: '4.1.0',
             type: 'boolean',
             enum: 'false',
             defVal: '',
@@ -972,6 +993,15 @@ const apis = [
             enum: 'auto, px, %',
             defVal: '',
             list: []
+          // },
+          // {
+          //   name: 'maxWidth',
+          //   desc: '每一列的最大宽度',
+          //   version: '',
+          //   type: 'number, string',
+          //   enum: 'auto, px, %',
+          //   defVal: '',
+          //   list: []
           }
         ]
       },
@@ -983,6 +1013,24 @@ const apis = [
         enum: '',
         defVal: '继承 setup.table.rowConfig',
         list: [
+          {
+            name: 'useKey',
+            desc: '是否需要为每一行的 VNode 设置 key 属性（非特殊情况下不需要使用）',
+            version: '4.2.0',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'keyField',
+            desc: '自定义行数据唯一主键的字段名（默认自动生成）',
+            version: '4.2.0',
+            type: 'string',
+            enum: '',
+            defVal: '_X_ROW_KEY',
+            list: []
+          },
           {
             name: 'isCurrent',
             desc: '当鼠标点击行时，是否要高亮当前行',
@@ -1013,6 +1061,25 @@ const apis = [
         ]
       },
       {
+        name: 'resize-config',
+        desc: '响应式布局配置项',
+        version: '4.3.11',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.table.resizeConfig',
+        list: [
+          {
+            name: 'refreshDelay',
+            desc: '只对 auto-resize 有效，刷新延时，当父容器发生变化时，至少多少毫秒刷新布局',
+            version: '',
+            type: 'number',
+            enum: '',
+            defVal: '250',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'resizable-config',
         descKey: 'app.api.table.desc.resizableConfig',
         version: '',
@@ -1028,6 +1095,15 @@ const apis = [
             enum: '',
             defVal: 'auto',
             list: []
+          // },
+          // {
+          //   name: 'maxWidth',
+          //   desc: '列宽拖动的最大宽度',
+          //   version: '',
+          //   type: 'number | string | (({ $table, column, columnIndex, cell }) => number | string)',
+          //   enum: '',
+          //   defVal: 'auto',
+          //   list: []
           }
         ]
       },
@@ -1041,7 +1117,8 @@ const apis = [
         list: [
           {
             name: 'startIndex',
-            desc: '设置序号的起始值',
+            abandoned: true,
+            desc: '请使用 seqMethod',
             version: '',
             type: 'number',
             enum: '',
@@ -1117,6 +1194,15 @@ const apis = [
             name: 'multiple',
             desc: '是否启用多列组合筛选',
             version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'chronological',
+            desc: '只对 multiple 有效，是否按照先后触发顺序进行排序',
+            version: '4.2.1',
             type: 'boolean',
             enum: '',
             defVal: 'false',
@@ -1270,7 +1356,7 @@ const apis = [
           },
           {
             name: 'reserve',
-            desc: '是否保留勾选状态，例如：数据被刷新或者分页之后还保留之前选中的状态（需要有 row-id）',
+            desc: '是否保留勾选状态，例如：数据被刷新或者分页之后还保留之前选中的状态（需要有 row-config.keyField）',
             version: '',
             type: 'boolean',
             enum: '',
@@ -1288,7 +1374,7 @@ const apis = [
           },
           {
             name: 'checkRowKey',
-            desc: '默认选中指定行（只会在初始化时被触发一次，需要有 row-id）',
+            desc: '默认选中指定行（只会在初始化时被触发一次，需要有 row-config.keyField）',
             version: '',
             type: 'string',
             enum: '',
@@ -1379,7 +1465,7 @@ const apis = [
           },
           {
             name: 'checkRowKeys',
-            desc: '默认勾选指定行（只会在初始化时被触发一次，需要有 row-id）',
+            desc: '默认勾选指定行（只会在初始化时被触发一次，需要有 row-config.keyField）',
             version: '',
             type: 'string[]',
             enum: '',
@@ -1442,7 +1528,7 @@ const apis = [
           },
           {
             name: 'reserve',
-            desc: '是否保留勾选状态，对于某些场景可能会用到，比如数据被刷新之后还保留之前选中的状态（需要有 row-id）',
+            desc: '是否保留勾选状态，对于某些场景可能会用到，比如数据被刷新之后还保留之前选中的状态（需要有 row-config.keyField）',
             version: '',
             type: 'boolean',
             enum: '',
@@ -1470,7 +1556,7 @@ const apis = [
         list: [
           {
             name: 'showAll',
-            desc: '所有单元格开启 tooltip 显示',
+            desc: '所有单元格开启工具提示',
             version: '',
             type: 'boolean',
             enum: '',
@@ -1479,7 +1565,7 @@ const apis = [
           },
           {
             name: 'theme',
-            desc: 'tooltip 的主题颜色',
+            desc: '主题颜色',
             version: '',
             type: 'string',
             enum: 'dark,light',
@@ -1488,7 +1574,7 @@ const apis = [
           },
           {
             name: 'enterable',
-            desc: '鼠标是否可进入到 tooltip 中',
+            desc: '鼠标是否可进入到工具提示中',
             version: '',
             type: 'boolean',
             enum: '',
@@ -1496,8 +1582,17 @@ const apis = [
             list: []
           },
           {
+            name: 'enterDelay',
+            desc: '鼠标移入后延时多少才显示工具提示',
+            version: '4.1.21',
+            type: 'number',
+            enum: '',
+            defVal: '500',
+            list: []
+          },
+          {
             name: 'leaveDelay',
-            desc: '鼠标移出后延时多少才隐藏 tooltip',
+            desc: '鼠标移出后延时多少才隐藏工具提示',
             version: '',
             type: 'number',
             enum: '',
@@ -1506,7 +1601,7 @@ const apis = [
           },
           {
             name: 'contentMethod',
-            desc: '该方法可以通过返回值来重写默认的提示内容，可以返回 null 使用默认的提示消息，可以返回空内容去掉指定单元格的提示消息',
+            desc: '该方法可以通过返回值来重写默认的提示内容，可以返回 null 使用默认的提示内容，可以返回空内容去掉指定单元格的提示内容',
             version: '',
             type: '({ items?, row?, rowIndex?, $rowIndex, column, columnIndex, $columnIndex, type, cell, $event }) => string',
             enum: '',
@@ -1543,7 +1638,7 @@ const apis = [
           },
           {
             name: 'expandRowKeys',
-            desc: '默认展开指定行（只会在初始化时被触发一次，需要有 row-id）',
+            desc: '默认展开指定行（只会在初始化时被触发一次，需要有 row-config.keyField）',
             version: '',
             type: 'string[]',
             enum: '',
@@ -1557,6 +1652,15 @@ const apis = [
             type: 'boolean',
             enum: '',
             defVal: 'false',
+            list: []
+          },
+          {
+            name: 'height',
+            desc: '展开内容的高度，默认自适应高度',
+            version: '4.3.0',
+            type: 'number',
+            enum: '',
+            defVal: '',
             list: []
           },
           {
@@ -1606,7 +1710,7 @@ const apis = [
           },
           {
             name: 'reserve',
-            desc: '是否保留展开状态，对于某些场景可能会用到，比如数据被刷新之后还保留之前展开的状态（需要有 row-id）',
+            desc: '是否保留展开状态，对于某些场景可能会用到，比如数据被刷新之后还保留之前展开的状态（需要有 row-config.keyField）',
             version: '',
             type: 'boolean',
             enum: '',
@@ -1661,7 +1765,7 @@ const apis = [
         list: [
           {
             name: 'transform',
-            desc: '自动将列表转为树结构',
+            desc: '自动将列表转为树结构（支持虚拟滚动）',
             version: '4.1.3',
             type: 'string',
             enum: '',
@@ -1724,7 +1828,7 @@ const apis = [
           },
           {
             name: 'expandRowKeys',
-            desc: '默认展开指定树节点（只会在初始化时被触发一次，需要有 row-id）',
+            desc: '默认展开指定树节点（只会在初始化时被触发一次，需要有 row-config.keyField）',
             version: '',
             type: 'string[]',
             enum: '',
@@ -1787,7 +1891,7 @@ const apis = [
           },
           {
             name: 'reserve',
-            desc: '是否保留展开状态，对于某些场景可能会用到，比如数据被刷新之后还保留之前展开的状态（需要有 row-id）',
+            desc: '是否保留展开状态，对于某些场景可能会用到，比如数据被刷新之后还保留之前展开的状态（需要有 row-config.keyField）',
             version: '',
             type: 'boolean',
             enum: '',
@@ -1980,7 +2084,7 @@ const apis = [
             name: 'beforeCopyMethod',
             desc: '自定义单元格复制取值之前的方法，可以通过返回 false 阻止复制行为',
             version: 'pro',
-            type: '({ isCut, targetAreas }) => boolean',
+            type: '({ isCut, activeArea, targetAreas }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -2007,7 +2111,7 @@ const apis = [
             name: 'beforeCutMethod',
             desc: '自定义单元格剪贴值清除之前的方法，可以通过返回 false 阻止清除行为',
             version: 'pro',
-            type: '({ cutAreas, currentAreas }) => boolean',
+            type: '({ cutAreas, activeArea, currentAreas }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -2034,7 +2138,7 @@ const apis = [
             name: 'beforePasteMethod',
             desc: '自定义单元格粘贴赋值之前的方法，可以通过返回 false 阻止复制行为',
             version: 'pro',
-            type: '({ isCut, cutAreas, currentAreas, targetAreas, cellValues, pasteCells }) => boolean',
+            type: '({ isCut, activeArea, cutAreas, currentAreas, targetAreas, cellValues, pasteCells }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -2278,6 +2382,15 @@ const apis = [
             list: []
           },
           {
+            name: 'isEsc',
+            desc: '开启Esc键关闭编辑功能',
+            version: '4.1.7',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'isDel',
             desc: '开启删除键功能',
             version: '',
@@ -2299,6 +2412,15 @@ const apis = [
             name: 'isTab',
             desc: '开启 Tab 键功能',
             version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'isShift',
+            desc: '如果功能被支持，用于 mouse-config.area，开启同时按住方向键以活动区域为起始，向指定方向延伸单元格区域',
+            version: 'pro',
             type: 'boolean',
             enum: '',
             defVal: 'false',
@@ -2478,8 +2600,18 @@ const apis = [
           },
           {
             name: 'activeMethod',
-            desc: '该方法的返回值用来决定该单元格是否允许编辑',
+            abandoned: true,
+            desc: '请使用 beforeEditMethod',
             version: '',
+            type: '({ row, rowIndex, column, columnIndex }) => boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'beforeEditMethod',
+            desc: '该方法的返回值用来决定该单元格是否允许编辑',
+            version: '4.2.5',
             type: '({ row, rowIndex, column, columnIndex }) => boolean',
             enum: '',
             defVal: '',
@@ -2711,6 +2843,32 @@ const apis = [
         ]
       },
       {
+        name: 'loading-config',
+        desc: '加载中配置项',
+        version: '4.3.0',
+        type: 'any',
+        enum: '',
+        defVal: '继承 setup.table.loadingConfig',
+        list: [
+          {
+            name: 'icon',
+            desc: '显示图标',
+            version: '',
+            type: 'string',
+            enum: '',
+            defVal: ''
+          },
+          {
+            name: 'text',
+            desc: '显示文字',
+            version: '',
+            type: 'string',
+            enum: '',
+            defVal: ''
+          }
+        ]
+      },
+      {
         name: 'custom-config',
         descKey: 'app.api.table.desc.customConfig',
         version: '',
@@ -2806,7 +2964,7 @@ const apis = [
           },
           {
             name: 'gt',
-            desc: '指定大于指定列时自动启动横向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭',
+            desc: '指定大于指定列时自动启动横向虚拟滚动，如果为 0 则总是启用；如果需要关闭，可以设置 enabled 为 false',
             version: '',
             type: 'number',
             enum: '',
@@ -2820,6 +2978,15 @@ const apis = [
             type: 'number',
             enum: '',
             defVal: '0',
+            list: []
+          },
+          {
+            name: 'scrollToLeftOnChange',
+            desc: '当数据源被更改时，自动将横向滚动条滚动到左侧',
+            version: '4.2.6',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
             list: []
           }
         ]
@@ -2852,7 +3019,7 @@ const apis = [
           },
           {
             name: 'gt',
-            desc: '指定大于指定行时自动启动纵向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭（注：启用纵向虚拟滚动之后将不能支持动态行高）',
+            desc: '指定大于指定行时自动启动纵向虚拟滚动，如果为 0 则总是启用；如果需要关闭，可以设置 enabled 为 false（注：启用纵向虚拟滚动之后将不能支持动态行高）',
             version: '',
             type: 'number',
             enum: '',
@@ -2876,6 +3043,15 @@ const apis = [
           //   enum: '',
           //   defVal: '',
           //   list: []
+          },
+          {
+            name: 'scrollToTopOnChange',
+            desc: '当数据源被更改时，自动将纵向滚动条滚动到顶部',
+            version: '4.2.6',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
           }
           // {
           //   name: 'adaptive',
@@ -2961,6 +3137,15 @@ const apis = [
         enum: '',
         defVal: '{}',
         list: []
+      },
+      {
+        name: 'loading',
+        desc: '自定义加载中模板',
+        version: '4.3.7',
+        type: '',
+        enum: '',
+        defVal: '{}',
+        list: []
       }
     ]
   },
@@ -2973,9 +3158,27 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: 'keydown-start',
+        desc: '当表格被激活且键盘被按下开始时会触发的事件',
+        version: '4.2.0',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
         name: 'keydown',
         desc: '当表格被激活且键盘被按下时会触发的事件',
         version: '',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
+        name: 'keydown-end',
+        desc: '当表格被激活且键盘被按下结束时会触发的事件',
+        version: '4.2.0',
         type: '',
         enum: '',
         defVal: '{ $event }',
@@ -3005,7 +3208,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ records, reserves, indeterminates, checked, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
+        defVal: '{ checked, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -3014,7 +3217,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ records, reserves, indeterminates, checked, $event }',
+        defVal: '{ checked, $event }',
         list: []
       },
       {
@@ -3023,7 +3226,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ records, reserves, $event }',
+        defVal: '{ $event }',
         list: []
       },
       {
@@ -3032,7 +3235,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ records, reserves, $event }',
+        defVal: '{ $event }',
         list: []
       },
       {
@@ -3041,7 +3244,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ records, reserves, $event }',
+        defVal: '{ $event }',
         list: []
       },
       {
@@ -3131,7 +3334,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ items, $rowIndex, column, columnIndex, $columnIndex, $event}',
+        defVal: '{ items, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -3140,7 +3343,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ type, column, columnIndex, $event}',
+        defVal: '{ type, column, columnIndex, $event }',
         list: []
       },
       {
@@ -3284,7 +3487,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ type, scrollTop, scrollLeft, bodyWidth, bodyHeight, isX, isY, $event }',
+        defVal: '{ type, scrollTop, scrollLeft, scrollHeight, scrollWidth, bodyWidth, bodyHeight, isX, isY, $event }',
         list: []
       },
       {
@@ -3293,7 +3496,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ type, $event}',
+        defVal: '{ type, $event }',
         list: []
       },
       {
@@ -3302,7 +3505,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ tab, $event}',
+        defVal: '{ tab, $event }',
         list: []
       },
       {
@@ -3311,7 +3514,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ tab, $event}',
+        defVal: '{ tab, $event }',
         list: []
       },
       {
@@ -3320,7 +3523,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ findValue, row, column, $event}',
+        defVal: '{ findValue, row, column, $event }',
         list: []
       },
       {
@@ -3329,7 +3532,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ findValue, result, $event}',
+        defVal: '{ findValue, result, $event }',
         list: []
       },
       {
@@ -3338,7 +3541,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ findValue, replaceValue, row, column, $event}',
+        defVal: '{ findValue, replaceValue, row, column, $event }',
         list: []
       },
       {
@@ -3347,7 +3550,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ findValue, replaceValue, result, $event}',
+        defVal: '{ findValue, replaceValue, result, $event }',
         list: []
       },
       {
@@ -3356,7 +3559,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ status, targetAreas, cellValues, $event}',
+        defVal: '{ status, targetAreas, cellValues, $event }',
         list: []
       },
       {
@@ -3365,7 +3568,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ status, targetAreas, cellValues, $event}',
+        defVal: '{ status, targetAreas, cellValues, $event }',
         list: []
       },
       {
@@ -3374,7 +3577,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ status, targetAreas, $event}',
+        defVal: '{ status, targetAreas, $event }',
         list: []
       },
       {
@@ -3383,7 +3586,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ status, targetAreas, $event}',
+        defVal: '{ status, targetAreas, $event }',
         list: []
       },
       {
@@ -3392,7 +3595,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ mergeCells, $event}',
+        defVal: '{ mergeCells, $event }',
         list: []
       },
       {
@@ -3401,7 +3604,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, cell, targetRows, targetCols, $event}',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, cell, targetRows, targetCols, $event }',
         list: []
       },
       {
@@ -3410,7 +3613,16 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, cell, $event}',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, cell, $event }',
+        list: []
+      },
+      {
+        name: 'cell-area-selection-drag',
+        desc: '只对 mouse-config.area 配置时有效，在单元格区域选取过程中持续触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ rows, cols, $event }',
         list: []
       },
       {
@@ -3419,7 +3631,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ rows, cols, $event}',
+        defVal: '{ rows, cols, $event }',
         list: []
       },
       {
@@ -3428,7 +3640,16 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, cell, targetRows, targetCols, $event}',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, cell, $event }',
+        list: []
+      },
+      {
+        name: 'cell-area-extension-drag',
+        desc: '只对 mouse-config.extension 配置时有效，在单元格区域扩展过程中持续触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ rows, cols, targetRows, targetCols, $event }',
         list: []
       },
       {
@@ -3437,7 +3658,61 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ rows, cols, targetRows, targetCols, $event}',
+        defVal: '{ rows, cols, targetRows, targetCols, $event }',
+        list: []
+      },
+      {
+        name: 'cell-area-selection-all-start',
+        desc: '只对 mouse-config.area 配置时有效，按快捷键全选所有单元格开始时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
+        name: 'cell-area-selection-all-end',
+        desc: '只对 mouse-config.area 配置时有效，按快捷键全选所有单元格结束时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ rows, cols, $event }',
+        list: []
+      },
+      {
+        name: 'cell-area-arrows-start',
+        desc: '只对 mouse-config.area 配置时有效，通过 Shift 键向指定方向移动选取区域开始时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ rows, cols, targetRows, targetCols, isLeft, isUp, isRight, isDown, $event }',
+        list: []
+      },
+      {
+        name: 'cell-area-arrows-end',
+        desc: '只对 mouse-config.area 配置时有效，通过 Shift 键向指定方向移动选取区域结束时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ rows, cols, targetRows, targetCols, isLeft, isUp, isRight, isDown, $event }',
+        list: []
+      },
+      {
+        name: 'active-cell-change-start',
+        desc: '只对 mouse-config.area 与 keyboard-config.isArrow|isEnter|isTab 配置时有效，通过按键或鼠标切换活动单元格开始时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ row, column, activeArea, isTab, isEnter, isLeft, isUp, isRight, isDown, $event }',
+        list: []
+      },
+      {
+        name: 'active-cell-change-end',
+        desc: '只对 mouse-config.area 与 keyboard-config.isArrow|isEnter|isTab 配置时有效，通过按键或鼠标切换活动单元格结束时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ row, column, activeArea, beforeActiveArea, isTab, isEnter, isLeft, isUp, isRight, isDown, $event }',
         list: []
       }
     ]
@@ -3471,7 +3746,7 @@ const apis = [
       {
         name: 'updateData()',
         abandoned: true,
-        desc: '手动处理数据（对于手动更改了排序、筛选...等条件后需要重新处理数据时可能会用到）',
+        desc: '手动处理数据，用于手动排序与筛选（对于手动更改了排序、筛选...等条件后需要重新处理数据时可能会用到）',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -3506,8 +3781,9 @@ const apis = [
         list: []
       },
       {
-        name: 'reloadRowExpand(row)',
-        desc: '用于懒加载展开行，重新加载展开行的内容',
+        name: 'reloadExpandContent(row)',
+        disabled: true,
+        desc: '即将废弃，请使用 reloadRowExpand',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -3650,15 +3926,15 @@ const apis = [
         defVal: '',
         list: []
       },
-      {
-        name: 'removeInsertRow()',
-        desc: '删除新增的临时数据',
-        version: '',
-        type: 'Promise<{row, rows}>',
-        enum: '',
-        defVal: '4.0.30',
-        list: []
-      },
+      // {
+      //   name: 'removeInsertRow()',
+      //   desc: '删除新增的临时数据',
+      //   version: '',
+      //   type: 'Promise<{row, rows}>',
+      //   enum: '',
+      //   defVal: '4.0.30',
+      //   list: []
+      // },
       {
         name: 'removeMergeCells(merges)',
         desc: '取消单元格的临时合并状态，如果为数组，则取消多个合并',
@@ -3678,10 +3954,19 @@ const apis = [
         list: []
       },
       {
+        name: 'getRowSeq(row)',
+        desc: '根据 row 获取行的序号',
+        version: '4.1.9',
+        type: 'string | number',
+        enum: '',
+        defVal: 'row: Row',
+        list: []
+      },
+      {
         name: 'getRowIndex(row)',
         desc: '根据 row 获取相对于 data 中的索引',
         version: '',
-        type: 'Number',
+        type: 'number',
         enum: '',
         defVal: 'row: Row',
         list: []
@@ -3690,7 +3975,7 @@ const apis = [
         name: 'getVTRowIndex(row)',
         desc: '根据 row 获取相对于当前数据中的索引',
         version: '',
-        type: 'Number',
+        type: 'number',
         enum: '',
         defVal: 'row: Row',
         list: []
@@ -3699,9 +3984,18 @@ const apis = [
         name: 'getVMRowIndex(row)',
         desc: '根据 row 获取渲染中的虚拟索引',
         version: '',
-        type: 'Number',
+        type: 'number',
         enum: '',
         defVal: 'row: Row',
+        list: []
+      },
+      {
+        name: 'getParentRow(rowOrRowid)',
+        desc: '只对 tree-config 有效，获取行的父级',
+        version: '4.1.17',
+        type: 'any',
+        enum: '',
+        defVal: 'rowOrRowid: string | Row',
         list: []
       },
       {
@@ -3762,7 +4056,7 @@ const apis = [
         name: 'getColumnIndex(column)',
         desc: '根据 column 获取相对于 columns 中的索引',
         version: '',
-        type: 'Number',
+        type: 'number',
         enum: '',
         defVal: 'column: ColumnConfig',
         list: []
@@ -3771,7 +4065,7 @@ const apis = [
         name: 'getVMColumnIndex(column)',
         desc: '根据 column 获取渲染中的虚拟索引',
         version: '',
-        type: 'Number',
+        type: 'number',
         enum: '',
         defVal: 'column',
         list: []
@@ -3780,7 +4074,7 @@ const apis = [
         name: 'getVTColumnIndex(column)',
         desc: '根据 column 获取相对于当前表格列中的索引（分组表头可能会用到）',
         version: '',
-        type: 'Number',
+        type: 'number',
         enum: '',
         defVal: 'column',
         list: []
@@ -3823,7 +4117,7 @@ const apis = [
       },
       {
         name: 'getRowById(rowid)',
-        desc: '根据行的唯一主键获取行',
+        desc: '根据行的唯一主键获取行（需要 row-config.keyField）',
         version: '',
         type: 'String',
         enum: '',
@@ -3832,7 +4126,7 @@ const apis = [
       },
       {
         name: 'getRowid(row)',
-        desc: '根据行获取行的唯一主键',
+        desc: '根据行获取行的唯一主键（需要 row-config.keyField）',
         version: '',
         type: 'Row',
         enum: '',
@@ -3904,7 +4198,7 @@ const apis = [
       },
       {
         name: 'getCurrentColumn()',
-        desc: '用于 highlight-current-column，获取当前列',
+        desc: '用于 column-config.isCurrent，获取当前列',
         version: '',
         type: 'ColumnConfig',
         enum: '',
@@ -3913,7 +4207,7 @@ const apis = [
       },
       {
         name: 'getCurrentRecord()',
-        desc: '用于 highlight-current-row，获取高亮的当前行数据',
+        desc: '用于 row-config.isCurrent，获取高亮的当前行数据',
         version: '',
         type: 'Row',
         enum: '',
@@ -3985,8 +4279,18 @@ const apis = [
       },
       {
         name: 'getActiveRecord()',
-        desc: '用于 edit-config，获取已激活的行数据',
+        abandoned: true,
+        desc: '请使用 getEditRecord',
         version: '',
+        type: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}',
+        enum: '',
+        defVal: 'row',
+        list: []
+      },
+      {
+        name: 'getEditRecord()',
+        desc: '用于 edit-config，获取已激活的行数据',
+        version: '4.2.4',
         type: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}',
         enum: '',
         defVal: 'row',
@@ -4020,14 +4324,23 @@ const apis = [
         list: []
       },
       {
-        name: 'getCopyCellArea()',
-        desc: '如果功能被支持，用于 mouse-config.area，用于获取被标记为复制状态的区域',
+        name: 'updateCellAreas()',
+        desc: '如果功能被支持，用于 mouse-config.area，更新已选区域的单元格样式',
         version: 'pro',
-        type: '{cols: ColumnConfig[], rows: any[]}',
+        type: '',
         enum: '',
         defVal: '',
         list: []
       },
+      // {
+      //   name: 'getCopyCellAreas()',
+      //   desc: '如果功能被支持，用于 mouse-config.area，用于获取被标记为复制状态的区域',
+      //   version: 'pro',
+      //   type: '{cols: ColumnConfig[], rows: any[]}',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
       {
         name: 'getScroll()',
         desc: '获取表格的滚动状态',
@@ -4039,8 +4352,18 @@ const apis = [
       },
       {
         name: 'isActiveByRow(row)',
-        desc: '用于 edit-config，判断行是否为激活编辑状态',
+        abandoned: true,
+        desc: '请使用 isEditByRow',
         version: '',
+        type: 'boolean',
+        enum: '',
+        defVal: 'row',
+        list: []
+      },
+      {
+        name: 'isEditByRow(row)',
+        desc: '用于 edit-config，判断行是否为激活编辑状态',
+        version: '4.2.4',
         type: 'boolean',
         enum: '',
         defVal: 'row',
@@ -4164,8 +4487,18 @@ const apis = [
         list: []
       },
       {
+        name: 'openFilter(fieldOrColumn)',
+        desc: '用于 filters，手动弹出筛选面板',
+        version: '4.1.9',
+        type: 'Promise<any>',
+        enum: '',
+        defVal: 'fieldOrColumn: string | ColumnInfo',
+        list: []
+      },
+      {
         name: 'setActiveRow(row)',
-        desc: '用于 edit-config，激活行编辑并激活第一个单元格',
+        abandoned: true,
+        desc: '请使用 setEditRow',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -4173,9 +4506,28 @@ const apis = [
         list: []
       },
       {
+        name: 'setEditRow(row)',
+        desc: '用于 edit-config，激活行编辑并激活第一个单元格',
+        version: '4.2.4',
+        type: 'Promise<any>',
+        enum: '',
+        defVal: 'row: Row',
+        list: []
+      },
+      {
         name: 'setActiveCell(row, fieldOrColumn)',
-        desc: '用于 edit-config，激活单元格编辑',
+        abandoned: true,
+        desc: '请使用 setEditCell',
         version: '',
+        type: 'Promise<any>',
+        enum: '',
+        defVal: 'row: Row, fieldOrColumn: string | ColumnInfo',
+        list: []
+      },
+      {
+        name: 'setEditCell(row, fieldOrColumn)',
+        desc: '用于 edit-config，激活单元格编辑',
+        version: '4.2.4',
         type: 'Promise<any>',
         enum: '',
         defVal: 'row: Row, fieldOrColumn: string | ColumnInfo',
@@ -4255,7 +4607,7 @@ const apis = [
       },
       {
         name: 'setCurrentRow(row)',
-        desc: '用于 highlight-current-row，设置某一行为高亮状态',
+        desc: '用于 row-config.isCurrent，设置某一行为高亮状态',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -4264,7 +4616,7 @@ const apis = [
       },
       {
         name: 'setCurrentColumn(fieldOrColumn)',
-        desc: '用于 highlight-current-column，设置某列行为高亮状态',
+        desc: '用于 column-config.isCurrent，设置某列行为高亮状态',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -4354,7 +4706,7 @@ const apis = [
       },
       {
         name: 'clearCurrentRow()',
-        desc: '用于 highlight-current-row，手动清空当前高亮的状态',
+        desc: '用于 row-config.isCurrent，手动清空当前高亮的状态',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -4363,7 +4715,7 @@ const apis = [
       },
       {
         name: 'clearCurrentColumn()',
-        desc: '用于 highlight-current-column，手动清空当前高亮的状态',
+        desc: '用于 column-config.isCurrent，手动清空当前高亮的状态',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -4471,8 +4823,18 @@ const apis = [
       },
       {
         name: 'clearActived()',
-        desc: '手动清除单元格激活状态',
+        abandoned: true,
+        desc: '请使用 clearEdit',
         version: '',
+        type: 'Promise<any>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearEdit()',
+        desc: '手动清除单元格激活状态',
+        version: '4.2.4',
         type: 'Promise<any>',
         enum: '',
         defVal: '',
@@ -4492,7 +4854,7 @@ const apis = [
         version: 'pro',
         type: 'Promise<any>',
         enum: '',
-        defVal: '',
+        defVal: 'area?: any',
         list: []
       },
       {
@@ -4570,7 +4932,7 @@ const apis = [
       },
       {
         name: 'closeFilter()',
-        desc: '手动关闭筛选面板（某些特殊场景可能会用到）',
+        desc: '手动关闭筛选面板',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -4579,7 +4941,7 @@ const apis = [
       },
       {
         name: 'closeTooltip()',
-        desc: '手动关闭 tooltip 提示（某些特殊场景可能会用到）',
+        desc: '手动关闭 tooltip 提示',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -4588,8 +4950,17 @@ const apis = [
       },
       {
         name: 'closeMenu()',
-        desc: '手动关闭右键菜单（某些特殊场景可能会用到）',
+        desc: '手动关闭右键菜单',
         version: '',
+        type: 'Promise<any>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'closeFNR()',
+        desc: '手动关闭查找与替换窗口',
+        version: 'pro',
         type: 'Promise<any>',
         enum: '',
         defVal: '',
@@ -4627,6 +4998,24 @@ const apis = [
         desc: '显示指定列',
         version: '',
         type: 'Promise<any>',
+        enum: '',
+        defVal: 'fieldOrColumn: string | ColumnConfig',
+        list: []
+      },
+      {
+        name: 'setColumnWidth(fieldOrColumn, width)',
+        desc: '设置列宽',
+        version: '4.3.12',
+        type: 'Promise<any>',
+        enum: 'px, %',
+        defVal: 'fieldOrColumn: string | ColumnConfig, width: number | string',
+        list: []
+      },
+      {
+        name: 'getColumnWidth(fieldOrColumn)',
+        desc: '获取列宽',
+        version: '4.3.12',
+        type: 'number',
         enum: '',
         defVal: 'fieldOrColumn: string | ColumnConfig',
         list: []

@@ -99,7 +99,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeTablePropTypes } from '../../../../types/index'
+import { VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -162,13 +162,13 @@ export default defineComponent({
           means.push('平均')
           sums.push('和值')
         } else {
-          let meanCell = null
-          let sumCell = null
-          switch (column.property) {
+          let meanCell: any = null
+          let sumCell: any = null
+          switch (column.field) {
             case 'age':
             case 'rate':
-              meanCell = meanNum(data, column.property)
-              sumCell = sumNum(data, column.property)
+              meanCell = meanNum(data, column.field)
+              sumCell = sumNum(data, column.field)
               break
           }
           means.push(meanCell)
@@ -341,13 +341,13 @@ export default defineComponent({
                   means.push('平均')
                   sums.push('和值')
                 } else {
-                  let meanCell = null
-                  let sumCell = null
-                  switch (column.property) {
+                  let meanCell: any = null
+                  let sumCell: any = null
+                  switch (column.field) {
                     case 'age':
                     case 'rate':
-                      meanCell = meanNum(data, column.property)
-                      sumCell = sumNum(data, column.property)
+                      meanCell = meanNum(data, column.field)
+                      sumCell = sumNum(data, column.field)
                       break
                   }
                   means.push(meanCell)

@@ -10,18 +10,41 @@
 
     <vxe-table
       border
-      resizable
       show-overflow
       ref="xTable"
       max-height="400"
+      :column-config="{resizable: true}"
       :data="demo1.tableData"
       :edit-config="{trigger: 'click', mode: 'row'}"
       @edit-actived="editActivedEvent">
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="attr3" title="Project type" :edit-render="{name: '$select', options: demo1.ptypeList, props: {clearable: true}, events: {change: ptypeChangeEvent}}"></vxe-column>
-      <vxe-column field="attr4" title="Project name" :formatter="formatPanmeLabel" :edit-render="{name: '$select', options: demo1.pnameList, props: {clearable: true}}"></vxe-column>
-      <vxe-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.name" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="attr3" title="Project type" :edit-render="{}">
+        <template #default="{ row }">
+          <span>{{ formatProjectType(row.attr3) }}</span>
+        </template>
+        <template #edit="{ row }">
+          <vxe-select v-model="row.attr3" transfer @change="ptypeChangeEvent({ row })">
+            <vxe-option v-for="item in demo1.ptypeList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+          </vxe-select>
+        </template>
+      </vxe-column>
+      <vxe-column field="attr4" title="Project name" :formatter="formatPanmeLabel" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-select v-model="row.attr4" transfer>
+            <vxe-option v-for="item in demo1.pnameList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+          </vxe-select>
+        </template>
+      </vxe-column>
+      <vxe-column field="date12" title="Date" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.date12" type="date"></vxe-input>
+        </template>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -36,12 +59,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance, VxeColumnPropTypes, VxeTableEvents } from '../../../../types/index'
+import { VxeTableInstance, VxeColumnPropTypes, VxeTableEvents } from 'vxe-table'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const demo1 = reactive({
       tableData: [
@@ -59,10 +82,17 @@ export default defineComponent({
       cachePnameList: [] as any[]
     })
 
+    const formatProjectType = (value: any) => {
+      const item = demo1.ptypeList.find(item => item.value === value)
+      return item ? item.label : value
+    }
+
     const insertEvent = () => {
       const $table = xTable.value
-      const record = {}
-      $table.insert(record)
+      if ($table) {
+        const record = {}
+        $table.insert(record)
+      }
     }
 
     // 格式化显示名称
@@ -113,6 +143,7 @@ export default defineComponent({
     return {
       xTable,
       demo1,
+      formatProjectType,
       insertEvent,
       formatPanmeLabel,
       ptypeChangeEvent,
@@ -127,18 +158,41 @@ export default defineComponent({
 
         <vxe-table
           border
-          resizable
           show-overflow
           ref="xTable"
           max-height="400"
+          :column-config="{resizable: true}"
           :data="demo1.tableData"
           :edit-config="{trigger: 'click', mode: 'row'}"
           @edit-actived="editActivedEvent">
           <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="attr3" title="Project type" :edit-render="{name: '$select', options: demo1.ptypeList, props: {clearable: true}, events: {change: ptypeChangeEvent}}"></vxe-column>
-          <vxe-column field="attr4" title="Project name" :formatter="formatPanmeLabel" :edit-render="{name: '$select', options: demo1.pnameList, props: {clearable: true}}"></vxe-column>
-          <vxe-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.name" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="attr3" title="Project type" :edit-render="{}">
+            <template #default="{ row }">
+              <span>{{ formatProjectType(row.attr3) }}</span>
+            </template>
+            <template #edit="{ row }">
+              <vxe-select v-model="row.attr3" transfer @change="ptypeChangeEvent({ row })">
+                <vxe-option v-for="item in demo1.ptypeList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+              </vxe-select>
+            </template>
+          </vxe-column>
+          <vxe-column field="attr4" title="Project name" :formatter="formatPanmeLabel" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-select v-model="row.attr4" transfer>
+                <vxe-option v-for="item in demo1.pnameList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+              </vxe-select>
+            </template>
+          </vxe-column>
+          <vxe-column field="date12" title="Date" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.date12" type="date"></vxe-input>
+            </template>
+          </vxe-column>
         </vxe-table>
         `,
         `
@@ -148,7 +202,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const demo1 = reactive({
               tableData: [
@@ -165,6 +219,11 @@ export default defineComponent({
               pnameList: [] as any[],
               cachePnameList: [] as any[]
             })
+
+            const formatProjectType = (value: any) => {
+              const item = demo1.ptypeList.find(item => item.value === value)
+              return item ? item.label : value
+            }
 
             const insertEvent = () => {
               const $table = xTable.value
@@ -220,6 +279,7 @@ export default defineComponent({
             return {
               xTable,
               demo1,
+              formatProjectType,
               insertEvent,
               formatPanmeLabel,
               ptypeChangeEvent,

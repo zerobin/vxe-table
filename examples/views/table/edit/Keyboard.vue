@@ -8,10 +8,10 @@
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
+        <vxe-button icon="vxe-icon-question-circle-fill" @click="insertEvent()">新增</vxe-button>
         <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
         <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
-        <vxe-button icon="fa fa-save" @click="getInsertEvent">获取新增</vxe-button>
+        <vxe-button icon="vxe-icon-question-circle-fill" @click="getInsertEvent">获取新增</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -28,10 +28,26 @@
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column type="checkbox" width="60"></vxe-column>
-      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="role" title="Role" :edit-render="{name: '$input'}"></vxe-column>
-      <vxe-column field="num" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
-      <vxe-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.name" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.role" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="nickname" title="Nickname" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.nickname" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="address" title="Address" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.address" type="text"></vxe-input>
+        </template>
+      </vxe-column>
     </vxe-table>
 
     <pre>
@@ -81,8 +97,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTablePropTypes } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -106,36 +121,42 @@ export default defineComponent({
         body: {
           options: [
             [
-              { code: 'copy', name: '复制', prefixIcon: 'fa fa-copy', disabled: false },
+              { code: 'copy', name: '复制', prefixIcon: 'vxe-icon-question-circle-fill', disabled: false },
               { code: 'remove', name: '删除', disabled: false },
-              { code: 'save', name: '保存', prefixIcon: 'fa fa-save', disabled: false }
+              { code: 'save', name: '保存', prefixIcon: 'vxe-icon-question-circle-fill', disabled: false }
             ]
           ]
         }
       } as VxeTablePropTypes.MenuConfig
     })
 
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const insertEvent = async () => {
       const $table = xTable.value
-      const record = {
-        sex: '1'
+      if ($table) {
+        const record = {
+          sex: '1'
+        }
+        const { row: newRow } = await $table.insert(record)
+        await $table.setEditCell(newRow, 'name')
       }
-      const { row: newRow } = await $table.insert(record)
-      await $table.setActiveCell(newRow, 'name')
     }
 
     const getInsertEvent = () => {
       const $table = xTable.value
-      const insertRecords = $table.getInsertRecords()
-      VXETable.modal.alert(insertRecords.length)
+      if ($table) {
+        const insertRecords = $table.getInsertRecords()
+        VXETable.modal.alert(insertRecords.length)
+      }
     }
 
     const getSelectionEvent = () => {
       const $table = xTable.value
-      const selectRecords = $table.getCheckboxRecords()
-      VXETable.modal.alert(selectRecords.length)
+      if ($table) {
+        const selectRecords = $table.getCheckboxRecords()
+        VXETable.modal.alert(selectRecords.length)
+      }
     }
 
     return {
@@ -148,10 +169,10 @@ export default defineComponent({
         `
         <vxe-toolbar>
           <template #buttons>
-            <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
+            <vxe-button icon="vxe-icon-question-circle-fill" @click="insertEvent()">新增</vxe-button>
             <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
             <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
-            <vxe-button icon="fa fa-save" @click="getInsertEvent">获取新增</vxe-button>
+            <vxe-button icon="vxe-icon-question-circle-fille" @click="getInsertEvent">获取新增</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -168,10 +189,26 @@ export default defineComponent({
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column type="checkbox" width="60"></vxe-column>
-          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="role" title="Role" :edit-render="{name: '$input'}"></vxe-column>
-          <vxe-column field="num" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
-          <vxe-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.name" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.role" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="nickname" title="Nickname" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.nickname" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="address" title="Address" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.address" type="text"></vxe-input>
+            </template>
+          </vxe-column>
         </vxe-table>
         `,
         `
@@ -200,16 +237,16 @@ export default defineComponent({
                 body: {
                   options: [
                     [
-                      { code: 'copy', name: '复制', prefixIcon: 'fa fa-copy', disabled: false },
+                      { code: 'copy', name: '复制', prefixIcon: 'vxe-icon-question-circle-fill', disabled: false },
                       { code: 'remove', name: '删除', disabled: false },
-                      { code: 'save', name: '保存', prefixIcon: 'fa fa-save', disabled: false }
+                      { code: 'save', name: '保存', prefixIcon: 'vxe-icon-question-circle-fill', disabled: false }
                     ]
                   ]
                 }
               } as VxeTablePropTypes.MenuConfig
             })
 
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const insertEvent = async () => {
               const $table = xTable.value
@@ -217,7 +254,7 @@ export default defineComponent({
                 sex: '1'
               }
               const { row: newRow } = await $table.insert(record)
-              await $table.setActiveCell(newRow, 'name')
+              await $table.setEditCell(newRow, 'name')
             }
 
             const getInsertEvent = () => {

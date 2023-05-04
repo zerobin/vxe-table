@@ -1,4 +1,4 @@
-import { VXETable } from '../../../../packages/all'
+import { VXETable } from 'vxe-table'
 import EditDownTable from './components/EditDownTable.vue'
 import EditPopupModal from './components/EditPopupModal.vue'
 import EditDownModal from './components/EditDownModal.vue'
@@ -10,15 +10,13 @@ VXETable.renderer.add('MyInput', {
   // 可编辑激活模板
   renderEdit (renderOpts, params) {
     const { row, column } = params
-    return [
-      <vxe-input class="my-cell" v-model={ row[column.property] } prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
-    ]
+    return <vxe-input class="my-cell" v-model={ row[column.field] } clearable></vxe-input>
   },
   // 可编辑显示模板
   renderCell (renderOpts, params) {
     const { row, column } = params
     return [
-      <span>{ row[column.property] }</span>
+      <span>{ row[column.field] }</span>
     ]
   }
 })
@@ -27,9 +25,7 @@ VXETable.renderer.add('MyInput', {
 VXETable.renderer.add('EditDownTable', {
   autofocus: '.vxe-input--inner',
   renderEdit (renderOpts, params) {
-    return [
-      <EditDownTable params={ params }></EditDownTable>
-    ]
+    return <EditDownTable params={ params }></EditDownTable>
   }
 })
 
@@ -37,9 +33,7 @@ VXETable.renderer.add('EditDownTable', {
 VXETable.renderer.add('EditPopupModal', {
   autofocus: '.vxe-input--inner',
   renderEdit (renderOpts, params) {
-    return [
-      <EditPopupModal params={ params }></EditPopupModal>
-    ]
+    return <EditPopupModal params={ params }></EditPopupModal>
   }
 })
 
@@ -47,8 +41,6 @@ VXETable.renderer.add('EditPopupModal', {
 VXETable.renderer.add('EditDownModal', {
   autofocus: '.vxe-input--inner',
   renderEdit (renderOpts, params) {
-    return [
-      <EditDownModal params={ params }></EditDownModal>
-    ]
+    return <EditDownModal params={ params }></EditDownModal>
   }
 })

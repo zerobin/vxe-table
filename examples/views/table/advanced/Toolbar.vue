@@ -2,7 +2,8 @@
   <div>
     <p class="tip">
       使用自带的工具栏 <toolbar-api-link name="vxe-toolbar"/>，配合模板可以非常简单的实现强大的功能<br>
-      支持显示/隐藏列、列宽拖动状态的保存功能，还可以配合 <table-api-link prop="custom"/> 事件实现显示/隐藏列的服务端保存
+      支持显示/隐藏列、列宽拖动状态的保存功能，还可以配合 <table-api-link prop="custom"/> 事件实现显示/隐藏列的服务端保存<br>
+      <span class="green">小提示：需要使用 <table-api-link prop="connect"/> 方法关联表格后才能使用相关功能</span>
     </p>
 
     <vxe-toolbar ref="xToolbar1" custom print></vxe-toolbar>
@@ -77,13 +78,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeToolbarInstance, VxeTableEvents } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeToolbarInstance, VxeTableEvents } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTable1 = ref({} as VxeTableInstance)
-    const xToolbar1 = ref({} as VxeToolbarInstance)
+    const xTable1 = ref<VxeTableInstance>()
+    const xToolbar1 = ref<VxeToolbarInstance>()
 
     const demo1 = reactive({
       tableData: [
@@ -102,11 +102,13 @@ export default defineComponent({
       // 将表格和工具栏进行关联
       const $table = xTable1.value
       const $toolbar = xToolbar1.value
-      $table.connect($toolbar)
+      if ($table && $toolbar) {
+        $table.connect($toolbar)
+      }
     })
 
-    const xTable2 = ref({} as VxeTableInstance)
-    const xToolbar2 = ref({} as VxeToolbarInstance)
+    const xTable2 = ref<VxeTableInstance>()
+    const xToolbar2 = ref<VxeToolbarInstance>()
 
     const demo2 = reactive({
       loading: false,
@@ -145,19 +147,21 @@ export default defineComponent({
 
     const toolbarCustomEvent: VxeTableEvents.Custom = (params) => {
       const $table = xTable2.value
-      const visibleColumn = $table.getColumns()
-      switch (params.type) {
-        case 'confirm': {
-          VXETable.modal.message({ content: `点击了确认，显示为 ${visibleColumn.length} 列`, status: 'info' })
-          break
-        }
-        case 'reset': {
-          VXETable.modal.message({ content: `点击了重置，显示为 ${visibleColumn.length} 列`, status: 'info' })
-          break
-        }
-        case 'close': {
-          VXETable.modal.message({ content: `关闭了面板，显示为 ${visibleColumn.length} 列`, status: 'info' })
-          break
+      if ($table) {
+        const visibleColumn = $table.getColumns()
+        switch (params.type) {
+          case 'confirm': {
+            VXETable.modal.message({ content: `点击了确认，显示为 ${visibleColumn.length} 列`, status: 'info' })
+            break
+          }
+          case 'reset': {
+            VXETable.modal.message({ content: `点击了重置，显示为 ${visibleColumn.length} 列`, status: 'info' })
+            break
+          }
+          case 'close': {
+            VXETable.modal.message({ content: `关闭了面板，显示为 ${visibleColumn.length} 列`, status: 'info' })
+            break
+          }
         }
       }
     }
@@ -166,7 +170,9 @@ export default defineComponent({
       // 将表格和工具栏进行关联
       const $table = xTable2.value
       const $toolbar = xToolbar2.value
-      $table.connect($toolbar)
+      if ($table && $toolbar) {
+        $table.connect($toolbar)
+      }
     })
 
     findList()
@@ -210,8 +216,8 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTable1 = ref({} as VxeTableInstance)
-            const xToolbar1 = ref({} as VxeToolbarInstance)
+            const xTable1 = ref<VxeTableInstance>()
+            const xToolbar1 = ref<VxeToolbarInstance>()
 
             const demo1 = reactive({
               tableData: [
@@ -278,8 +284,8 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTable2 = ref({} as VxeTableInstance)
-            const xToolbar2 = ref({} as VxeToolbarInstance)
+            const xTable2 = ref<VxeTableInstance>()
+            const xToolbar2 = ref<VxeToolbarInstance>()
 
             const demo2 = reactive({
               loading: false,

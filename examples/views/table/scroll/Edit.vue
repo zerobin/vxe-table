@@ -30,20 +30,32 @@
 
     <vxe-table
       border
-      resizable
       show-overflow
       keep-source
       ref="xTable"
       height="500"
+      :column-config="{resizable: true}"
       :export-config="{}"
       :loading="demo1.loading"
       :checkbox-config="{checkField: 'checked'}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="100"></vxe-column>
-      <vxe-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="name" title="Name" sortable width="200" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.name" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="age" title="Age" width="200" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.age" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="sex" title="Sex" width="200" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.sex" type="text"></vxe-input>
+        </template>
+      </vxe-column>
       <vxe-column field="rate" title="Rate" width="200"></vxe-column>
       <vxe-column field="region" title="Region" width="200"></vxe-column>
       <vxe-column field="time" title="Time" width="200"></vxe-column>
@@ -72,8 +84,7 @@
 
 <script lang="tsx">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance } from '../../../../types/index'
+import { VXETable, VxeTableInstance } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -81,7 +92,7 @@ export default defineComponent({
       loading: false
     })
 
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const mockList = (size: number) => {
       const list: any[] = []
@@ -118,30 +129,38 @@ export default defineComponent({
 
     const insertEvent = (row: any) => {
       const $table = xTable.value
-      const record = {
-        checked: false
+      if ($table) {
+        const record = {
+          checked: false
+        }
+        $table.insertAt(record, row).then(({ row }) => {
+          $table.setEditRow(row)
+        })
       }
-      $table.insertAt(record, row).then(({ row }) => {
-        $table.setActiveRow(row)
-      })
     }
 
     const getInsertEvent = () => {
       const $table = xTable.value
-      const insertRecords = $table.getInsertRecords()
-      VXETable.modal.alert(insertRecords.length)
+      if ($table) {
+        const insertRecords = $table.getInsertRecords()
+        VXETable.modal.alert(insertRecords.length)
+      }
     }
 
     const getRemoveEvent = () => {
       const $table = xTable.value
-      const removeRecords = $table.getRemoveRecords()
-      VXETable.modal.alert(removeRecords.length)
+      if ($table) {
+        const removeRecords = $table.getRemoveRecords()
+        VXETable.modal.alert(removeRecords.length)
+      }
     }
 
     const getUpdateEvent = () => {
       const $table = xTable.value
-      const updateRecords = $table.getUpdateRecords()
-      VXETable.modal.alert(updateRecords.length)
+      if ($table) {
+        const updateRecords = $table.getUpdateRecords()
+        VXETable.modal.alert(updateRecords.length)
+      }
     }
 
     findList()
@@ -184,20 +203,32 @@ export default defineComponent({
 
         <vxe-table
           border
-          resizable
           show-overflow
           keep-source
           ref="xTable"
           height="500"
+          :column-config="{resizable: true}"
           :export-config="{}"
           :loading="demo1.loading"
           :checkbox-config="{checkField: 'checked'}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <vxe-column type="checkbox" width="60"></vxe-column>
           <vxe-column type="seq" width="100"></vxe-column>
-          <vxe-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="name" title="Name" sortable width="200" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.name" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="age" title="Age" width="200" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.age" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="sex" title="Sex" width="200" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.sex" type="text"></vxe-input>
+            </template>
+          </vxe-column>
           <vxe-column field="rate" title="Rate" width="200"></vxe-column>
           <vxe-column field="region" title="Region" width="200"></vxe-column>
           <vxe-column field="time" title="Time" width="200"></vxe-column>
@@ -217,7 +248,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VXETable, VxeTableInstance } from '../../../../types/index'
+        import { VXETable, VxeTableInstance } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -225,7 +256,7 @@ export default defineComponent({
               loading: false
             })
 
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const mockList = (size: number) => {
               const list: any[] = []
@@ -266,7 +297,7 @@ export default defineComponent({
                 checked: false
               }
               $table.insertAt(record, row).then(({ row }) => {
-                $table.setActiveRow(row)
+                $table.setEditRow(row)
               })
             }
 

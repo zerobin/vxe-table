@@ -98,6 +98,15 @@ const apis = [
         defVal: '继承 table.column-config.minWidth',
         list: []
       },
+      // {
+      //   name: 'max-width',
+      //   descKey: 'app.api.tableColumn.desc.maxWidth',
+      //   version: '',
+      //   type: 'number | string',
+      //   enum: 'px, %',
+      //   defVal: '继承 table.column-config.maxWidth',
+      //   list: []
+      // },
       {
         name: 'resizable',
         descKey: 'app.api.tableColumn.desc.resizable',
@@ -417,7 +426,8 @@ const apis = [
       },
       {
         name: 'title-help',
-        desc: '标题帮助图标配置项',
+        disabled: true,
+        desc: '即将废弃，请使用 title.prefix',
         version: '',
         type: 'any',
         enum: '',
@@ -436,6 +446,43 @@ const apis = [
             name: 'message',
             disabled: true,
             desc: '请使用 content',
+            version: '',
+            type: 'string',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'icon',
+            desc: '自定义图标',
+            version: '',
+            type: 'string',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
+        name: 'title-prefix',
+        desc: '标题前缀图标配置项',
+        version: '4.2.0',
+        type: 'any',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'content',
+            desc: '提示消息（支持开启国际化）',
+            version: '',
+            type: 'string',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'useHTML',
+            desc: '是否显示为HTML标签（动态渲染任意 HTML 是非常危险的，很容易导致 XSS 攻击，请确保内容是可信的）',
             version: '',
             type: 'string',
             enum: '',

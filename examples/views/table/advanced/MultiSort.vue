@@ -4,8 +4,8 @@
 
     <vxe-table
       border
-      highlight-hover-column
       height="300"
+      :column-config="{isHover: true}"
       :sort-config="{multiple: true, trigger: 'cell'}"
       :data="demo1.tableData"
       @sort-change="sortChangeEvent">
@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeTableEvents } from '../../../../types/index'
+import { VxeTableEvents } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -62,7 +62,7 @@ export default defineComponent({
     })
 
     const sortChangeEvent: VxeTableEvents.SortChange = ({ sortList }) => {
-      console.info(sortList.map((item) => `${item.property},${item.order}`).join('; '))
+      console.info(sortList.map((item) => `${item.field},${item.order}`).join('; '))
     }
 
     return {
@@ -72,8 +72,8 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-hover-column
           height="300"
+          :column-config="{isHover: true}"
           :sort-config="{multiple: true, trigger: 'cell'}"
           :data="demo1.tableData"
           @sort-change="sortChangeEvent">
@@ -121,7 +121,7 @@ export default defineComponent({
             })
 
             const sortChangeEvent: VxeTableEvents.SortChange = ({ sortList }) => {
-              console.info(sortList.map((item) => \`\${item.property},\${item.order}\`).join('; '))
+              console.info(sortList.map((item) => \`\${item.field},\${item.order}\`).join('; '))
             }
 
             return {

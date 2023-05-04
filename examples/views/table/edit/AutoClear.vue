@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       通过设置 <table-api-link prop="edit-config"/>.<table-api-link prop="autoClear"/> 关闭默认的单元格清除激活行为<br>
-      <span class="red">（注：如果设置为手动模式则不会自动关闭激活状态，需要手动调用 clearActived 关闭编辑状态）</span>
+      <span class="red">（注：如果设置为手动模式则不会自动关闭激活状态，需要手动调用 clearEdit 关闭编辑状态）</span>
     </p>
 
     <vxe-table
@@ -12,16 +12,41 @@
       ref="xTable"
       :loading="demo1.loading"
       :data="demo1.tableData"
-      :edit-config="demo1.tableEditConfig">
+      :edit-config="{trigger: 'manual', mode: 'row', autoClear: false, showStatus: true}">
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-column>
-      <vxe-column field="sex" title="Sex" :edit-render="{name: 'select', options: demo1.sexList}"></vxe-column>
-      <vxe-column field="date" title="Date" :edit-render="{name: 'input', immediate: true, attrs: { type: 'date' }}"></vxe-column>
-      <vxe-column field="num" title="Num" :edit-render="{name: 'input', immediate: true, attrs: {type: 'number'}}"></vxe-column>
-      <vxe-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.name" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="sex" title="Sex" :edit-render="{}">
+        <template #default="{ row }">
+          <span>{{ formatSex(row.sex) }}</span>
+        </template>
+        <template #edit="{ row }">
+          <vxe-select v-model="row.sex" transfer>
+            <vxe-option v-for="item in demo1.sexList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+          </vxe-select>
+        </template>
+      </vxe-column>
+      <vxe-column field="date12" title="Date" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.date12" type="date" placeholder="请选择日期" transfer></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="num1" title="Num" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.num1" type="number" placeholder="请输入数值"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="address" title="Address" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.address" type="text"></vxe-input>
+        </template>
+      </vxe-column>
       <vxe-column title="操作">
         <template #default="{ row }">
-          <template v-if="$refs.xTable.isActiveByRow(row)">
+          <template v-if="$refs.xTable.isEditByRow(row)">
             <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
             <vxe-button @click="cancelRowEvent(row)">取消</vxe-button>
           </template>
@@ -43,39 +68,52 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTablePropTypes } from '../../../../types/index'
+import { VXETable, VxeTableInstance } from 'vxe-table'
 
 export default defineComponent({
   setup () {
     const demo1 = reactive({
       loading: false,
       tableData: [] as any[],
-      sexList: [] as any[],
-      tableEditConfig: {
-        trigger: 'manual',
-        mode: 'row',
-        autoClear: false
-      } as VxeTablePropTypes.EditConfig
+      sexList: [] as any[]
     })
 
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
+
+    const formatSex = (value: any) => {
+      if (value === '1') {
+        return '男'
+      }
+      if (value === '0') {
+        return '女'
+      }
+      return ''
+    }
 
     const editRowEvent = async (row: any) => {
       const $table = xTable.value
-      await $table.setActiveRow(row)
+      if ($table) {
+        await $table.setEditRow(row)
+      }
     }
 
-    const saveRowEvent = async () => {
+    const saveRowEvent = async (row: any) => {
       const $table = xTable.value
-      await $table.clearActived()
-      VXETable.modal.alert('success')
+      if ($table) {
+        await $table.clearEdit()
+        // 重新加载行
+        await $table.reloadRow(row, {})
+        VXETable.modal.message({ content: 'success', status: 'success' })
+      }
     }
 
     const cancelRowEvent = async (row: any) => {
       const $table = xTable.value
-      await $table.clearActived()
-      await $table.revertData(row)
+      if ($table) {
+        await $table.clearEdit()
+        // 还原数据
+        await $table.revertData(row)
+      }
     }
 
     demo1.loading = true
@@ -100,6 +138,7 @@ export default defineComponent({
     return {
       demo1,
       xTable,
+      formatSex,
       editRowEvent,
       saveRowEvent,
       cancelRowEvent,
@@ -112,16 +151,41 @@ export default defineComponent({
           ref="xTable"
           :loading="demo1.loading"
           :data="demo1.tableData"
-          :edit-config="demo1.tableEditConfig">
+          :edit-config="{trigger: 'manual', mode: 'row', autoClear: false, showStatus: true}">
           <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-column>
-          <vxe-column field="sex" title="Sex" :edit-render="{name: 'select', options: demo1.sexList}"></vxe-column>
-          <vxe-column field="date" title="Date" :edit-render="{name: 'input', immediate: true, attrs: { type: 'date' }}"></vxe-column>
-          <vxe-column field="num" title="Num" :edit-render="{name: 'input', immediate: true, attrs: {type: 'number'}}"></vxe-column>
-          <vxe-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.name" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="sex" title="Sex" :edit-render="{}">
+            <template #default="{ row }">
+              <span>{{ formatSex(row.sex) }}</span>
+            </template>
+            <template #edit="{ row }">
+              <vxe-select v-model="row.sex" transfer>
+                <vxe-option v-for="item in demo1.sexList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+              </vxe-select>
+            </template>
+          </vxe-column>
+          <vxe-column field="date12" title="Date" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.date12" type="date" placeholder="请选择日期" transfer></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="num1" title="Num" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.num1" type="number" placeholder="请输入数值"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="address" title="Address" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.address" type="text"></vxe-input>
+            </template>
+          </vxe-column>
           <vxe-column title="操作">
             <template #default="{ row }">
-              <template v-if="$refs.xTable.isActiveByRow(row)">
+              <template v-if="$refs.xTable.isEditByRow(row)">
                 <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
                 <vxe-button @click="cancelRowEvent(row)">取消</vxe-button>
               </template>
@@ -134,37 +198,45 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VXETable, VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
+        import { VXETable, VxeTableInstance } from 'vxe-table'
 
         export default defineComponent({
           setup () {
             const demo1 = reactive({
               loading: false,
               tableData: [] as any[],
-              sexList: [] as any[],
-              tableEditConfig: {
-                trigger: 'manual',
-                mode: 'row',
-                autoClear: false
-              } as VxeTablePropTypes.EditConfig
+              sexList: [] as any[]
             })
 
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
+
+            const formatSex = (value: any) => {
+              if (value === '1') {
+                return '男'
+              }
+              if (value === '0') {
+                return '女'
+              }
+              return ''
+            }
 
             const editRowEvent = async (row: any) => {
               const $table = xTable.value
-              await $table.setActiveRow(row)
+              await $table.setEditRow(row)
             }
 
-            const saveRowEvent = async () => {
+            const saveRowEvent = async (row: any) => {
               const $table = xTable.value
-              await $table.clearActived()
-              VXETable.modal.alert('success')
+              await $table.clearEdit()
+              // 重新加载行
+              await $table.reloadRow(row, {})
+              VXETable.modal.message({ content: 'success', status: 'success' })
             }
 
             const cancelRowEvent = async (row: any) => {
               const $table = xTable.value
-              await $table.clearActived()
+              await $table.clearEdit()
+              // 还原数据
               await $table.revertData(row)
             }
 
@@ -190,6 +262,7 @@ export default defineComponent({
             return {
               demo1,
               xTable,
+              formatSex,
               editRowEvent,
               saveRowEvent,
               cancelRowEvent

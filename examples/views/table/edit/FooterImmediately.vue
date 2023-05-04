@@ -18,10 +18,10 @@
       border
       show-footer
       show-overflow
-      highlight-hover-row
       ref="xTable"
       height="400"
       class="editable-footer"
+      :row-config="{isHover: true}"
       :export-config="{}"
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
@@ -29,10 +29,26 @@
       :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-colgroup title="统计信息">
-        <vxe-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-column>
-        <vxe-column field="age" title="Age" :edit-render="{name: '$input', immediate: true, props: {type: 'number', min: 1, max: 120}, events: {change: updateFooterEvent}}"></vxe-column>
-        <vxe-column field="num1" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-column>
-        <vxe-column field="rate" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-column>
+        <vxe-column field="name" title="Name" :edit-render="{}">
+          <template #edit="{ row }">
+            <vxe-input v-model="row.name" type="text"></vxe-input>
+          </template>
+        </vxe-column>
+        <vxe-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
+          <template #edit="{ row }">
+            <vxe-input v-model="row.age" type="text" :min="1" :max="120" @change="updateFooterEvent"></vxe-input>
+          </template>
+        </vxe-column>
+        <vxe-column field="num1" title="Num" :edit-render="{autofocus: '.vxe-input--inner'}">
+          <template #edit="{ row }">
+            <vxe-input v-model="row.num1" type="text" @input="updateFooterEvent"></vxe-input>
+          </template>
+        </vxe-column>
+        <vxe-column field="rate" title="Rate" :edit-render="{}">
+          <template #edit="{ row }">
+            <vxe-input v-model="row.rate" type="text" @input="updateFooterEvent"></vxe-input>
+          </template>
+        </vxe-column>
       </vxe-colgroup>
     </vxe-table>
 
@@ -47,13 +63,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTablePropTypes, VxeToolbarInstance } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeTablePropTypes, VxeToolbarInstance } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
-    const xToolbar = ref({} as VxeToolbarInstance)
+    const xTable = ref<VxeTableInstance>()
+    const xToolbar = ref<VxeToolbarInstance>()
 
     const demo1 = reactive({
       tableData: [
@@ -84,7 +99,9 @@ export default defineComponent({
     // 在值发生改变时更新表尾合计
     const updateFooterEvent = () => {
       const $table = xTable.value
-      $table.updateFooter()
+      if ($table) {
+        $table.updateFooter()
+      }
     }
 
     const meanNum = (list: any[], field: string) => {
@@ -109,10 +126,10 @@ export default defineComponent({
           if (columnIndex === 0) {
             return '平均'
           }
-          if (['age'].includes(column.property)) {
-            return meanNum(data, column.property)
-          } else if (['rate', 'num1'].includes(column.property)) {
-            return meanNum(data, column.property)
+          if (['age'].includes(column.field)) {
+            return meanNum(data, column.field)
+          } else if (['rate', 'num1'].includes(column.field)) {
+            return meanNum(data, column.field)
           }
           return null
         }),
@@ -120,8 +137,8 @@ export default defineComponent({
           if (columnIndex === 0) {
             return '和值'
           }
-          if (['rate', 'num1'].includes(column.property)) {
-            return sumNum(data, column.property)
+          if (['rate', 'num1'].includes(column.field)) {
+            return sumNum(data, column.field)
           }
           return null
         })
@@ -133,26 +150,34 @@ export default defineComponent({
         name: 'New name'
       }
       const $table = xTable.value
-      const { row: newRow } = await $table.insert(record)
-      $table.setActiveCell(newRow, 'age')
+      if ($table) {
+        const { row: newRow } = await $table.insert(record)
+        $table.setEditCell(newRow, 'age')
+      }
     }
 
     const removeEvent = () => {
       const $table = xTable.value
-      $table.removeCheckboxRow()
+      if ($table) {
+        $table.removeCheckboxRow()
+      }
     }
 
     const saveEvent = () => {
       const $table = xTable.value
-      const { insertRecords, removeRecords, updateRecords } = $table.getRecordset()
-      VXETable.modal.alert(`insertRecords=${insertRecords.length} removeRecords=${removeRecords.length} updateRecords=${updateRecords.length}`)
+      if ($table) {
+        const { insertRecords, removeRecords, updateRecords } = $table.getRecordset()
+        VXETable.modal.alert(`insertRecords=${insertRecords.length} removeRecords=${removeRecords.length} updateRecords=${updateRecords.length}`)
+      }
     }
 
     nextTick(() => {
       // 将表格和工具栏进行关联
       const $table = xTable.value
       const $toolbar = xToolbar.value
-      $table.connect($toolbar)
+      if ($table && $toolbar) {
+        $table.connect($toolbar)
+      }
     })
 
     return {
@@ -179,10 +204,10 @@ export default defineComponent({
           border
           show-footer
           show-overflow
-          highlight-hover-row
           ref="xTable"
           height="400"
           class="editable-footer"
+          :row-config="{isHover: true}"
           :export-config="{}"
           :footer-method="footerMethod"
           :footer-cell-class-name="footerCellClassName"
@@ -190,10 +215,26 @@ export default defineComponent({
           :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-colgroup title="统计信息">
-            <vxe-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-column>
-            <vxe-column field="age" title="Age" :edit-render="{name: '$input', immediate: true, props: {type: 'number', min: 1, max: 120}, events: {change: updateFooterEvent}}"></vxe-column>
-            <vxe-column field="num1" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-column>
-            <vxe-column field="rate" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-column>
+            <vxe-column field="name" title="Name" :edit-render="{}">
+              <template #edit="{ row }">
+                <vxe-input v-model="row.name" type="text"></vxe-input>
+              </template>
+            </vxe-column>
+            <vxe-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
+              <template #edit="{ row }">
+                <vxe-input v-model="row.age" type="text" :min="1" :max="120" @change="updateFooterEvent"></vxe-input>
+              </template>
+            </vxe-column>
+            <vxe-column field="num1" title="Num" :edit-render="{autofocus: '.vxe-input--inner'}">
+              <template #edit="{ row }">
+                <vxe-input v-model="row.num1" type="text" @input="updateFooterEvent"></vxe-input>
+              </template>
+            </vxe-column>
+            <vxe-column field="rate" title="Rate" :edit-render="{}">
+              <template #edit="{ row }">
+                <vxe-input v-model="row.rate" type="text" @input="updateFooterEvent"></vxe-input>
+              </template>
+            </vxe-column>
           </vxe-colgroup>
         </vxe-table>
         `,
@@ -203,8 +244,8 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTable = ref({} as VxeTableInstance)
-            const xToolbar = ref({} as VxeToolbarInstance)
+            const xTable = ref<VxeTableInstance>()
+            const xToolbar = ref<VxeToolbarInstance>()
 
             const demo1 = reactive({
               tableData: [
@@ -260,10 +301,10 @@ export default defineComponent({
                   if (columnIndex === 0) {
                     return '平均'
                   }
-                  if (['age'].includes(column.property)) {
-                    return meanNum(data, column.property)
-                  } else if (['rate', 'num1'].includes(column.property)) {
-                    return meanNum(data, column.property)
+                  if (['age'].includes(column.field)) {
+                    return meanNum(data, column.field)
+                  } else if (['rate', 'num1'].includes(column.field)) {
+                    return meanNum(data, column.field)
                   }
                   return null
                 }),
@@ -271,8 +312,8 @@ export default defineComponent({
                   if (columnIndex === 0) {
                     return '和值'
                   }
-                  if (['rate', 'num1'].includes(column.property)) {
-                    return sumNum(data, column.property)
+                  if (['rate', 'num1'].includes(column.field)) {
+                    return sumNum(data, column.field)
                   }
                   return null
                 })
@@ -285,7 +326,7 @@ export default defineComponent({
               }
               const $table = xTable.value
               const { row: newRow } = await $table.insert(record)
-              $table.setActiveCell(newRow, 'age')
+              $table.setEditCell(newRow, 'age')
             }
 
             const removeEvent = () => {

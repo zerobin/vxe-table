@@ -6,6 +6,7 @@
       对于 csv 等特殊类型，可以通过设置 <table-column-api-link prop="cell-type"/> 将数值类型转为字符串类型<br>
       如果是服务端导出，通过设置 <table-api-link prop="remote"/> 和 <table-api-link prop="exportMethod"/> 开启服务端自定义导出<br>
       <span class="red">（注：树结构和虚拟滚动只允许导出数据源，前端导出的数据量有限，建议使用后端导出）</span>
+      <span class="red">（注：导出多级表头合并列，需要将导出格式设置为 html/xlsx 格式）</span>
     </p>
 
     <vxe-toolbar>
@@ -18,10 +19,10 @@
     </vxe-toolbar>
 
     <vxe-table
-      highlight-hover-row
       ref="xTable1"
       height="300"
       :show-overflow="demo1.showOverflow"
+      :row-config="{isHover: true}"
       :export-config="{}"
       :data="demo1.tableData1">
       <vxe-column type="checkbox" width="60"></vxe-column>
@@ -52,9 +53,9 @@
     </vxe-toolbar>
 
     <vxe-table
-      highlight-hover-row
       ref="xTable2"
       height="300"
+      :row-config="{isHover: true}"
       :data="demo2.tableData2">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name"></vxe-column>
@@ -80,9 +81,9 @@
 
     <vxe-table
       show-footer
-      highlight-hover-row
       height="300"
       ref="xTable3"
+      :row-config="{isHover: true}"
       :footer-method="footerMethod"
       :data="demo3.tableData3">
       <vxe-column type="seq" width="60"></vxe-column>
@@ -112,9 +113,9 @@
     <vxe-table
       border
       show-footer
-      highlight-hover-row
       ref="xTable4"
       height="300"
+      :row-config="{isHover: true}"
       :loading="demo4.loading"
       :footer-method="footerMethod"
       :data="demo4.tableData4">
@@ -145,7 +146,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance, VxeTablePropTypes, VxeColumnPropTypes, VxePagerEvents, VxeButtonEvents } from '../../../../types/index'
+import { VxeTableInstance, VxeTablePropTypes, VxeColumnPropTypes, VxePagerEvents, VxeButtonEvents } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -162,7 +163,7 @@ export default defineComponent({
       ]
     })
 
-    const xTable1 = ref({} as VxeTableInstance)
+    const xTable1 = ref<VxeTableInstance>()
 
     const formatterSex: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
       if (cellValue === '1') {
@@ -187,8 +188,8 @@ export default defineComponent({
           if (columnIndex === 0) {
             return '平均'
           }
-          if (['age'].includes(column.property)) {
-            return meanNum(data, column.property)
+          if (['age'].includes(column.field)) {
+            return meanNum(data, column.field)
           }
           return null
         })
@@ -198,19 +199,25 @@ export default defineComponent({
 
     const exportDataEvent: VxeButtonEvents.Click = () => {
       const $table = xTable1.value
-      $table.exportData({ type: 'csv' })
+      if ($table) {
+        $table.exportData({ type: 'csv' })
+      }
     }
 
     const exportSelectEvent: VxeButtonEvents.Click = () => {
       const $table = xTable1.value
-      $table.exportData({
-        data: $table.getCheckboxRecords()
-      })
+      if ($table) {
+        $table.exportData({
+          data: $table.getCheckboxRecords()
+        })
+      }
     }
 
     const openExportEvent: VxeButtonEvents.Click = () => {
       const $table = xTable1.value
-      $table.openExport()
+      if ($table) {
+        $table.openExport()
+      }
     }
 
     const demo2 = reactive({
@@ -226,16 +233,18 @@ export default defineComponent({
       ]
     })
 
-    const xTable2 = ref({} as VxeTableInstance)
+    const xTable2 = ref<VxeTableInstance>()
 
     const exportDataEvent2: VxeButtonEvents.Click = () => {
       const $table = xTable2.value
-      $table.exportData({
-        type: 'csv',
-        columnFilterMethod ({ column }) {
-          return ['name', 'sex'].includes(column.property)
-        }
-      })
+      if ($table) {
+        $table.exportData({
+          type: 'csv',
+          columnFilterMethod ({ column }) {
+            return ['name', 'sex'].includes(column.field)
+          }
+        })
+      }
     }
 
     const demo3 = reactive({
@@ -251,16 +260,18 @@ export default defineComponent({
       ]
     })
 
-    const xTable3 = ref({} as VxeTableInstance)
+    const xTable3 = ref<VxeTableInstance>()
 
     const exportDataEvent3: VxeButtonEvents.Click = () => {
       const $table = xTable3.value
-      $table.exportData({
-        type: 'csv',
-        dataFilterMethod ({ row }) {
-          return row.sex === '1'
-        }
-      })
+      if ($table) {
+        $table.exportData({
+          type: 'csv',
+          dataFilterMethod ({ row }) {
+            return row.sex === '1'
+          }
+        })
+      }
     }
 
     const demo4 = reactive({
@@ -273,7 +284,7 @@ export default defineComponent({
       }
     })
 
-    const xTable4 = ref({} as VxeTableInstance)
+    const xTable4 = ref<VxeTableInstance>()
 
     const findList4 = () => {
       demo4.loading = true
@@ -302,28 +313,32 @@ export default defineComponent({
 
     const exportCurrDataEvent4: VxeButtonEvents.Click = () => {
       const $table = xTable4.value
-      $table.exportData({
-        filename: '自定义文件名',
-        type: 'html',
-        isHeader: true,
-        isFooter: true
-      })
+      if ($table) {
+        $table.exportData({
+          filename: '自定义文件名',
+          type: 'html',
+          isHeader: true,
+          isFooter: true
+        })
+      }
     }
 
     const exportDataEvent4: VxeButtonEvents.Click = () => {
       const $table = xTable4.value
-      $table.exportData({
-        filename: '自定义文件名',
-        type: 'html',
-        isHeader: true,
-        isFooter: true,
-        // 自定义导出的数据源
-        data: [
-          { name: 'Name1', sex: '男', age: 26, role: '前端', html1: '<a>xxx1</a>' },
-          { name: 'Name2', sex: '女', age: 20, role: '测试', html1: '<a>xxx2</a>' },
-          { name: 'Name4', sex: '女', age: 22, role: '设计师', html1: '<a>xxx3</a>' }
-        ]
-      })
+      if ($table) {
+        $table.exportData({
+          filename: '自定义文件名',
+          type: 'html',
+          isHeader: true,
+          isFooter: true,
+          // 自定义导出的数据源
+          data: [
+            { name: 'Name1', sex: '男', age: 26, role: '前端', html1: '<a>xxx1</a>' },
+            { name: 'Name2', sex: '女', age: 20, role: '测试', html1: '<a>xxx2</a>' },
+            { name: 'Name4', sex: '女', age: 22, role: '设计师', html1: '<a>xxx3</a>' }
+          ]
+        })
+      }
     }
 
     const exportAllDataEvent4: VxeButtonEvents.Click = () => {
@@ -340,13 +355,15 @@ export default defineComponent({
           { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'test abc', html1: '<span>768</span>' },
           { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc', html1: '<span>789</span>' }
         ]
-        $table.exportData({
-          filename: '自定义文件名',
-          type: 'csv',
-          isHeader: true,
-          isFooter: true,
-          data: list
-        })
+        if ($table) {
+          $table.exportData({
+            filename: '自定义文件名',
+            type: 'csv',
+            isHeader: true,
+            isFooter: true,
+            data: list
+          })
+        }
         demo4.loading = false
       }, 100)
     }
@@ -385,9 +402,9 @@ export default defineComponent({
         </vxe-toolbar>
 
         <vxe-table
-          highlight-hover-row
           ref="xTable1"
           height="300"
+          :row-config="{isHover: true}"
           :show-overflow="demo1.showOverflow"
           :export-config="{}"
           :data="demo1.tableData1">
@@ -422,7 +439,7 @@ export default defineComponent({
               ]
             })
 
-            const xTable1 = ref({} as VxeTableInstance)
+            const xTable1 = ref<VxeTableInstance>()
 
             const exportDataEvent: VxeButtonEvents.Click = () => {
               const $table = xTable1.value
@@ -459,9 +476,9 @@ export default defineComponent({
         </vxe-toolbar>
 
         <vxe-table
-          highlight-hover-row
           ref="xTable2"
           height="300"
+          :row-config="{isHover: true}"
           :data="demo2.tableData2">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column field="name" title="Name"></vxe-column>
@@ -489,14 +506,14 @@ export default defineComponent({
               ]
             })
 
-            const xTable2 = ref({} as VxeTableInstance)
+            const xTable2 = ref<VxeTableInstance>()
 
             const exportDataEvent2: VxeButtonEvents.Click = () => {
               const $table = xTable2.value
               $table.exportData({
                 type: 'csv',
                 columnFilterMethod ({ column }) {
-                  return ['name', 'sex'].includes(column.property)
+                  return ['name', 'sex'].includes(column.field)
                 }
               })
             }
@@ -518,9 +535,9 @@ export default defineComponent({
 
         <vxe-table
           show-footer
-          highlight-hover-row
           height="300"
           ref="xTable3"
+          :row-config="{isHover: true}"
           :footer-method="footerMethod"
           :data="demo3.tableData3">
           <vxe-column type="seq" width="60"></vxe-column>
@@ -559,8 +576,8 @@ export default defineComponent({
                   if (columnIndex === 0) {
                     return '平均'
                   }
-                  if (['age'].includes(column.property)) {
-                    return meanNum(data, column.property)
+                  if (['age'].includes(column.field)) {
+                    return meanNum(data, column.field)
                   }
                   return null
                 })
@@ -581,7 +598,7 @@ export default defineComponent({
               ]
             })
 
-            const xTable3 = ref({} as VxeTableInstance)
+            const xTable3 = ref<VxeTableInstance>()
 
             const exportDataEvent3: VxeButtonEvents.Click = () => {
               const $table = xTable3.value
@@ -615,9 +632,9 @@ export default defineComponent({
         <vxe-table
           border
           show-footer
-          highlight-hover-row
           ref="xTable4"
           height="300"
+          :row-config="{isHover: true}"
           :loading="demo4.loading"
           :footer-method="footerMethod"
           :data="demo4.tableData4">
@@ -667,8 +684,8 @@ export default defineComponent({
                   if (columnIndex === 0) {
                     return '平均'
                   }
-                  if (['age'].includes(column.property)) {
-                    return meanNum(data, column.property)
+                  if (['age'].includes(column.field)) {
+                    return meanNum(data, column.field)
                   }
                   return null
                 })
@@ -686,7 +703,7 @@ export default defineComponent({
               }
             })
 
-            const xTable4 = ref({} as VxeTableInstance)
+            const xTable4 = ref<VxeTableInstance>()
 
             const findList4 = () => {
               demo4.loading = true

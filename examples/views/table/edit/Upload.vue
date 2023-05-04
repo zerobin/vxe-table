@@ -20,7 +20,11 @@
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{}">
+        <template #edit="{ row }">
+          <input type="text" v-model="row.name">
+        </template>
+      </vxe-column>
       <vxe-column field="type" title="Type"></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
       <vxe-column field="date" title="Date"></vxe-column>
@@ -37,43 +41,48 @@
 
 <script lang="ts">
 import { defineComponent, ref, nextTick } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeToolbarInstance } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
-    const xToolbar = ref({} as VxeToolbarInstance)
+    const xTable = ref<VxeTableInstance>()
+    const xToolbar = ref<VxeToolbarInstance>()
 
     const insertEvent = async (isMultiple: boolean) => {
       const $table = xTable.value
-      const { files } = await $table.readFile({ multiple: isMultiple })
-      const records = Array.from(files).map(file => {
-        const ns = file.name.split('.')
-        const name = ns.slice(0, ns.length - 1).join('')
-        const type = ns[ns.length - 1]
-        return {
-          name: name,
-          size: file.size,
-          type: type,
-          date: XEUtils.toDateString(new Date())
-        }
-      })
-      $table.insert(records)
+      if ($table) {
+        const { files } = await $table.readFile({ multiple: isMultiple })
+        const records = Array.from(files).map(file => {
+          const ns = file.name.split('.')
+          const name = ns.slice(0, ns.length - 1).join('')
+          const type = ns[ns.length - 1]
+          return {
+            name: name,
+            size: file.size,
+            type: type,
+            date: XEUtils.toDateString(new Date())
+          }
+        })
+        $table.insert(records)
+      }
     }
 
     const getInsertEvent = () => {
       const $table = xTable.value
-      const insertRecords = $table.getInsertRecords()
-      VXETable.modal.alert(insertRecords.length)
+      if ($table) {
+        const insertRecords = $table.getInsertRecords()
+        VXETable.modal.alert(insertRecords.length)
+      }
     }
 
     nextTick(() => {
       // 将表格和工具栏进行关联
       const $table = xTable.value
       const $toolbar = xToolbar.value
-      $table.connect($toolbar)
+      if ($table && $toolbar) {
+        $table.connect($toolbar)
+      }
     })
 
     return {
@@ -102,7 +111,11 @@ export default defineComponent({
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-column type="checkbox" width="60"></vxe-column>
           <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{}">
+            <template #edit="{ row }">
+              <input type="text" v-model="row.name">
+            </template>
+          </vxe-column>
           <vxe-column field="type" title="Type"></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>
           <vxe-column field="date" title="Date"></vxe-column>
@@ -115,8 +128,8 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTable = ref({} as VxeTableInstance)
-            const xToolbar = ref({} as VxeToolbarInstance)
+            const xTable = ref<VxeTableInstance>()
+            const xToolbar = ref<VxeToolbarInstance>()
 
             const insertEvent = async (isMultiple: boolean) => {
               const $table = xTable.value

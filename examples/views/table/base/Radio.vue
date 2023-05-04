@@ -36,7 +36,7 @@
     </pre>
 
     <p class="tip">
-      还可以通过 <table-api-link prop="checkMethod"/> 方法控制 checkbox 是否允许用户手动选中，还可以配置 <table-api-link prop="labelField"/> 列显示属性
+      还可以通过 <table-api-link prop="checkMethod"/> 方法控制 checkbox 是否允许用户手动选中，如果被禁用，可以调用 <table-api-link prop="setRadioRow"/> 方法手动设置
     </p>
 
     <vxe-toolbar>
@@ -67,7 +67,7 @@
     </pre>
 
     <p class="tip">
-      默认选中，通过指定 <table-api-link prop="checkRowKey"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-id"/><br>
+      默认选中，通过指定 <table-api-link prop="checkRowKey"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-config"/>.<table-api-link prop="keyField"/><br>
       <span class="red">（注：默认行为只会在 reload 之后触发一次）</span>
     </p>
 
@@ -117,8 +117,8 @@
 
     <vxe-table
       border
-      highlight-current-row
       height="300"
+      :row-config="{isCurrent: true}"
       :radio-config="{labelField: 'name'}"
       :data="demo5.tableData">
       <vxe-column type="radio" title="还可以这样" width="120"></vxe-column>
@@ -139,9 +139,8 @@
 
     <vxe-table
       border
-      highlight-hover-row
-      highlight-current-row
       height="300"
+      :row-config="{isCurrent: true, isHover: true}"
       :radio-config="{labelField: 'name', trigger: 'row'}"
       :data="demo6.tableData">
       <vxe-column type="radio" title="还可以这样" width="120"></vxe-column>
@@ -162,8 +161,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTableEvents } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeTableEvents } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -181,7 +179,7 @@ export default defineComponent({
       selectRow: null as any
     })
 
-    const xTable1 = ref({} as VxeTableInstance)
+    const xTable1 = ref<VxeTableInstance>()
 
     const cellClickEvent1: VxeTableEvents.CellClick = () => {
       console.log('单元格点击事件')
@@ -194,13 +192,17 @@ export default defineComponent({
 
     const clearRadioRowEevnt1 = () => {
       const $table = xTable1.value
-      demo1.selectRow = null
-      $table.clearRadioRow()
+      if ($table) {
+        demo1.selectRow = null
+        $table.clearRadioRow()
+      }
     }
 
     const getRadioEvent1 = () => {
       const $table = xTable1.value
-      VXETable.modal.alert(JSON.stringify($table.getRadioRecord()))
+      if ($table) {
+        VXETable.modal.alert(JSON.stringify($table.getRadioRecord()))
+      }
     }
 
     const demo2 = reactive({
@@ -339,7 +341,7 @@ export default defineComponent({
               selectRow: null as any
             })
 
-            const xTable1 = ref({} as VxeTableInstance)
+            const xTable1 = ref<VxeTableInstance>()
 
             const cellClickEvent1: VxeTableEvents.CellClick = () => {
               console.log('单元格点击事件')
@@ -426,7 +428,7 @@ export default defineComponent({
         <vxe-table
           border
           height="300"
-          row-id="id"
+          :row-config="{keyField: 'id'}"
           :data="demo3.tableData"
           :radio-config="{checkRowKey: demo3.defaultSelecteRow3}">
           <vxe-column type="radio" width="60"></vxe-column>
@@ -508,8 +510,8 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-current-row
           height="300"
+          :row-config="{isCurrent: true}"
           :radio-config="{labelField: 'name'}"
           :data="demo5.tableData">
           <vxe-column type="radio" title="还可以这样" width="120"></vxe-column>
@@ -546,9 +548,8 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-hover-row
-          highlight-current-row
           height="300"
+          :row-config="{isCurrent: true, isHover: true}"
           :radio-config="{labelField: 'name', trigger: 'row'}"
           :data="demo6.tableData">
           <vxe-column type="radio" title="还可以这样" width="120"></vxe-column>

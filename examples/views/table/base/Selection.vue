@@ -33,12 +33,12 @@
     </pre>
 
     <p class="tip">
-      还可以通过 <table-api-link prop="checkMethod"/> 方法控制 checkbox 是否允许用户手动勾选，还可以配置 <table-api-link prop="visibleMethod"/> 是否显示复选框<br>
+      还可以通过 <table-api-link prop="checkMethod"/> 方法控制 checkbox 是否允许用户手动勾选，还可以配置 <table-api-link prop="visibleMethod"/> 是否显示复选框，如果被禁用，可以调用 <table-api-link prop="setCheckboxRow"/> 方法手动设置<br>
     </p>
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button @click="$refs.xTable2.toggleCheckboxRow(demo2.tableData[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
+        <vxe-button @click="$refs.xTable2.toggleCheckboxRow(demo2.tableData[0])">设置第一行选中</vxe-button>
         <vxe-button @click="$refs.xTable2.toggleCheckboxRow(demo2.tableData[1])">切换第二行选中</vxe-button>
         <vxe-button @click="$refs.xTable2.setCheckboxRow([demo2.tableData[2], demo2.tableData[3]], true)">设置第三、四行选中</vxe-button>
         <vxe-button @click="$refs.xTable2.setAllCheckboxRow(true)">设置所有行选中</vxe-button>
@@ -96,9 +96,9 @@
 
     <vxe-table
       border
-      highlight-hover-row
       class="checkbox-table"
       ref="xTable4"
+      :row-config="{isHover: true}"
       :data="demo4.tableData"
       :checkbox-config="{checkField: 'checked', trigger: 'row'}">
       <vxe-column type="checkbox" width="60"></vxe-column>
@@ -116,14 +116,13 @@
     </pre>
 
     <p class="tip">
-      默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-id"/>，通过 <table-api-link prop="highlight"/> 设置高亮选中行<br>
+      默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-config"/>.<table-api-link prop="keyField"/>，通过 <table-api-link prop="checkbox-config"/>.<table-api-link prop="highlight"/> 设置高亮选中行<br>
       <span class="red">（注：默认行为只会在 reload 之后触发一次）</span>
     </p>
 
     <vxe-table
       border
-      highlight-hover-row
-      :row-config="{keyField: 'id'}"
+      :row-config="{keyField: 'id', isHover: true}"
       :data="demo5.tableData"
       :checkbox-config="{checkRowKeys: demo5.defaultSelecteRows5, highlight: true}"
       :radio-config="{labelField: 'name'}">
@@ -152,8 +151,8 @@
 
     <vxe-table
       border
-      highlight-hover-row
       ref="xTable6"
+      :row-config="{isHover: true}"
       :data="tableData6"
       :checkbox-config="{checkStrictly: true}">
       <vxe-column type="checkbox" width="60"></vxe-column>
@@ -174,7 +173,7 @@
 
     <vxe-table
       border
-      highlight-hover-row
+      :row-config="{isHover: true}"
       :data="tableData7"
       :radio-config="{labelField: 'name'}">
       <vxe-column type="checkbox" width="60"></vxe-column>
@@ -195,10 +194,9 @@
 
     <vxe-table
       border
-      resizable
-      highlight-hover-row
-      highlight-current-row
       height="300"
+      :column-config="{resizable: true}"
+      :row-config="{isCurrent: true, isHover: true}"
       :data="tableData8"
       :radio-config="{labelField: 'role'}"
       :checkbox-config="{labelField: 'name', highlight: true, range: true}">
@@ -220,8 +218,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTableEvents, VxeTablePropTypes } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeTableEvents, VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -235,20 +232,30 @@ export default defineComponent({
       ]
     })
 
-    const xTable1 = ref({} as VxeTableInstance)
+    const xTable1 = ref<VxeTableInstance>()
 
-    const selectAllChangeEvent1: VxeTableEvents.CheckboxAll = ({ checked, records }) => {
-      console.log(checked ? '所有勾选事件' : '所有取消事件', records)
+    const selectAllChangeEvent1: VxeTableEvents.CheckboxAll = ({ checked }) => {
+      const $table = xTable1.value
+      if ($table) {
+        const records = $table.getCheckboxRecords()
+        console.log(checked ? '所有勾选事件' : '所有取消事件', records)
+      }
     }
 
-    const selectChangeEvent1: VxeTableEvents.CheckboxChange = ({ checked, records }) => {
-      console.log(checked ? '勾选事件' : '取消事件', records)
+    const selectChangeEvent1: VxeTableEvents.CheckboxChange = ({ checked }) => {
+      const $table = xTable1.value
+      if ($table) {
+        const records = $table.getCheckboxRecords()
+        console.log(checked ? '勾选事件' : '取消事件', records)
+      }
     }
 
     const getSelectEvent1 = () => {
       const $table = xTable1.value
-      const selectRecords = $table.getCheckboxRecords()
-      VXETable.modal.alert(`${selectRecords.length}条数据`)
+      if ($table) {
+        const selectRecords = $table.getCheckboxRecords()
+        VXETable.modal.alert(`${selectRecords.length}条数据`)
+      }
     }
 
     const demo2 = reactive({
@@ -392,13 +399,17 @@ export default defineComponent({
               ]
             })
 
-            const xTable1 = ref({} as VxeTableInstance)
+            const xTable1 = ref<VxeTableInstance>()
 
-            const selectAllChangeEvent1: VxeTableEvents.CheckboxAll = ({ checked, records }: any) => {
+            const selectAllChangeEvent1: VxeTableEvents.CheckboxAll = ({ checked }) => {
+              const $table = xTable1.value
+              const records = $table.getCheckboxRecords()
               console.log(checked ? '所有勾选事件' : '所有取消事件', records)
             }
 
-            const selectChangeEvent1: VxeTableEvents.CheckboxChange = ({ checked, records }: any) => {
+            const selectChangeEvent1: VxeTableEvents.CheckboxChange = ({ checked }) => {
+              const $table = xTable1.value
+              const records = $table.getCheckboxRecords()
               console.log(checked ? '勾选事件' : '取消事件', records)
             }
 
@@ -524,9 +535,9 @@ export default defineComponent({
 
         <vxe-table
           border
-          highlight-hover-row
           class="checkbox-table"
           ref="xTable4"
+          :row-config="{isHover: true}"
           :data="demo4.tableData"
           :checkbox-config="{checkField: 'checked', trigger: 'row'}">
           <vxe-column type="checkbox" width="60"></vxe-column>
@@ -560,8 +571,7 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-hover-row
-          row-id="id"
+          :row-config="{keyField: 'id', isHover: true}"
           :data="demo5.tableData"
           :checkbox-config="{checkRowKeys: demo5.defaultSelecteRows5, highlight: true}"
           :radio-config="{labelField: 'name'}">
@@ -604,8 +614,8 @@ export default defineComponent({
 
         <vxe-table
           border
-          highlight-hover-row
           ref="xTable6"
+          :row-config="{isHover: true}"
           :data="tableData6"
           :checkbox-config="{checkStrictly: true}">
           <vxe-column type="checkbox" width="60"></vxe-column>
@@ -637,7 +647,7 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-hover-row
+          :row-config="{isHover: true}"
           :data="tableData7"
           :radio-config="{labelField: 'name'}">
           <vxe-column type="checkbox" width="60"></vxe-column>
@@ -669,10 +679,9 @@ export default defineComponent({
         `
         <vxe-table
           border
-          resizable
-          highlight-hover-row
-          highlight-current-row
           height="300"
+          :column-config="{resizable: true}"
+          :row-config="{isCurrent: true, isHover: true}"
           :data="tableData8"
           :radio-config="{labelField: 'role'}"
           :checkbox-config="{labelField: 'name', highlight: true, range: true}">

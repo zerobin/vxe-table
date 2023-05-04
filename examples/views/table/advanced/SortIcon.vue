@@ -4,11 +4,10 @@
 
     <vxe-table
       border
-      resizable
-      highlight-hover-row
-      highlight-current-row
       height="300"
-      :sort-config="{iconAsc: 'fa fa-chevron-up', iconDesc: 'fa fa-chevron-down'}"
+      :row-config="{isCurrent: true, isHover: true}"
+      :column-config="{resizable: true}"
+      :sort-config="{iconAsc: 'vxe-icon-question-circle-fill', iconDesc: 'vxe-icon-question-circle-fill'}"
       :data="tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod"></vxe-column>
@@ -28,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VxeColumnPropTypes } from '../../../../types/index'
+import { VxeColumnPropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -54,11 +53,10 @@ export default defineComponent({
         `
         <vxe-table
           border
-          resizable
-          highlight-hover-row
-          highlight-current-row
           height="300"
-          :sort-config="{iconAsc: 'fa fa-chevron-up', iconDesc: 'fa fa-chevron-down'}"
+          :row-config="{isCurrent: true, isHover: true}"
+          :column-config="{resizable: true}"
+          :sort-config="{iconAsc: 'vxe-icon-question-circle-fill', iconDesc: 'vxe-icon-question-circle-fill'}"
           :data="tableData">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod"></vxe-column>

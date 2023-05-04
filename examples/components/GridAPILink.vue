@@ -1,5 +1,5 @@
 <template>
-  <span>{{ prop || name }}</span>
+  <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'grid'}, query: {filterName: prop}}">{{ prop || name }}</router-link>
 </template>
 
 <script lang="ts">

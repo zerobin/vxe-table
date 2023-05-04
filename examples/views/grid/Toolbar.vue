@@ -2,7 +2,20 @@
   <div>
     <p class="tip">工具栏：通过 <grid-api-link prop="toolbar-config"/> 属性配置，支持显示/隐藏列、列宽拖动状态的保存功能，可以通过表格的 <table-api-link prop="custom-config"/> 参数开启将列个性化的设置状态保存到本地</p>
 
-    <vxe-grid ref="xGrid" v-bind="gridOptions" v-on="gridEvents"></vxe-grid>
+    <vxe-grid ref="xGrid" v-bind="gridOptions" v-on="gridEvents">
+      <template #name_edit="{ row }">
+        <vxe-input v-model="row.name"></vxe-input>
+      </template>
+      <template #nickname_edit="{ row }">
+        <vxe-input v-model="row.nickname"></vxe-input>
+      </template>
+      <template #role_edit="{ row }">
+        <vxe-input v-model="row.role"></vxe-input>
+      </template>
+      <template #address_edit="{ row }">
+        <vxe-input v-model="row.address"></vxe-input>
+      </template>
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -15,22 +28,23 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../packages/all'
-import { VxeGridInstance, VxeGridListeners, VxeGridProps } from '../../../types/index'
+import { VXETable, VxeGridInstance, VxeGridListeners, VxeGridProps } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xGrid = ref({} as VxeGridInstance)
+    const xGrid = ref<VxeGridInstance>()
 
     const gridOptions = reactive<VxeGridProps>({
       border: true,
-      resizable: true,
       keepSource: true,
       id: 'toolbar_demo_1',
       height: 530,
       printConfig: {},
       importConfig: {},
       exportConfig: {},
+      columnConfig: {
+        resizable: true
+      },
       customConfig: {
         storage: true
       },
@@ -42,15 +56,15 @@ export default defineComponent({
       columns: [
         { type: 'checkbox', width: 50 },
         { type: 'seq', width: 60 },
-        { field: 'name', title: 'Name', editRender: { name: 'input' } },
+        { field: 'name', title: 'Name', editRender: {}, slots: { edit: 'name_edit' } },
         {
           title: '分类',
           children: [
-            { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-            { field: 'role', title: 'Role', editRender: { name: 'input' } }
+            { field: 'nickname', title: 'Nickname', editRender: { autofocus: '.vxe-input--inner' }, slots: { edit: 'nickname_edit' } },
+            { field: 'role', title: 'Role', editRender: {}, slots: { edit: 'role_edit' } }
           ]
         },
-        { field: 'address', title: 'Address', showOverflow: true, editRender: { name: 'input' } }
+        { field: 'address', title: 'Address', showOverflow: true, editRender: {}, slots: { edit: 'address_edit' } }
       ],
       toolbarConfig: {
         buttons: [
@@ -91,32 +105,36 @@ export default defineComponent({
     const gridEvents: VxeGridListeners = {
       toolbarButtonClick ({ code }) {
         const $grid = xGrid.value
-        switch (code) {
-          case 'myInsert': {
-            $grid.insert({
-              name: 'xxx'
-            })
-            break
-          }
-          case 'mySave': {
-            const { insertRecords, removeRecords, updateRecords } = $grid.getRecordset()
-            VXETable.modal.message({ content: `新增 ${insertRecords.length} 条，删除 ${removeRecords.length} 条，更新 ${updateRecords.length} 条`, status: 'success' })
-            break
-          }
-          case 'myExport': {
-            $grid.exportData({
-              type: 'csv'
-            })
-            break
+        if ($grid) {
+          switch (code) {
+            case 'myInsert': {
+              $grid.insert({
+                name: 'xxx'
+              })
+              break
+            }
+            case 'mySave': {
+              const { insertRecords, removeRecords, updateRecords } = $grid.getRecordset()
+              VXETable.modal.message({ content: `新增 ${insertRecords.length} 条，删除 ${removeRecords.length} 条，更新 ${updateRecords.length} 条`, status: 'success' })
+              break
+            }
+            case 'myExport': {
+              $grid.exportData({
+                type: 'csv'
+              })
+              break
+            }
           }
         }
       },
       toolbarToolClick ({ code }) {
         const $grid = xGrid.value
-        switch (code) {
-          case 'myPrint': {
-            $grid.print()
-            break
+        if ($grid) {
+          switch (code) {
+            case 'myPrint': {
+              $grid.print()
+              break
+            }
           }
         }
       }
@@ -128,7 +146,20 @@ export default defineComponent({
       gridEvents,
       demoCodes: [
         `
-        <vxe-grid ref="xGrid" v-bind="gridOptions" v-on="gridEvents"></vxe-grid>
+        <vxe-grid ref="xGrid" v-bind="gridOptions" v-on="gridEvents">
+          <template #name_edit="{ row }">
+            <vxe-input v-model="row.name"></vxe-input>
+          </template>
+          <template #nickname_edit="{ row }">
+            <vxe-input v-model="row.nickname"></vxe-input>
+          </template>
+          <template #role_edit="{ row }">
+            <vxe-input v-model="row.role"></vxe-input>
+          </template>
+          <template #address_edit="{ row }">
+            <vxe-input v-model="row.address"></vxe-input>
+          </template>
+        </vxe-grid>
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
@@ -136,17 +167,19 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xGrid = ref({} as VxeGridInstance)
+            const xGrid = ref<VxeGridInstance>()
 
             const gridOptions = reactive<VxeGridProps>({
               border: true,
-              resizable: true,
               keepSource: true,
               id: 'toolbar_demo_1',
               height: 530,
               printConfig: {},
               importConfig: {},
               exportConfig: {},
+              columnConfig: {
+                resizable: true
+              },
               customConfig: {
                 storage: true
               },
@@ -158,15 +191,15 @@ export default defineComponent({
               columns: [
                 { type: 'checkbox', width: 50 },
                 { type: 'seq', width: 60 },
-                { field: 'name', title: 'Name', editRender: { name: 'input' } },
+                { field: 'name', title: 'Name', editRender: {}, slots: { edit: 'name_edit' } },
                 {
                   title: '分类',
                   children: [
-                    { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-                    { field: 'role', title: 'Role', editRender: { name: 'input' } }
+                    { field: 'nickname', title: 'Nickname', editRender: { autofocus: '.vxe-input--inner' }, slots: { edit: 'nickname_edit' } },
+                    { field: 'role', title: 'Role', editRender: {}, slots: { edit: 'role_edit' } }
                   ]
                 },
-                { field: 'address', title: 'Address', showOverflow: true, editRender: { name: 'input' } }
+                { field: 'address', title: 'Address', showOverflow: true, editRender: {}, slots: { edit: 'address_edit' } }
               ],
               toolbarConfig: {
                 buttons: [

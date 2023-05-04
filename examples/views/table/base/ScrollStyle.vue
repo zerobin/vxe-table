@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeTablePropTypes } from '../../../../types/index'
+import { VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -63,8 +63,8 @@ export default defineComponent({
           if (columnIndex === 0) {
             return '平均'
           }
-          if (['age'].includes(column.property)) {
-            return sumNum(data, column.property)
+          if (['age'].includes(column.field)) {
+            return sumNum(data, column.field)
           }
           return '-'
         })
@@ -124,8 +124,8 @@ export default defineComponent({
                   if (columnIndex === 0) {
                     return '平均'
                   }
-                  if (['age'].includes(column.property)) {
-                    return sumNum(data, column.property)
+                  if (['age'].includes(column.field)) {
+                    return sumNum(data, column.field)
                   }
                   return '-'
                 })

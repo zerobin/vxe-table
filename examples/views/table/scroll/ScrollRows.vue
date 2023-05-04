@@ -4,7 +4,8 @@
       虚拟滚动渲染<br>
       大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性，建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 函数<br>
       <table-api-link prop="data"/> 和 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 不应该同时使用，请根据数据量决定使用哪种方式，保证一致性<br>
-      <span class="red">（注：启用纵向虚拟滚启动后不支持动态行高；如果需要支持，将虚拟滚动关闭即可）</span>
+      <span class="red">（注：启用纵向虚拟滚启动后不支持动态行高；如果需要支持，将虚拟滚动关闭即可）</span><br>
+      <span class="green">（性能优化：横向虚拟滚动由列宽决定性能，每一列的列宽越大就越流畅；纵向虚拟滚动由行高决定性能，每一行的高度越高就越流畅）</span>
     </p>
 
     <vxe-toolbar>
@@ -23,11 +24,11 @@
 
     <vxe-table
       border
-      resizable
       show-overflow
       show-header-overflow
       ref="xTable"
       height="700"
+      :column-config="{resizable: true}"
       :export-config="{}"
       :sort-config="{trigger: 'cell'}"
       :loading="demo1.loading">
@@ -62,9 +63,7 @@
 
 <script lang="ts">
 import { defineComponent, nextTick, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance } from '../../../../types/index'
-import XEUtils from 'xe-utils'
+import { VXETable, VxeTableInstance } from 'vxe-table'
 
 const dataList: any[] = []
 
@@ -75,7 +74,7 @@ export default defineComponent({
       tableData: []
     })
 
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const mockList = (rowSize: number): Promise<any[]> => {
       return new Promise(resolve => {
@@ -105,7 +104,8 @@ export default defineComponent({
               })
             }
           }
-          const result = XEUtils.clone(dataList.slice(0, rowSize), true)
+          // 模拟数据
+          const result = JSON.parse(JSON.stringify(dataList.slice(0, rowSize)))
           resolve(result)
         }, 100)
       })
@@ -154,11 +154,11 @@ export default defineComponent({
 
         <vxe-table
           border
-          resizable
           show-overflow
           show-header-overflow
           ref="xTable"
           height="700"
+          :column-config="{resizable: true}"
           :export-config="{}"
           :sort-config="{trigger: 'cell'}"
           :loading="demo1.loading">
@@ -184,8 +184,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, nextTick, reactive, ref } from 'vue'
-        import { VXETable, VxeTableInstance } from '../../../../types/index'
-        import XEUtils from 'xe-utils'
+        import { VXETable, VxeTableInstance } from 'vxe-table'
 
         const dataList: any[] = []
 
@@ -196,7 +195,7 @@ export default defineComponent({
               tableData: []
             })
 
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const mockList = (rowSize: number): Promise<any[]> => {
               return new Promise(resolve => {
@@ -226,7 +225,8 @@ export default defineComponent({
                       })
                     }
                   }
-                  const result = XEUtils.clone(dataList.slice(0, rowSize), true)
+                  // 模拟数据
+                  const result = JSON.parse(JSON.stringify(dataList.slice(0, rowSize)))
                   resolve(result)
                 }, 100)
               })

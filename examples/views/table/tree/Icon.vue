@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      自定义图标，通过设置 <table-api-link prop="tree-config"/>={<table-api-link prop="iconOpen"/>, <table-api-link prop="iconClose"/>} 局部替换默认的图标，例如第三方图标库：font-awesome、inconfont
+      自定义图标，通过设置 <table-api-link prop="tree-config"/>={<table-api-link prop="iconOpen"/>, <table-api-link prop="iconClose"/>} 局部替换默认的图标
     </p>
 
     <vxe-toolbar>
@@ -14,8 +14,8 @@
 
     <vxe-table
       border
-      resizable
       ref="xTree1"
+      :column-config="{resizable: true}"
       :tree-config="demo1.tableTreeConfig"
       :data="demo1.tableData">
       <vxe-column field="name" title="app.body.label.name" tree-node></vxe-column>
@@ -34,19 +34,19 @@
     <p class="tip">更多自定义</p>
 
     <vxe-table
-      resizable
       show-overflow
       ref="xTree2"
+      :column-config="{resizable: true}"
       :tree-config="demo2.tableTreeConfig"
       :data="demo2.tableData">
       <vxe-column field="name" title="Name" tree-node>
         <template #default="{ row }">
           <span>
             <template v-if="row.children && row.children.length">
-              <i class="tree-node-icon fa" :class="$refs.xTree2.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
+              <i class="tree-node-icon" :class="$refs.xTree2.isTreeExpandByRow(row) ? 'vxe-icon-folder-open' : 'vxe-icon-folder'"></i>
             </template>
             <template v-else>
-              <i class="tree-node-icon fa fa-file-o"></i>
+              <i class="tree-node-icon vxe-icon-file-txt"></i>
             </template>
             <span>{{ row.name }}</span>
           </span>
@@ -68,8 +68,8 @@
     <p class="tip">还可以通过 <table-api-link prop="tree-config"/>={<table-api-link prop="toggleMethod"/>} 方法实现展开与关闭的细节处理，返回值用来决定是否允许继续执行</p>
 
     <vxe-table
-      resizable
       show-overflow
+      :column-config="{resizable: true}"
       :tree-config="demo3.tableTreeConfig"
       :data="demo3.tableData">
       <vxe-column field="name" title="Name" tree-node></vxe-column>
@@ -89,8 +89,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTablePropTypes } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -119,17 +118,19 @@ export default defineComponent({
         transform: true,
         rowField: 'id',
         parentField: 'parentId',
-        iconOpen: 'fa fa-minus-square-o',
-        iconClose: 'fa fa-plus-square-o'
+        iconOpen: 'vxe-icon-square-minus',
+        iconClose: 'vxe-icon-square-plus'
       } as VxeTablePropTypes.TreeConfig
     })
 
-    const xTree1 = ref({} as VxeTableInstance)
+    const xTree1 = ref<VxeTableInstance>()
 
     const getTreeExpansionEvent = () => {
       const $table = xTree1.value
-      const treeExpandRecords = $table.getTreeExpandRecords()
-      VXETable.modal.alert(`${treeExpandRecords.length}`)
+      if ($table) {
+        const treeExpandRecords = $table.getTreeExpandRecords()
+        VXETable.modal.alert(`${treeExpandRecords.length}`)
+      }
     }
 
     const demo2 = reactive({
@@ -155,8 +156,8 @@ export default defineComponent({
       ],
       tableTreeConfig: {
         transform: true,
-        iconOpen: 'fa fa-minus-circle',
-        iconClose: 'fa fa-plus-circle'
+        iconOpen: 'vxe-icon-square-minus',
+        iconClose: 'vxe-icon-square-plus'
       } as VxeTablePropTypes.TreeConfig
     })
 
@@ -218,8 +219,8 @@ export default defineComponent({
 
         <vxe-table
           border
-          resizable
           ref="xTree1"
+          :column-config="{resizable: true}"
           :tree-config="demo1.tableTreeConfig"
           :data="demo1.tableData">
           <vxe-column field="name" title="app.body.label.name" tree-node></vxe-column>
@@ -259,12 +260,12 @@ export default defineComponent({
                 transform: true,
                 rowField: 'id',
                 parentField: 'parentId',
-                iconOpen: 'fa fa-minus-square-o',
-                iconClose: 'fa fa-plus-square-o'
+                iconOpen: 'vxe-icon-square-minus',
+                iconClose: 'vxe-icon-square-plus'
               } as VxeTablePropTypes.TreeConfig
             })
 
-            const xTree1 = ref({} as VxeTableInstance)
+            const xTree1 = ref<VxeTableInstance>()
 
             const getTreeExpansionEvent = () => {
               const $table = xTree1.value
@@ -282,19 +283,19 @@ export default defineComponent({
         `,
         `
         <vxe-table
-          resizable
           show-overflow
           ref="xTree2"
+          :column-config="{resizable: true}"
           :tree-config="demo2.tableTreeConfig"
           :data="demo2.tableData">
           <vxe-column field="name" title="Name" tree-node>
             <template #default="{ row }">
               <span>
                 <template v-if="row.children && row.children.length">
-                  <i class="tree-node-icon fa" :class="$refs.xTree2.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
+                  <i class="tree-node-icon" :class="$refs.xTree2.isTreeExpandByRow(row) ? 'vxe-icon-folder-open' : 'vxe-icon-folder'"></i>
                 </template>
                 <template v-else>
-                  <i class="tree-node-icon fa fa-file-o"></i>
+                  <i class="tree-node-icon vxe-icon-file-txt"></i>
                 </template>
                 <span>{{ row.name }}</span>
               </span>
@@ -334,8 +335,8 @@ export default defineComponent({
               ],
               tableTreeConfig: {
                 transform: true,
-                iconOpen: 'fa fa-minus-circle',
-                iconClose: 'fa fa-plus-circle'
+                iconOpen: 'vxe-icon-square-minus',
+                iconClose: 'vxe-icon-square-plus'
               } as VxeTablePropTypes.TreeConfig
             })
 
@@ -352,8 +353,8 @@ export default defineComponent({
         `,
         `
         <vxe-table
-          resizable
           show-overflow
+          :column-config="{resizable: true}"
           :tree-config="demo3.tableTreeConfig"
           :data="demo3.tableData">
           <vxe-column field="name" title="Name" tree-node></vxe-column>

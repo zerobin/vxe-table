@@ -19,10 +19,26 @@
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column type="checkbox" width="60"></vxe-column>
-      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="date12" title="Date" :edit-render="{name: '$input'}"></vxe-column>
-      <vxe-column field="address" title="Address" :edit-render="{name: '$input'}"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.name" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.role" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="nickname" title="Nickname" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.nickname" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="address" title="Address" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.address" type="text"></vxe-input>
+        </template>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -36,11 +52,11 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance, VxeTablePropTypes } from '../../../../types/index'
+import { VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const demo1 = reactive({
       tableData: [
@@ -66,8 +82,10 @@ export default defineComponent({
         isEdit: true,
         editMethod ({ row, column }) {
           const $table = xTable.value
-          // 重写默认的覆盖式，改为追加式
-          $table.setActiveCell(row, column)
+          if ($table) {
+            // 重写默认的覆盖式，改为追加式
+            $table.setEditCell(row, column)
+          }
         }
       } as VxeTablePropTypes.KeyboardConfig
     })
@@ -86,8 +104,8 @@ export default defineComponent({
           if (columnIndex === 0) {
             return '和值'
           }
-          if (['age'].includes(column.property)) {
-            return sumNum(data, column.property)
+          if (['age'].includes(column.field)) {
+            return sumNum(data, column.field)
           }
           return null
         })
@@ -114,10 +132,26 @@ export default defineComponent({
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column type="checkbox" width="60"></vxe-column>
-          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="date12" title="Date" :edit-render="{name: '$input'}"></vxe-column>
-          <vxe-column field="address" title="Address" :edit-render="{name: '$input'}"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.name" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.role" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="nickname" title="Nickname" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.nickname" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="address" title="Address" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.address" type="text"></vxe-input>
+            </template>
+          </vxe-column>
         </vxe-table>
         `,
         `
@@ -126,7 +160,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const demo1 = reactive({
               tableData: [
@@ -153,7 +187,7 @@ export default defineComponent({
                 editMethod ({ row, column }) {
                   const $table = xTable.value
                   // 重写默认的覆盖式，改为追加式
-                  $table.setActiveCell(row, column)
+                  $table.setEditCell(row, column)
                 }
               } as VxeTablePropTypes.KeyboardConfig
             })
@@ -172,8 +206,8 @@ export default defineComponent({
                   if (columnIndex === 0) {
                     return '和值'
                   }
-                  if (['age'].includes(column.property)) {
-                    return sumNum(data, column.property)
+                  if (['age'].includes(column.field)) {
+                    return sumNum(data, column.field)
                   }
                   return null
                 })

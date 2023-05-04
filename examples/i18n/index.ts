@@ -1,8 +1,8 @@
 import { createI18n } from 'vue-i18n'
 
-import tableZhCN from '../../packages/locale/lang/zh-CN'
-import tableZhTC from '../../packages/locale/lang/zh-TC'
-import tableEnUS from '../../packages/locale/lang/en-US'
+import tableZhCN from 'vxe-table/lib/locale/lang/zh-CN'
+import tableZhTC from 'vxe-table/lib/locale/lang/zh-TC'
+import tableEnUS from 'vxe-table/lib/locale/lang/en-US'
 
 import myZhCN from './lang/zh-CN'
 import myZhTC from './lang/zh-TC'

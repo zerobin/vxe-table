@@ -17,6 +17,15 @@ const apis = [
         list: []
       },
       {
+        name: 'max',
+        desc: '限制最大可选数量，默认无限制',
+        version: '4.3.0',
+        type: 'string, number',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'size',
         descKey: 'app.api.select.desc.size',
         version: '',
@@ -143,23 +152,89 @@ const apis = [
         list: []
       },
       {
+        name: 'option-config',
+        desc: '选项配置信息',
+        version: '4.2.0',
+        type: 'any',
+        enum: '',
+        defVal: '继承 setup.select.optionConfig',
+        list: [
+          {
+            name: 'useKey',
+            desc: '是否需要为每一选项的 VNode 设置 key 属性（非特殊情况下不需要使用）',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'keyField',
+            desc: '自定义选项数据唯一主键的字段名（默认自动生成）',
+            version: '',
+            type: 'string',
+            enum: '',
+            defVal: '_X_OPTION_KEY',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'option-id',
-        desc: '自定义选项唯一主键的字段名（选项必须要有唯一主键，默认自动生成）',
+        disabled: true,
+        desc: '已废弃，被 option-config.keyField 替换',
         version: '',
         type: 'string',
         enum: '',
-        defVal: '默认 _XID，继承 setup.select.optionId',
+        defVal: '默认 _X_OPTION_KEY，继承 setup.select.optionId',
         list: []
       },
       {
         name: 'option-key',
-        desc: '是否需要为每一行的 VNode 设置 key 属性（非特殊情况下没必要设置）',
+        disabled: true,
+        desc: '已废弃，被 option-config.useKey 替换',
         version: '',
         type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
       },
+      {
+        name: 'filterable',
+        desc: '是否启用下拉过滤功能',
+        version: '4.2.6',
+        type: 'boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'filter-method',
+        desc: '只对 filterable 有效，自定义过滤方法',
+        version: '4.2.6',
+        type: '({ searchValue, option, group }) => boolean',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      // {
+      //   name: 'remote',
+      //   desc: '只对 filterable 有效，是否启用远程过滤功能',
+      //   version: '4.2.6',
+      //   type: 'boolean',
+      //   enum: '',
+      //   defVal: 'false',
+      //   list: []
+      // },
+      // {
+      //   name: 'remote-method',
+      //   desc: '只对 remote 有效，自定义过滤方法',
+      //   version: '4.2.6',
+      //   type: '({ searchValue }) => void',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
       {
         name: 'transfer',
         descKey: 'app.api.select.desc.transfer',

@@ -1,16 +1,5 @@
-import { createStore } from 'vuex'
+import { createPinia } from 'pinia'
 
-export default createStore({
-  state: {
-    showSupportQQ: false
-  },
-  mutations: {
-    setSupportQQ (state, visible) {
-      state.showSupportQQ = !!visible
-    }
-  },
-  actions: {
-  },
-  modules: {
-  }
-})
+const pinia = createPinia()
+
+export default pinia

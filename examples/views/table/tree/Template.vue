@@ -17,7 +17,7 @@
 
     <vxe-table
       border
-      resizable
+      :column-config="{resizable: true}"
       :tree-config="demo1.tableTreeConfig"
       :data="demo1.tableData">
       <vxe-column field="name" title="app.body.label.name"></vxe-column>
@@ -29,7 +29,7 @@
       </vxe-column>
       <vxe-column field="attr3" title="Image" tree-node>
         <template #default>
-          <img src="/vxe-table/static/other/img1.gif" height="50">
+          <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" height="50">
         </template>
       </vxe-column>
       <vxe-column field="date" title="Date">
@@ -50,8 +50,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import XEUtils from 'xe-utils'
-import { VxeTablePropTypes } from '../../../../types/index'
+import { VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -84,7 +83,8 @@ export default defineComponent({
     })
 
     const formatDate = (value: any) => {
-      return XEUtils.toDateString(value, 'yyyy-MM-dd HH:mm:ss.S')
+      const date = new Date(value)
+      return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
     }
 
     return {
@@ -105,7 +105,7 @@ export default defineComponent({
 
         <vxe-table
           border
-          resizable
+          :column-config="{resizable: true}"
           :tree-config="demo1.tableTreeConfig"
           :data="demo1.tableData">
           <vxe-column field="name" title="app.body.label.name"></vxe-column>
@@ -117,7 +117,7 @@ export default defineComponent({
           </vxe-column>
           <vxe-column field="attr3" title="Image" tree-node>
             <template #default>
-              <img src="/vxe-table/static/other/img1.gif" height="50">
+              <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" height="50">
             </template>
           </vxe-column>
           <vxe-column field="date" title="Date">
@@ -129,7 +129,6 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
-        import XEUtils from 'xe-utils'
         import { VxeTablePropTypes } from 'vxe-table'
 
         export default defineComponent({
@@ -163,7 +162,8 @@ export default defineComponent({
             })
 
             const formatDate = (value: any) => {
-              return XEUtils.toDateString(value, 'yyyy-MM-dd HH:mm:ss.S')
+              const date = new Date(value)
+              return \`\${date.getFullYear()}-\${date.getMonth() + 1}-\${date.getDate()}\`
             }
 
             return {

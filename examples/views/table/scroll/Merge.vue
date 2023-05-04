@@ -7,12 +7,12 @@
 
     <vxe-table
       border
-      resizable
       show-overflow
       show-header-overflow
       show-footer
       ref="xTable"
       height="500"
+      :column-config="{resizable: true}"
       :export-config="{}"
       :merge-cells="demo1.mergeCells"
       :sort-config="{trigger: 'cell'}"
@@ -53,12 +53,11 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTablePropTypes } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const demo1 = reactive({
       loading: false,
@@ -76,7 +75,7 @@ export default defineComponent({
     })
 
     const mockList = (size: number) => {
-      const list = []
+      const list: any[] = []
       for (let index = 0; index < size; index++) {
         list.push({
           name: `名称${index}`,
@@ -126,12 +125,12 @@ export default defineComponent({
         `
         <vxe-table
           border
-          resizable
           show-overflow
           show-header-overflow
           show-footer
           ref="xTable"
           height="500"
+          :column-config="{resizable: true}"
           :export-config="{}"
           :merge-cells="demo1.mergeCells"
           :sort-config="{trigger: 'cell'}"
@@ -167,7 +166,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const demo1 = reactive({
               loading: false,
@@ -185,7 +184,7 @@ export default defineComponent({
             })
 
             const mockList = (size: number) => {
-              const list = []
+              const list: any[] = []
               for (let index = 0; index < size; index++) {
                 list.push({
                   name: \`名称\${index}\`,

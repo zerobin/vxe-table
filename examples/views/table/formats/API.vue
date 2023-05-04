@@ -1,12 +1,13 @@
 <template>
   <div>
     <h1>{{ $t('app.aside.nav.formats') }}</h1>
-    <p class="tip">将列的格式化函数注册成全局可复用，通过 <table-column-api-link prop="formatter"/> 调用</p>
+    <p class="tip">
+      将列的格式化函数注册成全局可复用，通过 <table-column-api-link prop="formatter"/> 调用<br>
+      <span class="red">（注：高级功能难度较高，不适合非前端和初级前端使用）</span>
+    </p>
     <vxe-table
-      resizable
-      highlight-current-row
-      highlight-hover-row
-      highlight-current-column
+      :row-config="{isCurrent: true, isHover: true}"
+      :column-config="{resizable: true, isCurrent: true}"
       :data="tableData">
       <vxe-column field="name" title="app.api.title.prop" min-width="280" tree-node></vxe-column>
       <vxe-column field="desc" title="app.api.title.desc" min-width="200"></vxe-column>

@@ -11,7 +11,7 @@ const apis = [
         name: 'modelValue',
         descKey: 'app.api.modal.desc.value',
         version: '',
-        type: 'boolean',
+        type: 'any',
         enum: '',
         defVal: '',
         list: []
@@ -428,6 +428,15 @@ const apis = [
         name: 'title',
         desc: '窗口标题的模板',
         version: '',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'corner',
+        desc: '窗口右上角的模板',
+        version: '4.3.0',
         type: '',
         enum: '',
         defVal: '',

@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, reactive } from 'vue'
-import { VxeInputEvents, VxeGlobalRendererHandles } from '../../../../../types/index'
+import { VxeInputEvents, VxeGlobalRendererHandles } from 'vxe-table'
 
 export default defineComponent({
   name: 'FilterInput',

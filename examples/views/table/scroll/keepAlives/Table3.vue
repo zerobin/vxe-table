@@ -21,11 +21,11 @@
 
 <script lang="tsx">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
-import { VxeTableInstance } from '../../../../../types/index'
+import { VxeTableInstance } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const mockList = (size: number) => {
       const list: any[] = []

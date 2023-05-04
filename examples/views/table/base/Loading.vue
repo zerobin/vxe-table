@@ -4,19 +4,14 @@
 
     <vxe-table
       border
-      highlight-hover-row
+      loading
       height="300"
-      :loading="demo1.loading"
       :data="demo1.tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>
       <vxe-column field="sex" title="Sex"></vxe-column>
       <vxe-column field="age" title="Age"></vxe-column>
       <vxe-column field="address" title="Address" show-overflow></vxe-column>
-
-      <template #loading>
-        <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif">
-      </template>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -26,11 +21,10 @@
       <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
-    <p class="tip">加载中</p>
+    <p class="tip">修改加载中图标</p>
 
     <vxe-table
       border
-      highlight-hover-row
       height="300"
       :loading="demo2.loading"
       :data="demo2.tableData"
@@ -48,6 +42,32 @@
       <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
       <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
     </pre>
+
+    <p class="tip">修改加载中图标</p>
+
+    <vxe-table
+      border
+      height="300"
+      :loading="demo3.loading"
+      :data="demo3.tableData"
+      :loading-config="{icon: 'vxe-icon-indicator roll', text: '正在拼命加载中...'}">
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
+
+      <template #loading>
+        <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" style="width: 100px;">
+      </template>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[5] }}</pre-code>
+    </pre>
   </div>
 </template>
 
@@ -57,7 +77,6 @@ import { defineComponent, reactive } from 'vue'
 export default defineComponent({
   setup () {
     const demo1 = reactive({
-      loading: true,
       tableData: [] as any[]
     })
 
@@ -72,7 +91,7 @@ export default defineComponent({
         { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'test abc' },
         { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
       ]
-    }, 60000)
+    }, 8000)
 
     const demo2 = reactive({
       loading: false,
@@ -92,18 +111,38 @@ export default defineComponent({
         { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
       ]
       demo2.loading = false
-    }, 60000)
+    }, 8000)
+
+    const demo3 = reactive({
+      loading: false,
+      tableData: [] as any[]
+    })
+
+    demo3.loading = true
+    setTimeout(() => {
+      demo3.tableData = [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'test abc' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 21, address: 'test abc' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'test abc' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
+      ]
+      demo3.loading = false
+    }, 8000)
 
     return {
       demo1,
       demo2,
+      demo3,
       demoCodes: [
         `
         <vxe-table
           border
-          highlight-hover-row
+          loading
           height="300"
-          :loading="demo1.loading"
           :data="demo1.tableData">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column field="name" title="Name" sortable></vxe-column>
@@ -118,7 +157,6 @@ export default defineComponent({
         export default defineComponent({
           setup () {
             const demo1 = reactive({
-              loading: true,
               tableData: [] as any[]
             })
 
@@ -133,7 +171,7 @@ export default defineComponent({
                 { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'test abc' },
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
               ]
-            }, 60000)
+            }, 8000)
 
             return {
               demo1
@@ -144,7 +182,6 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-hover-row
           height="300"
           :loading="demo2.loading"
           :data="demo2.tableData"
@@ -179,10 +216,58 @@ export default defineComponent({
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
               ]
               demo2.loading = false
-            }, 60000)
+            }, 8000)
 
             return {
               demo2
+            }
+          }
+        })
+        `,
+        `
+        <vxe-table
+          border
+          height="300"
+          :loading="demo3.loading"
+          :data="demo3.tableData">
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
+
+          <template #loading>
+            <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" style="width: 100px;">
+          </template>
+        </vxe-table>
+        `,
+        `
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo3 = reactive({
+              loading: false,
+              tableData: [] as any[]
+            })
+
+            demo3.loading = true
+            setTimeout(() => {
+              demo3.tableData = [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'test abc' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 21, address: 'test abc' },
+                { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'test abc' },
+                { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
+              ]
+              demo3.loading = false
+            }, 8000)
+
+            return {
+              demo3
             }
           }
         })

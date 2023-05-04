@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, reactive } from 'vue'
-import { VxeGlobalRendererHandles } from '../../../../../types/index'
+import { VxeGlobalRendererHandles } from 'vxe-table'
 
 export default defineComponent({
   name: 'FilterComplex',

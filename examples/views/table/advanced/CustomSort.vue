@@ -1,16 +1,15 @@
 <template>
   <div>
-    <p class="tip">自定义列头排序的实现，你可以把表格封装成子组件进行定制，通过 <table-column-api-link prop="slot"/> 就可以实现自定义排序，通过设置 <table-column-api-link prop="showIcon"/> 可以去掉内置排序图标，例如第三方图标库：font-awesome、inconfont<br><span class="red">（具体请自行实现，该示例仅供参考）</span></p>
+    <p class="tip">自定义列头排序的实现，你可以把表格封装成子组件进行定制，通过 <table-column-api-link prop="slot"/> 就可以实现自定义排序，通过设置 <table-column-api-link prop="showIcon"/> 可以去掉内置排序图标<br><span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-table
       border
-      resizable
-      highlight-hover-row
-      highlight-current-row
       class="my-sort"
       ref="xTable"
       height="300"
       :data="tableData"
+      :row-config="{isCurrent: true, isHover: true}"
+      :column-config="{resizable: true}"
       :sort-config="{showIcon: false}"
       @header-cell-click="headerCellClickEvent">
       <vxe-column type="seq" width="60"></vxe-column>
@@ -18,7 +17,7 @@
         <template #header="{ column }">
           <span>{{ column.title }}</span>
           <span class="custom-sort" :class="{'is-order': column.order}">
-            <i class="fa" :class="[column.order ? `fa-sort-alpha-${column.order}` : 'fa-long-arrow-down']"></i>
+            <i :class="[column.order ? `vxe-icon-sort-alpha-${column.order}` : 'vxe-icon-sort']"></i>
           </span>
         </template>
       </vxe-column>
@@ -27,7 +26,7 @@
         <template #header="{ column }">
           <span>{{ column.title }}</span>
           <span class="custom-sort" :class="{'is-order': column.order}">
-            <i class="fa" :class="[column.order ? `fa-sort-numeric-${column.order}` : 'fa-long-arrow-down']"></i>
+            <i :class="[column.order ? `vxe-icon-sort-numeric-${column.order}` : 'vxe-icon-sort']"></i>
           </span>
         </template>
       </vxe-column>
@@ -35,7 +34,7 @@
         <template #header="{ column }">
           <span>{{ column.title }}</span>
           <span class="custom-sort" :class="{'is-order': column.order}">
-            <i class="fa" :class="[column.order ? `fa-sort-amount-${column.order}` : 'fa-long-arrow-down']"></i>
+            <i :class="[column.order ? `vxe-icon-sort-numeric-${column.order}` : 'vxe-icon-sort']"></i>
           </span>
         </template>
       </vxe-column>
@@ -53,7 +52,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VxeTableInstance, VxeTableEvents, VxeColumnPropTypes } from '../../../../types/index'
+import { VxeTableInstance, VxeTableEvents, VxeColumnPropTypes } from 'vxe-table'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
@@ -69,18 +68,20 @@ export default defineComponent({
       { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'test abc' }
     ])
 
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const headerCellClickEvent: VxeTableEvents.HeaderCellClick = ({ column, triggerResizable, triggerSort, triggerFilter }) => {
       const $table = xTable.value
-      // 如果触发了列的其他功能按钮
-      if (column.sortable && !(triggerResizable || triggerSort || triggerFilter)) {
-        if (column.order === 'desc') {
-          $table.clearSort()
-        } else if (column.order === 'asc') {
-          $table.sort(column.property, 'desc')
-        } else {
-          $table.sort(column.property, 'asc')
+      if ($table) {
+        // 如果触发了列的其他功能按钮
+        if (column.sortable && !(triggerResizable || triggerSort || triggerFilter)) {
+          if (column.order === 'desc') {
+            $table.clearSort()
+          } else if (column.order === 'asc') {
+            $table.sort(column.field, 'desc')
+          } else {
+            $table.sort(column.field, 'asc')
+          }
         }
       }
     }
@@ -103,13 +104,12 @@ export default defineComponent({
         `
         <vxe-table
           border
-          resizable
-          highlight-hover-row
-          highlight-current-row
           class="my-sort"
           ref="xTable"
           height="300"
           :data="tableData"
+          :row-config="{isCurrent: true, isHover: true}"
+          :column-config="{resizable: true}"
           :sort-config="{showIcon: false}"
           @header-cell-click="headerCellClickEvent">
           <vxe-column type="seq" width="60"></vxe-column>
@@ -117,7 +117,7 @@ export default defineComponent({
             <template #header="{ column }">
               <span>{{ column.title }}</span>
               <span class="custom-sort" :class="{'is-order': column.order}">
-                <i class="fa" :class="[column.order ? \`fa-sort-alpha-\${column.order}\` : 'fa-long-arrow-down']"></i>
+                <i :class="[column.order ? \`vxe-icon-sort-alpha-\${column.order}\` : 'vxe-icon-sort']"></i>
               </span>
             </template>
           </vxe-column>
@@ -126,7 +126,7 @@ export default defineComponent({
             <template #header="{ column }">
               <span>{{ column.title }}</span>
               <span class="custom-sort" :class="{'is-order': column.order}">
-                <i class="fa" :class="[column.order ? \`fa-sort-numeric-\${column.order}\` : 'fa-long-arrow-down']"></i>
+                <i :class="[column.order ? \`vxe-icon-sort-numeric-\${column.order}\` : 'vxe-icon-sort']"></i>
               </span>
             </template>
           </vxe-column>
@@ -134,7 +134,7 @@ export default defineComponent({
             <template #header="{ column }">
               <span>{{ column.title }}</span>
               <span class="custom-sort" :class="{'is-order': column.order}">
-                <i class="fa" :class="[column.order ? \`fa-sort-amount-\${column.order}\` : 'fa-long-arrow-down']"></i>
+                <i :class="[column.order ? \`vxe-icon-sort-numeric-\${column.order}\` : 'vxe-icon-sort']"></i>
               </span>
             </template>
           </vxe-column>
@@ -158,7 +158,7 @@ export default defineComponent({
               { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'test abc' }
             ])
 
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const headerCellClickEvent: VxeTableEvents.HeaderCellClick = ({ column, triggerResizable, triggerSort, triggerFilter }) => {
               const $table = xTable.value
@@ -167,9 +167,9 @@ export default defineComponent({
                 if (column.order === 'desc') {
                   $table.clearSort()
                 } else if (column.order === 'asc') {
-                  $table.sort(column.property, 'desc')
+                  $table.sort(column.field, 'desc')
                 } else {
-                  $table.sort(column.property, 'asc')
+                  $table.sort(column.field, 'asc')
                 }
               }
             }

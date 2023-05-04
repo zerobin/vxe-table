@@ -14,9 +14,9 @@
 
     <vxe-table
       border
-      highlight-hover-row
       ref="xTable"
       height="400"
+      :row-config="{isHover: true}"
       :import-config="{}"
       :export-config="{}"
       :data="demo1.tableData">
@@ -38,11 +38,11 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance } from '../../../../types/index'
+import { VxeTableInstance } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const demo1 = reactive({
       tableData: [
@@ -61,12 +61,16 @@ export default defineComponent({
 
     const exportDataEvent = () => {
       const $table = xTable.value
-      $table.openExport({ types: ['csv'] })
+      if ($table) {
+        $table.openExport({ types: ['csv'] })
+      }
     }
 
     const importDataEvent = () => {
       const $table = xTable.value
-      $table.importData({ types: ['csv'] })
+      if ($table) {
+        $table.importData({ types: ['csv'] })
+      }
     }
 
     return {
@@ -87,9 +91,9 @@ export default defineComponent({
 
         <vxe-table
           border
-          highlight-hover-row
           ref="xTable"
           height="400"
+          :row-config="{isHover: true}"
           :import-config="{}"
           :export-config="{}"
           :data="demo1.tableData">
@@ -106,7 +110,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const demo1 = reactive({
               tableData: [

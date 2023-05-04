@@ -10,9 +10,9 @@
     <vxe-table
       border
       show-overflow
-      highlight-hover-row
       ref="xTable1"
-      height="300">
+      height="300"
+      :row-config="{isHover: true}">
       <vxe-column type="seq" width="100"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>
       <vxe-column field="role" title="Role"></vxe-column>
@@ -86,7 +86,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, nextTick } from 'vue'
-import { VxeTableInstance } from '../../../../types/index'
+import { VxeTableInstance } from 'vxe-table'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
@@ -100,7 +100,7 @@ export default defineComponent({
       })
     }
 
-    const xTable1 = ref({} as VxeTableInstance)
+    const xTable1 = ref<VxeTableInstance>()
 
     onMounted(() => {
       nextTick(() => {
@@ -132,7 +132,7 @@ export default defineComponent({
       })
     }
 
-    const xTable2 = ref({} as VxeTableInstance)
+    const xTable2 = ref<VxeTableInstance>()
 
     onMounted(() => {
       nextTick(() => {
@@ -158,7 +158,7 @@ export default defineComponent({
           if (columnIndex === 0) {
             return '平均'
           }
-          switch (column.property) {
+          switch (column.field) {
             case 'attr1':
               return sumNum(data, 'attr1')
           }
@@ -177,9 +177,9 @@ export default defineComponent({
         <vxe-table
           border
           show-overflow
-          highlight-hover-row
           ref="xTable1"
-          height="300">
+          height="300"
+          :row-config="{isHover: true}">
           <vxe-column type="seq" width="100"></vxe-column>
           <vxe-column field="name" title="Name" sortable></vxe-column>
           <vxe-column field="role" title="Role"></vxe-column>
@@ -202,7 +202,7 @@ export default defineComponent({
               })
             }
 
-            const xTable1 = ref({} as VxeTableInstance)
+            const xTable1 = ref<VxeTableInstance>()
 
             onMounted(() => {
               nextTick(() => {
@@ -278,7 +278,7 @@ export default defineComponent({
               })
             }
 
-            const xTable2 = ref({} as VxeTableInstance)
+            const xTable2 = ref<VxeTableInstance>()
 
             onMounted(() => {
               nextTick(() => {
@@ -304,7 +304,7 @@ export default defineComponent({
                   if (columnIndex === 0) {
                     return '平均'
                   }
-                  switch (column.property) {
+                  switch (column.field) {
                     case 'attr1':
                       return sumNum(data, 'attr1')
                   }

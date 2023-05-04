@@ -12,20 +12,15 @@
       <pre-code class="typescript">
         import { defineConfig } from 'vite'
         import vue from '@vitejs/plugin-vue'
-        import styleImport from 'vite-plugin-style-import'
+        import { createStyleImportPlugin, VxeTableResolve } from 'vite-plugin-style-import'
 
         export default defineConfig({
           plugins: [
             // ...,
-            styleImport({
-              libs: [
-                {
-                  libraryName: 'vxe-table',
-                  esModule: true,
-                  resolveComponent: (name) => `vxe-table/es/${name}`,
-                  resolveStyle: (name) => `vxe-table/es/${name}/style.css`
-                }
-              ]
+            createStyleImportPlugin({
+              resolves: [
+                VxeTableResolve()
+              ],
             })
           ]
         })
@@ -35,46 +30,46 @@
         import { App, createApp } = 'vue'
         import 'xe-utils'
         import {
-          // 实例对象
+          // 全局对象
           VXETable,
 
           // 表格功能
-          // VxeModuleFilter,
-          // VxeModuleEdit,
-          // VxeModuleMenu,
-          // VxeModuleExport,
-          // VxeModuleKeyboard,
-          // VxeModuleValidator,
+          // Filter,
+          // Edit,
+          // Menu,
+          // Export,
+          // Keyboard,
+          // Validator,
 
           // 可选组件
-          VxeIcon,
-          VxeColumn,
-          // VxeColgroup,
-          // VxeGrid,
-          // VxeTooltip,
-          // VxeToolbar,
-          // VxePager,
-          // VxeForm,
-          // VxeFormItem,
-          // VxeFormGather,
-          // VxeCheckbox,
-          // VxeCheckboxGroup,
-          // VxeRadio,
-          // VxeRadioGroup,
-          // VxeRadioButton,
-          // VxeSwitch,
-          // VxeInput,
-          // VxeSelect,
-          // VxeOptgroup,
-          // VxeOption,
-          // VxeTextarea,
-          // VxeButton,
-          // VxeModal,
-          // VxeList,
-          // VxePulldown,
+          Icon,
+          Column,
+          // Colgroup,
+          // Grid,
+          // Tooltip,
+          // Toolbar,
+          // Pager,
+          // Form,
+          // FormItem,
+          // FormGather,
+          // Checkbox,
+          // CheckboxGroup,
+          // Radio,
+          // RadioGroup,
+          // RadioButton,
+          // Switch,
+          // Input,
+          // Select,
+          // Optgroup,
+          // Option,
+          // Textarea,
+          // Button,
+          // Modal,
+          // List,
+          // Pulldown,
 
           // 表格
-          VxeTable
+          Table
         } from 'vxe-table'
         import zhCN from 'vxe-table/es/locale/lang/zh-CN'
 
@@ -85,42 +80,42 @@
 
         function useTable (app: App) {
           // 表格功能
-          app.use(VxeModuleFilter)
-          // .use(VxeModuleEdit)
-          // .use(VxeModuleMenu)
-          // .use(VxeModuleExport)
-          // .use(VxeModuleKeyboard)
-          // .use(VxeModuleValidator)
+          // app.use(Filter)
+          // .use(Edit)
+          // .use(Menu)
+          // .use(Export)
+          // .use(Keyboard)
+          // .use(Validator)
 
           // 可选组件
-          .use(VxeIcon)
-          .use(VxeColumn)
-          // .use(VxeColgroup)
-          // .use(VxeGrid)
-          // .use(VxeTooltip)
-          // .use(VxeToolbar)
-          // .use(VxePager)
-          // .use(VxeForm)
-          // .use(VxeFormItem)
-          // .use(VxeFormGather)
-          // .use(VxeCheckbox)
-          // .use(VxeCheckboxGroup)
-          // .use(VxeRadio)
-          // .use(VxeRadioGroup)
-          // .use(VxeRadioButton)
-          // .use(VxeSwitch)
-          // .use(VxeInput)
-          // .use(VxeSelect)
-          // .use(VxeOptgroup)
-          // .use(VxeOption)
-          // .use(VxeTextarea)
-          // .use(VxeButton)
-          // .use(VxeModal)
-          // .use(VxeList)
-          // .use(VxePulldown)
+          app.use(Icon)
+          .use(Column)
+          // .use(Colgroup)
+          // .use(Grid)
+          // .use(Tooltip)
+          // .use(Toolbar)
+          // .use(Pager)
+          // .use(Form)
+          // .use(FormItem)
+          // .use(FormGather)
+          // .use(Checkbox)
+          // .use(CheckboxGroup)
+          // .use(Radio)
+          // .use(RadioGroup)
+          // .use(RadioButton)
+          // .use(Switch)
+          // .use(Input)
+          // .use(Select)
+          // .use(Optgroup)
+          // .use(Option)
+          // .use(Textarea)
+          // .use(Button)
+          // .use(Modal)
+          // .use(List)
+          // .use(Pulldown)
 
           // 安装表格
-          .use(VxeTable)
+          .use(Table)
 
           // 给 vue 实例挂载内部对象，例如：
           // app.config.globalProperties.$XModal = VXETable.modal
@@ -134,7 +129,7 @@
     </pre>
 
     <p class="tip">
-      方式2：如果您使用了 babel，借助插件 <a class="link" href="https://www.npmjs.com/package/babel-plugin-import" target="_blank">babel-plugin-import</a> 可以实现按需加载模块，减少文件体积。
+      方式2：如果您使用了 webpack，借助插件 <a class="link" href="https://www.npmjs.com/package/babel-plugin-import" target="_blank">babel-plugin-import</a> 可以实现按需加载模块，减少文件体积。
     </p>
     <pre>
       <pre-code class="shell">
@@ -249,12 +244,6 @@
 
           // 安装表格
           .use(Table)
-
-          // 给 vue 实例挂载内部对象，例如：
-          // app.config.globalProperties.$XModal = VXETable.modal
-          // app.config.globalProperties.$XPrint = VXETable.print
-          // app.config.globalProperties.$XSaveFile = VXETable.saveFile
-          // app.config.globalProperties.$XReadFile = VXETable.readFile
         }
 
         createApp(App).use(useTable).mount('#app')

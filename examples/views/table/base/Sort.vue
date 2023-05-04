@@ -18,9 +18,9 @@
 
     <vxe-table
       border
-      highlight-hover-row
       ref="xTable"
       height="300"
+      :row-config="{isHover: true}"
       :data="tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>
@@ -42,8 +42,8 @@
 
     <vxe-table
       border
-      highlight-hover-row
       height="300"
+      :row-config="{isHover: true}"
       :data="tableData2">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name" :sort-by="sortNameMethod2" sortable>
@@ -67,8 +67,8 @@
 
     <vxe-table
       border
-      highlight-hover-row
       height="300"
+      :row-config="{isHover: true}"
       :data="tableData3"
       :sort-config="tableSort3">
       <vxe-column type="seq" width="60"></vxe-column>
@@ -95,8 +95,8 @@
 
     <vxe-table
       border
-      highlight-hover-row
       height="300"
+      :row-config="{isHover: true}"
       :sort-config="{multiple: true, chronological: isChronological4}"
       :data="tableData4"
       @sort-change="sortChangeEvent3">
@@ -117,9 +117,8 @@
 
     <vxe-table
       border
-      highlight-hover-row
-      highlight-hover-column
       height="300"
+      :row-config="{isCurrent: true, isHover: true}"
       :data="tableData"
       :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}, orders: ['desc', 'asc', null]}"
       @sort-change="sortChangeEvent4">
@@ -142,7 +141,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VxeColumnPropTypes, VxeTableEvents, VxeTablePropTypes } from '../../../../types/index'
+import { VxeColumnPropTypes, VxeTableEvents, VxeTablePropTypes } from 'vxe-table'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
@@ -233,10 +232,10 @@ export default defineComponent({
       sortMethod ({ data, sortList }) {
         const sortItem = sortList[0]
         // 取出第一个排序的列
-        const { property, order } = sortItem
-        let list = []
+        const { field, order } = sortItem
+        let list: any[] = []
         if (order === 'asc' || order === 'desc') {
-          if (property === 'name') {
+          if (field === 'name') {
             // 例如：实现中英文混排，按照字母排序
             list = data.sort((a, b) => {
               return getPinYin(a.name).localeCompare(getPinYin(b.name))
@@ -278,11 +277,11 @@ export default defineComponent({
     ])
 
     const sortChangeEvent3: VxeTableEvents.SortChange = ({ sortList }) => {
-      console.info(sortList.map((item) => `${item.property},${item.order}`).join('; '))
+      console.info(sortList.map((item) => `${item.field},${item.order}`).join('; '))
     }
 
-    const sortChangeEvent4: VxeTableEvents.SortChange = ({ property, order }) => {
-      console.info(property, order)
+    const sortChangeEvent4: VxeTableEvents.SortChange = ({ field, order }) => {
+      console.info(field, order)
     }
 
     return {
@@ -308,9 +307,9 @@ export default defineComponent({
 
         <vxe-table
           border
-          highlight-hover-row
           ref="xTable"
           height="300"
+          :row-config="{isHover: true}"
           :data="tableData">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column field="name" title="Name" sortable></vxe-column>
@@ -345,8 +344,8 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-hover-row
           height="300"
+          :row-config="{isHover: true}"
           :data="tableData2">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column field="name" title="Name" :sort-by="sortNameMethod2" sortable>
@@ -408,8 +407,8 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-hover-row
           height="300"
+          :row-config="{isHover: true}"
           :data="tableData3"
           :sort-config="tableSort3">
           <vxe-column type="seq" width="60"></vxe-column>
@@ -468,10 +467,10 @@ export default defineComponent({
               sortMethod ({ data, sortList }) {
                 const sortItem = sortList[0]
                 // 取出第一个排序的列
-                const { property, order } = sortItem
-                let list = []
+                const { field, order } = sortItem
+                let list: any[] = []
                 if (order === 'asc' || order === 'desc') {
-                  if (property === 'name') {
+                  if (field === 'name') {
                     // 例如：实现中英文混排，按照字母排序
                     list = data.sort((a, b) => {
                       return getPinYin(a.name).localeCompare(getPinYin(b.name))
@@ -495,11 +494,17 @@ export default defineComponent({
         })
         `,
         `
+        <vxe-toolbar>
+          <template #buttons>
+            按点击先后顺序排序：<vxe-switch v-model="isChronological4"></vxe-switch>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           border
-          highlight-hover-row
           height="300"
-          :sort-config="{multiple: true}"
+          :row-config="{isHover: true}"
+          :sort-config="{multiple: true, chronological: isChronological4}"
           :data="tableData4"
           @sort-change="sortChangeEvent3">
           <vxe-column type="seq" width="60"></vxe-column>
@@ -514,6 +519,8 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
+            const isChronological4 = ref(false)
+
             const tableData4 = ref([
               { name: '小红', role: '前端', num: 7 },
               { name: '老王', role: '后端', num: 6 },
@@ -538,12 +545,13 @@ export default defineComponent({
             ])
 
             const sortChangeEvent3: VxeTableEvents.SortChange = ({ sortList }) => {
-              console.info(sortList.map((item) => \`\${item.property},\${item.order}\`).join('; '))
+              console.info(sortList.map((item) => \`\${item.field},\${item.order}\`).join('; '))
             }
 
             return {
               tableData4,
-              sortChangeEvent3
+              sortChangeEvent3,
+              isChronological4
             }
           }
         })
@@ -551,9 +559,8 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-hover-row
-          highlight-hover-column
           height="300"
+          :row-config="{isCurrent: true, isHover: true}"
           :data="tableData"
           :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}, orders: ['desc', 'asc', null]}"
           @sort-change="sortChangeEvent4">
@@ -582,8 +589,8 @@ export default defineComponent({
               { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
             ])
 
-            const sortChangeEvent4: VxeTableEvents.SortChange = ({ property, order }) => {
-              console.info(property, order)
+            const sortChangeEvent4: VxeTableEvents.SortChange = ({ field, order }) => {
+              console.info(field, order)
             }
 
             return {

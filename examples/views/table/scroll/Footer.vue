@@ -15,11 +15,11 @@
 
 <script lang="tsx">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeGridInstance, VxeGridPropTypes, VxeGridProps } from '../../../../types/index'
+import { VxeGridInstance, VxeGridPropTypes, VxeGridProps } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xGrid = ref({} as VxeGridInstance)
+    const xGrid = ref<VxeGridInstance>()
 
     const footerData = ref([] as string[][])
 
@@ -30,8 +30,10 @@ export default defineComponent({
       showFooterOverflow: true,
       showFooter: true,
       height: 500,
-      rowId: 'id',
       loading: false,
+      rowConfig: {
+        keyField: 'id'
+      },
       checkboxConfig: {
         checkField: 'checked',
         labelField: 'id'
@@ -136,7 +138,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xGrid = ref({} as VxeGridInstance)
+            const xGrid = ref<VxeGridInstance>()
 
             const footerData = ref([] as string[][])
 
@@ -147,8 +149,10 @@ export default defineComponent({
               showFooterOverflow: true,
               showFooter: true,
               height: 500,
-              rowId: 'id',
               loading: false,
+              rowConfig: {
+                keyField: 'id'
+              },
               checkboxConfig: {
                 checkField: 'checked',
                 labelField: 'id'

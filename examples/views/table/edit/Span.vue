@@ -20,9 +20,21 @@
       :edit-rules="demo1.validRules"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-column type="checkbox" width="60"></vxe-column>
-      <vxe-column field="role" title="Role" :edit-render="{name: 'input', props: {placeholder: '请输入角色'}}"></vxe-column>
-      <vxe-column field="name" title="Name" :edit-render="{name: 'input', props: {placeholder: '请输入名称'}}"></vxe-column>
-      <vxe-column field="address" title="Address" :edit-render="{name: 'input', props: {placeholder: '请输入地址'}}"></vxe-column>
+      <vxe-column field="role" title="Role" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.role" type="text" placeholder="请输入角色"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.name" type="text" placeholder="请输入名称"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="address" title="Address" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.address" type="text" placeholder="请输入地址"></vxe-input>
+        </template>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -36,12 +48,11 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTablePropTypes } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const tableData = ref([
       { id: 10001, name: 'Test1', nickname: 'T1', role: 'Designer', sex: '0', sex2: ['0'], num1: 40, age: 28, address: 'Shenzhen', date12: '', date13: '' },
@@ -75,39 +86,43 @@ export default defineComponent({
 
     const insertEvent = async () => {
       const $table = xTable.value
-      const record = {}
-      const { row: newRow } = await $table.insert(record)
-      $table.setActiveCell(newRow, 'role')
+      if ($table) {
+        const record = {}
+        const { row: newRow } = await $table.insert(record)
+        $table.setEditCell(newRow, 'role')
+      }
     }
 
     const saveEvent = async () => {
       const $table = xTable.value
-      const body = $table.getRecordset()
-      const { insertRecords, removeRecords, updateRecords } = body
-      if (insertRecords.length || removeRecords.length || updateRecords.length) {
-        const errMap = await $table.validate().catch(errMap => errMap)
-        if (errMap) {
-          VXETable.modal.message({ status: 'error', content: '校验不通过！' })
+      if ($table) {
+        const body = $table.getRecordset()
+        const { insertRecords, removeRecords, updateRecords } = body
+        if (insertRecords.length || removeRecords.length || updateRecords.length) {
+          const errMap = await $table.validate()
+          if (errMap) {
+            VXETable.modal.message({ status: 'error', content: '校验不通过！' })
+          } else {
+            VXETable.modal.message({ content: '保存成功！', status: 'success' })
+          }
         } else {
-          VXETable.modal.message({ content: '保存成功！', status: 'success' })
+          VXETable.modal.message({ content: '数据未改动！', status: 'warning' })
         }
-      } else {
-        VXETable.modal.message({ content: '数据未改动！', status: 'warning' })
       }
     }
 
     // 通用行合并函数（将相同多列数据合并为一行）
     const rowspanMethod: VxeTablePropTypes.SpanMethod = ({ row, _rowIndex, column, visibleData }) => {
       const fields = ['role']
-      const cellValue = row[column.property]
-      if (cellValue && fields.includes(column.property)) {
+      const cellValue = row[column.field]
+      if (cellValue && fields.includes(column.field)) {
         const prevRow = visibleData[_rowIndex - 1]
         let nextRow = visibleData[_rowIndex + 1]
-        if (prevRow && prevRow[column.property] === cellValue) {
+        if (prevRow && prevRow[column.field] === cellValue) {
           return { rowspan: 0, colspan: 0 }
         } else {
           let countRowspan = 1
-          while (nextRow && nextRow[column.property] === cellValue) {
+          while (nextRow && nextRow[column.field] === cellValue) {
             nextRow = visibleData[++countRowspan + _rowIndex]
           }
           if (countRowspan > 1) {
@@ -144,9 +159,21 @@ export default defineComponent({
           :edit-rules="demo1.validRules"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-column type="checkbox" width="60"></vxe-column>
-          <vxe-column field="role" title="Role" :edit-render="{name: 'input', props: {placeholder: '请输入角色'}}"></vxe-column>
-          <vxe-column field="name" title="Name" :edit-render="{name: 'input', props: {placeholder: '请输入名称'}}"></vxe-column>
-          <vxe-column field="address" title="Address" :edit-render="{name: 'input', props: {placeholder: '请输入地址'}}"></vxe-column>
+          <vxe-column field="role" title="Role" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.role" type="text" placeholder="请输入角色"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.name" type="text" placeholder="请输入名称"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="address" title="Address" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.address" type="text" placeholder="请输入地址"></vxe-input>
+            </template>
+          </vxe-column>
         </vxe-table>
         `,
         `
@@ -155,7 +182,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const tableData = ref([
               { id: 10001, name: 'Test1', nickname: 'T1', role: 'Designer', sex: '0', sex2: ['0'], num1: 40, age: 28, address: 'Shenzhen', date12: '', date13: '' },
@@ -191,7 +218,7 @@ export default defineComponent({
               const $table = xTable.value
               const record = {}
               const { row: newRow } = await $table.insert(record)
-              $table.setActiveCell(newRow, 'role')
+              $table.setEditCell(newRow, 'role')
             }
 
             const saveEvent = async () => {
@@ -199,7 +226,7 @@ export default defineComponent({
               const body = $table.getRecordset()
               const { insertRecords, removeRecords, updateRecords } = body
               if (insertRecords.length || removeRecords.length || updateRecords.length) {
-                const errMap = await $table.validate().catch(errMap => errMap)
+                const errMap = await $table.validate()
                 if (errMap) {
                   VXETable.modal.message({ status: 'error', content: '校验不通过！' })
                 } else {
@@ -213,15 +240,15 @@ export default defineComponent({
             // 通用行合并函数（将相同多列数据合并为一行）
             const rowspanMethod: VxeTablePropTypes.SpanMethod = ({ row, _rowIndex, column, visibleData }) => {
               const fields = ['role']
-              const cellValue = row[column.property]
-              if (cellValue && fields.includes(column.property)) {
+              const cellValue = row[column.field]
+              if (cellValue && fields.includes(column.field)) {
                 const prevRow = visibleData[_rowIndex - 1]
                 let nextRow = visibleData[_rowIndex + 1]
-                if (prevRow && prevRow[column.property] === cellValue) {
+                if (prevRow && prevRow[column.field] === cellValue) {
                   return { rowspan: 0, colspan: 0 }
                 } else {
                   let countRowspan = 1
-                  while (nextRow && nextRow[column.property] === cellValue) {
+                  while (nextRow && nextRow[column.field] === cellValue) {
                     nextRow = visibleData[++countRowspan + _rowIndex]
                   }
                   if (countRowspan > 1) {

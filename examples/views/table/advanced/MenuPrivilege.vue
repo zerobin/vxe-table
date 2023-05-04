@@ -5,10 +5,10 @@
     <vxe-table
       border
       show-footer
-      highlight-current-row
-      highlight-current-column
       ref="xTable"
       height="400"
+      :row-config="{isCurrent: true}"
+      :column-config="{isCurrent: true}"
       :footer-method="footerMethod"
       :data="demo1.tableData"
       :menu-config="demo1.tableMenu"
@@ -45,12 +45,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTableEvents, VxeTablePropTypes } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeTableEvents, VxeTablePropTypes } from 'vxe-table'
+import XEClipboard from 'xe-clipboard'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const demo1 = reactive({
       tableData: [
@@ -70,11 +70,11 @@ export default defineComponent({
         body: {
           options: [
             [
-              { code: 'details', name: '查看详情', prefixIcon: 'fa fa-link', visible: true, disabled: false }
+              { code: 'details', name: '查看详情', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false }
             ],
             [
-              { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
-              { code: 'clear', name: '清除内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false }
+              { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false },
+              { code: 'clear', name: '清除内容', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false }
             ],
             [
               { code: 'remove', name: '删除', visible: true, disabled: false },
@@ -113,8 +113,8 @@ export default defineComponent({
         visibleMethod ({ options, column }) {
           // 示例：只有 name 列允许操作，清除按钮只能在 age 才显示
           // 显示之前处理按钮的操作权限
-          const isDisabled = !column || column.property !== 'name'
-          const isVisible = column && column.property === 'age'
+          const isDisabled = !column || column.field !== 'name'
+          const isVisible = column && column.field === 'age'
           options.forEach(list => {
             list.forEach(item => {
               item.disabled = false
@@ -123,7 +123,7 @@ export default defineComponent({
                   item.disabled = isDisabled
                 }
                 if (item.code === 'details') {
-                  item.visible = column.property === 'name'
+                  item.visible = column.field === 'name'
                 } else if (item.code === 'clear' || item.code === 'filter') {
                   item.visible = isVisible
                 }
@@ -144,19 +144,25 @@ export default defineComponent({
 
     const headerCellContextMenuEvent: VxeTableEvents.HeaderCellMenu = ({ column }) => {
       const $table = xTable.value
-      $table.setCurrentColumn(column)
+      if ($table) {
+        $table.setCurrentColumn(column)
+      }
     }
 
     const cellContextMenuEvent: VxeTableEvents.CellMenu = ({ row }) => {
       const $table = xTable.value
-      $table.setCurrentRow(row)
+      if ($table) {
+        $table.setCurrentRow(row)
+      }
     }
 
     const contextMenuClickEvent: VxeTableEvents.MenuClick = ({ menu, row, column }) => {
       switch (menu.code) {
         case 'copy':
           if (row && column) {
-            VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
+            if (XEClipboard.copy(row[column.field])) {
+              VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
+            }
           }
           break
         default:
@@ -178,8 +184,8 @@ export default defineComponent({
           if (columnIndex === 0) {
             return '平均'
           }
-          if (['age', 'rate'].includes(column.property)) {
-            return meanNum(data, column.property)
+          if (['age', 'rate'].includes(column.field)) {
+            return meanNum(data, column.field)
           }
           return '-'
         })
@@ -198,10 +204,10 @@ export default defineComponent({
         <vxe-table
           border
           show-footer
-          highlight-current-row
-          highlight-current-column
           ref="xTable"
           height="400"
+          :row-config="{isCurrent: true}"
+          :column-config="{isCurrent: true}"
           :footer-method="footerMethod"
           :data="demo1.tableData"
           :menu-config="demo1.tableMenu"
@@ -218,10 +224,11 @@ export default defineComponent({
         `
         import { defineComponent, reactive, ref } from 'vue'
         import { VXETable, VxeTableInstance, VxeTableEvents, VxeTablePropTypes } from 'vxe-table'
+        import XEClipboard from 'xe-clipboard'
 
         export default defineComponent({
           setup () {
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const demo1 = reactive({
               tableData: [
@@ -241,11 +248,11 @@ export default defineComponent({
                 body: {
                   options: [
                     [
-                      { code: 'details', name: '查看详情', prefixIcon: 'fa fa-link', visible: true, disabled: false }
+                      { code: 'details', name: '查看详情', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false }
                     ],
                     [
-                      { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
-                      { code: 'clear', name: '清除内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false }
+                      { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false },
+                      { code: 'clear', name: '清除内容', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false }
                     ],
                     [
                       { code: 'remove', name: '删除', visible: true, disabled: false },
@@ -284,8 +291,8 @@ export default defineComponent({
                 visibleMethod ({ options, column }) {
                   // 示例：只有 name 列允许操作，清除按钮只能在 age 才显示
                   // 显示之前处理按钮的操作权限
-                  const isDisabled = !column || column.property !== 'name'
-                  const isVisible = column && column.property === 'age'
+                  const isDisabled = !column || column.field !== 'name'
+                  const isVisible = column && column.field === 'age'
                   options.forEach(list => {
                     list.forEach(item => {
                       item.disabled = false
@@ -294,7 +301,7 @@ export default defineComponent({
                           item.disabled = isDisabled
                         }
                         if (item.code === 'details') {
-                          item.visible = column.property === 'name'
+                          item.visible = column.field === 'name'
                         } else if (item.code === 'clear' || item.code === 'filter') {
                           item.visible = isVisible
                         }
@@ -327,7 +334,9 @@ export default defineComponent({
               switch (menu.code) {
                 case 'copy':
                   if (row && column) {
-                    VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
+                    if (XEClipboard.copy(row[column.field])) {
+                      VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
+                    }
                   }
                   break
                 default:
@@ -349,8 +358,8 @@ export default defineComponent({
                   if (columnIndex === 0) {
                     return '平均'
                   }
-                  if (['age', 'rate'].includes(column.property)) {
-                    return meanNum(data, column.property)
+                  if (['age', 'rate'].includes(column.field)) {
+                    return meanNum(data, column.field)
                   }
                   return '-'
                 })

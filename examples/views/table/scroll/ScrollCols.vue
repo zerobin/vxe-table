@@ -2,7 +2,8 @@
   <div>
     <p class="tip">
       虚拟滚动渲染<br>
-      大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性，建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="loadColumn"/> 函数
+      大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性，建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="loadColumn"/> 函数<br>
+      <span class="green">（性能优化：横向虚拟滚动由列宽决定性能，每一列的列宽越大就越流畅；纵向虚拟滚动由行高决定性能，每一行的高度越高就越流畅）</span>
     </p>
 
     <vxe-grid ref="xGrid" v-bind="gridOptions">
@@ -27,9 +28,7 @@
 
 <script lang="ts">
 import { defineComponent, nextTick, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeGridInstance, VxeGridProps } from '../../../../types/index'
-import XEUtils from 'xe-utils'
+import { VXETable, VxeGridInstance, VxeGridProps } from 'vxe-table'
 
 const columnList: any[] = []
 const dataList: any[] = []
@@ -41,8 +40,10 @@ export default defineComponent({
       showHeaderOverflow: true,
       showOverflow: true,
       height: 500,
-      resizable: true,
       loading: false,
+      columnConfig: {
+        resizable: true
+      },
       toolbarConfig: {
         slots: {
           buttons: 'toolbar_buttons'
@@ -53,7 +54,7 @@ export default defineComponent({
       }
     } as VxeGridProps)
 
-    const xGrid = ref({} as VxeGridInstance)
+    const xGrid = ref<VxeGridInstance>()
 
     const mockColumns = (colSize: number): Promise<any[]> => {
       return new Promise(resolve => {
@@ -68,7 +69,8 @@ export default defineComponent({
               })
             }
           }
-          const result = XEUtils.clone(columnList.slice(0, colSize), true)
+          // 模拟数据
+          const result = JSON.parse(JSON.stringify(columnList.slice(0, colSize)))
           resolve(result)
         }, 100)
       })
@@ -148,7 +150,8 @@ export default defineComponent({
               })
             }
           }
-          const result = XEUtils.clone(dataList.slice(0, rowSize), true)
+          // 模拟数据
+          const result = JSON.parse(JSON.stringify(dataList.slice(0, rowSize)))
           resolve(result)
         }, 100)
       })
@@ -203,7 +206,6 @@ export default defineComponent({
         `
         import { defineComponent, nextTick, reactive, ref } from 'vue'
         import { VXETable, VxeGridInstance, VxeGridProps } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         const columnList: any[] = []
         const dataList: any[] = []
@@ -215,8 +217,10 @@ export default defineComponent({
               showHeaderOverflow: true,
               showOverflow: true,
               height: 500,
-              resizable: true,
               loading: false,
+              columnConfig: {
+                resizable: true
+              },
               toolbarConfig: {
                 slots: {
                   buttons: 'toolbar_buttons'
@@ -227,7 +231,7 @@ export default defineComponent({
               }
             } as VxeGridProps)
 
-            const xGrid = ref({} as VxeGridInstance)
+            const xGrid = ref<VxeGridInstance>()
 
             const mockColumns = (colSize: number): Promise<any[]> => {
               return new Promise(resolve => {
@@ -242,7 +246,8 @@ export default defineComponent({
                       })
                     }
                   }
-                  const result = XEUtils.clone(columnList.slice(0, colSize), true)
+                  // 模拟数据
+                  const result = JSON.parse(JSON.stringify(columnList.slice(0, colSize)))
                   resolve(result)
                 }, 100)
               })
@@ -322,7 +327,8 @@ export default defineComponent({
                       })
                     }
                   }
-                  const result = XEUtils.clone(dataList.slice(0, rowSize), true)
+                  // 模拟数据
+                  const result = JSON.parse(JSON.stringify(dataList.slice(0, rowSize)))
                   resolve(result)
                 }, 100)
               })

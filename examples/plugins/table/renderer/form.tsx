@@ -1,14 +1,12 @@
-import { VXETable } from '../../../../packages/all'
+import { VXETable } from 'vxe-table'
 
 // 创建一个简单的表单-输入框渲染
 VXETable.renderer.add('FormItemInput', {
   // 项内容模板
   renderItemContent (renderOpts, params) {
-    const { data, property } = params
+    const { data, field } = params
     const { props } = renderOpts
-    return [
-      <vxe-input v-model={ data[property] } { ...{ props } }></vxe-input>
-    ]
+    return <vxe-input v-model={ data[field] } { ...{ props } }></vxe-input>
   }
 })
 

@@ -408,6 +408,24 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: 'empty',
+        desc: '自定义空数据时显示模板',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{}',
+        list: []
+      },
+      {
+        name: 'loading',
+        desc: '自定义加载中模板',
+        version: '4.3.7',
+        type: '',
+        enum: '',
+        defVal: '{}',
+        list: []
+      },
+      {
         name: 'form',
         desc: '表单模板',
         version: '',
@@ -515,6 +533,33 @@ const apis = [
         type: '',
         enum: '',
         defVal: '{ status, data, $event }',
+        list: []
+      },
+      {
+        name: 'proxy-query',
+        desc: '只对 proxy-config.ajax.query 配置时有效，当手动点击查询时会触发该事件',
+        version: '4.3.10',
+        type: '',
+        enum: '',
+        defVal: '{ status, isReload, isInited }',
+        list: []
+      },
+      {
+        name: 'proxy-delete',
+        desc: '只对 proxy-config.ajax.delete 配置时有效，当手动点击删除时会触发该事件',
+        version: '4.3.10',
+        type: '',
+        enum: '',
+        defVal: '{ status }',
+        list: []
+      },
+      {
+        name: 'proxy-save',
+        desc: '只对 proxy-config.ajax.save 配置时有效，当手动点击保存时会触发该事件',
+        version: '4.3.10',
+        type: '',
+        enum: '',
+        defVal: '{ status }',
         list: []
       },
       {

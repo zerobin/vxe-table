@@ -4,10 +4,10 @@
 
     <vxe-table
       border
-      resizable
       show-overflow
       ref="xTable1"
       max-height="400"
+      :column-config="{resizable: true}"
       :loading="demo1.loading">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="100"></vxe-column>
@@ -31,10 +31,10 @@
 
     <vxe-table
       border
-      resizable
       show-overflow
       ref="xTable2"
       max-height="400"
+      :column-config="{resizable: true}"
       :loading="demo2.loading">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="100"></vxe-column>
@@ -57,12 +57,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance } from '../../../../types/index'
+import { VxeTableInstance } from 'vxe-table'
 
 export default defineComponent({
   setup () {
     const mockList = (size: number) => {
-      const list = []
+      const list: any[] = []
       for (let index = 0; index < size; index++) {
         list.push({
           name: `名称${index}`,
@@ -81,7 +81,7 @@ export default defineComponent({
       loading: false
     })
 
-    const xTable1 = ref({} as VxeTableInstance)
+    const xTable1 = ref<VxeTableInstance>()
 
     const findList1 = () => {
       demo1.loading = true
@@ -103,7 +103,7 @@ export default defineComponent({
       loading: false
     })
 
-    const xTable2 = ref({} as VxeTableInstance)
+    const xTable2 = ref<VxeTableInstance>()
 
     const findList2 = () => {
       demo2.loading = true
@@ -133,10 +133,10 @@ export default defineComponent({
         `
         <vxe-table
           border
-          resizable
           show-overflow
           ref="xTable1"
           max-height="400"
+          :column-config="{resizable: true}"
           :loading="demo1.loading">
           <vxe-column type="checkbox" width="60"></vxe-column>
           <vxe-column type="seq" width="100"></vxe-column>
@@ -156,7 +156,7 @@ export default defineComponent({
         export default defineComponent({
           setup () {
             const mockList = (size: number) => {
-              const list = []
+              const list: any[] = []
               for (let index = 0; index < size; index++) {
                 list.push({
                   name: \`名称\${index}\`,
@@ -175,7 +175,7 @@ export default defineComponent({
               loading: false
             })
 
-            const xTable2 = ref({} as VxeTableInstance)
+            const xTable2 = ref<VxeTableInstance>()
 
             const findList2 = () => {
               demo2.loading = true
@@ -205,10 +205,10 @@ export default defineComponent({
         `
         <vxe-table
           border
-          resizable
           show-overflow
           ref="xTable2"
           max-height="400"
+          :column-config="{resizable: true}"
           :loading="demo2.loading">
           <vxe-column type="checkbox" width="60"></vxe-column>
           <vxe-column type="seq" width="100"></vxe-column>
@@ -227,7 +227,7 @@ export default defineComponent({
         export default defineComponent({
           setup () {
             const mockList = (size: number) => {
-              const list = []
+              const list: any[] = []
               for (let index = 0; index < size; index++) {
                 list.push({
                   name: \`名称\${index}\`,
@@ -246,7 +246,7 @@ export default defineComponent({
               loading: false
             })
 
-            const xTable2 = ref({} as VxeTableInstance)
+            const xTable2 = ref<VxeTableInstance>()
 
             const findList2 = () => {
               demo2.loading = true

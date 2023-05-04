@@ -17,10 +17,10 @@
     <vxe-table
       ref="xTable"
       border
-      resizable
       show-overflow
       height="500"
       :row-config="{keyField: 'id'}"
+      :column-config="{resizable: true}"
       :loading="demo1.loading"
       :checkbox-config="{checkField: 'checked'}">
       <vxe-column type="checkbox" width="60"></vxe-column>
@@ -43,13 +43,13 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance } from '../../../../types/index'
+import { VxeTableInstance } from 'vxe-table'
 
 export default defineComponent({
   setup () {
     let allData: any[] = []
 
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const demo1 = reactive({
       loading: false
@@ -110,10 +110,10 @@ export default defineComponent({
         <vxe-table
           ref="xTable"
           border
-          resizable
           show-overflow
           height="500"
-          row-id="id"
+          :row-config="{keyField: 'id'}"
+          :column-config="{resizable: true}"
           :loading="demo1.loading"
           :checkbox-config="{checkField: 'checked'}">
           <vxe-column type="checkbox" width="60"></vxe-column>
@@ -133,7 +133,7 @@ export default defineComponent({
           setup () {
             let allData: any[] = []
 
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const demo1 = reactive({
               loading: false

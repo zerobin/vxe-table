@@ -1,11 +1,10 @@
 <template>
   <div>
-    <p class="tip">高亮当前列，当前列是唯一的，通过设置 <table-api-link prop="highlight-current-column"/> 参数</p>
+    <p class="tip">高亮当前列，当前列是唯一的，通过设置 <table-api-link prop="column-config"/>.<table-api-link prop="isCurrent"/> 参数</p>
 
     <vxe-table
       border
-      highlight-hover-column
-      highlight-current-column
+      :column-config="{isCurrent: true, isHover: true}"
       :data="demo1.tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name"></vxe-column>
@@ -21,14 +20,12 @@
       <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
-    <p class="tip">列和行选中高亮，通过设置 <table-api-link prop="highlight-hover-row"/>、<table-api-link prop="highlight-hover-column"/> 参数</p>
+    <p class="tip">列和行选中高亮，通过设置 <table-api-link prop="column-config"/>.isCurrent、<table-api-link prop="row-config"/>.isCurrent 参数</p>
 
     <vxe-table
       border
-      highlight-hover-row
-      highlight-current-row
-      highlight-hover-column
-      highlight-current-column
+      :column-config="{isCurrent: true, isHover: true}"
+      :row-config="{isCurrent: true, isHover: true}"
       :data="demo2.tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name"></vxe-column>
@@ -84,8 +81,7 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-hover-column
-          highlight-current-column
+          :column-config="{isCurrent: true, isHover: true}"
           :data="demo1.tableData">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column field="name" title="Name"></vxe-column>
@@ -121,10 +117,8 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-hover-row
-          highlight-current-row
-          highlight-hover-column
-          highlight-current-column
+          :column-config="{isCurrent: true, isHover: true}"
+          :row-config="{isCurrent: true, isHover: true}"
           :data="demo2.tableData">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column field="name" title="Name"></vxe-column>

@@ -30,10 +30,26 @@
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <vxe-column type="checkbox" width="80"></vxe-column>
       <vxe-column type="seq" width="80"></vxe-column>
-      <vxe-column field="name" title="Name" width="400" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="sex2" title="Sex" width="200" :edit-render="{name: '$input'}"></vxe-column>
-      <vxe-column field="date" title="Date" width="300" fixed="right" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
+      <vxe-column field="name" title="Name" width="400" :edit-render="{}">
+        <template #edit="scope">
+          <vxe-input v-model="scope.row.name" type="text" @change="$refs.xTable.updateStatus(scope)"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="age" title="Age" width="200" :edit-render="{}">
+        <template #edit="scope">
+          <vxe-input v-model="scope.row.age" type="text" @change="$refs.xTable.updateStatus(scope)"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="sex" title="Sex" width="200" :edit-render="{}">
+        <template #edit="scope">
+          <vxe-input v-model="scope.row.sex" type="text" @change="$refs.xTable.updateStatus(scope)"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="date" title="Date" width="300" fixed="right" :edit-render="{}">
+        <template #edit="scope">
+          <vxe-input v-model="scope.row.date" type="date" transfer @change="$refs.xTable.updateStatus(scope)"></vxe-input>
+        </template>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -47,12 +63,11 @@
 
 <script lang="tsx">
 import { defineComponent, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTablePropTypes, VxeTableDefines } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const tableData = ref([
       { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, address: 'test abc' },
@@ -73,7 +88,7 @@ export default defineComponent({
           }
         }
       ],
-      sex2: [
+      sex: [
         { required: true, message: '性别必须填写' }
       ],
       age: [
@@ -86,103 +101,121 @@ export default defineComponent({
 
     const validEvent = async () => {
       const $table = xTable.value
-      const errMap = await $table.validate().catch(errMap => errMap)
-      if (errMap) {
-        VXETable.modal.message({ status: 'error', message: '校验不通过！' })
-      } else {
-        VXETable.modal.message({ status: 'success', message: '校验成功！' })
-      }
-    }
-
-    const fullValidEvent = async () => {
-      const $table = xTable.value
-      const errMap: VxeTableDefines.ValidatorErrorMapParams = await $table.fullValidate().catch(errMap => errMap)
-      if (errMap) {
-        const msgList: string[] = []
-        Object.values(errMap).forEach(errList => {
-          errList.forEach(params => {
-            const { rowIndex, column, rules } = params
-            rules.forEach(rule => {
-              msgList.push(`第 ${rowIndex + 1} 行 ${column.title} 校验错误：${rule.message}`)
-            })
-          })
-        })
-        VXETable.modal.message({
-          status: 'error',
-          slots: {
-            default () {
-              return [
-                <div class="red" style="max-height: 400px;overflow: auto;">
-                  {
-                    msgList.map(msg => <div>{ msg }</div>)
-                  }
-                </div>
-              ]
-            }
-          }
-        })
-      } else {
-        VXETable.modal.message({ status: 'success', message: '校验成功！' })
-      }
-    }
-
-    const validAllEvent = async () => {
-      const $table = xTable.value
-      const errMap = await $table.validate(true).catch(errMap => errMap)
-      if (errMap) {
-        VXETable.modal.message({ status: 'error', message: '校验不通过！' })
-      } else {
-        VXETable.modal.message({ status: 'success', message: '校验成功！' })
-      }
-    }
-
-    const selectValidEvent = async () => {
-      const $table = xTable.value
-      const selectRecords = $table.getCheckboxRecords()
-      if (selectRecords.length > 0) {
-        const errMap = await $table.validate(selectRecords).catch(errMap => errMap)
+      if ($table) {
+        const errMap = await $table.validate()
         if (errMap) {
           VXETable.modal.message({ status: 'error', message: '校验不通过！' })
         } else {
           VXETable.modal.message({ status: 'success', message: '校验成功！' })
         }
-      } else {
-        VXETable.modal.message({ status: 'warning', message: '未选中数据！' })
+      }
+    }
+
+    const fullValidEvent = async () => {
+      const $table = xTable.value
+      if ($table) {
+        const errMap = await $table.fullValidate()
+        if (errMap) {
+          const msgList: string[] = []
+          Object.values(errMap).forEach((errList: any) => {
+            errList.forEach((params: any) => {
+              const { rowIndex, column, rules } = params
+              rules.forEach((rule: any) => {
+                msgList.push(`第 ${rowIndex + 1} 行 ${column.title} 校验错误：${rule.message}`)
+              })
+            })
+          })
+          VXETable.modal.message({
+            status: 'error',
+            slots: {
+              default () {
+                return [
+                  <div class="red" style="max-height: 400px;overflow: auto;">
+                    {
+                      msgList.map(msg => <div>{ msg }</div>)
+                    }
+                  </div>
+                ]
+              }
+            }
+          })
+        } else {
+          VXETable.modal.message({ status: 'success', message: '校验成功！' })
+        }
+      }
+    }
+
+    const validAllEvent = async () => {
+      const $table = xTable.value
+      if ($table) {
+        const errMap = await $table.validate(true)
+        if (errMap) {
+          VXETable.modal.message({ status: 'error', message: '校验不通过！' })
+        } else {
+          VXETable.modal.message({ status: 'success', message: '校验成功！' })
+        }
+      }
+    }
+
+    const selectValidEvent = async () => {
+      const $table = xTable.value
+      if ($table) {
+        const selectRecords = $table.getCheckboxRecords()
+        if (selectRecords.length > 0) {
+          const errMap = await $table.validate(selectRecords)
+          if (errMap) {
+            VXETable.modal.message({ status: 'error', message: '校验不通过！' })
+          } else {
+            VXETable.modal.message({ status: 'success', message: '校验成功！' })
+          }
+        } else {
+          VXETable.modal.message({ status: 'warning', message: '未选中数据！' })
+        }
       }
     }
 
     const insertEvent = async () => {
       const $table = xTable.value
-      const { row: newRow } = await $table.insert({})
-      // 插入一条数据并触发校验
-      const errMap = await $table.validate(newRow).catch(errMap => errMap)
-      if (errMap) {
-        // 校验不通过
+      if ($table) {
+        const { row: newRow } = await $table.insert({})
+        // 插入一条数据并触发校验
+        const errMap = await $table.validate(newRow)
+        if (errMap) {
+          // 校验失败
+        }
       }
     }
 
     const getSelectEvent = () => {
       const $table = xTable.value
-      const selectRecords = $table.getCheckboxRecords()
-      VXETable.modal.alert(selectRecords.length)
+      if ($table) {
+        const selectRecords = $table.getCheckboxRecords()
+        VXETable.modal.alert(selectRecords.length)
+      }
     }
 
     const getInsertEvent = () => {
       const $table = xTable.value
-      const insertRecords = $table.getInsertRecords()
-      VXETable.modal.alert(insertRecords.length)
+      if ($table) {
+        const insertRecords = $table.getInsertRecords()
+        VXETable.modal.alert(insertRecords.length)
+      }
     }
 
     const getRemoveEvent = () => {
       const $table = xTable.value
-      const removeRecords = $table.getRemoveRecords()
-      VXETable.modal.alert(removeRecords.length)
+      if ($table) {
+        const removeRecords = $table.getRemoveRecords()
+        VXETable.modal.alert(removeRecords.length)
+      }
     }
 
     const getUpdateEvent = () => {
       const $table = xTable.value
-      const updateRecords = $table.getUpdateRecords()
-      VXETable.modal.alert(updateRecords.length)
+      if ($table) {
+        const updateRecords = $table.getUpdateRecords()
+        VXETable.modal.alert(updateRecords.length)
+      }
     }
 
     return {
@@ -225,19 +258,35 @@ export default defineComponent({
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <vxe-column type="checkbox" width="80"></vxe-column>
           <vxe-column type="seq" width="80"></vxe-column>
-          <vxe-column field="name" title="Name" width="400" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="sex2" title="Sex" width="200" :edit-render="{name: '$input'}"></vxe-column>
-          <vxe-column field="date" title="Date" width="300" fixed="right" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
+          <vxe-column field="name" title="Name" width="400" :edit-render="{}">
+            <template #edit="scope">
+              <vxe-input v-model="scope.row.name" type="text" @change="$refs.xTable.updateStatus(scope)"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="age" title="Age" width="200" :edit-render="{}">
+            <template #edit="scope">
+              <vxe-input v-model="scope.row.age" type="text" @change="$refs.xTable.updateStatus(scope)"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="sex" title="Sex" width="200" :edit-render="{}">
+            <template #edit="scope">
+              <vxe-input v-model="scope.row.sex" type="text" @change="$refs.xTable.updateStatus(scope)"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="date" title="Date" width="300" fixed="right" :edit-render="{}">
+            <template #edit="scope">
+              <vxe-input v-model="scope.row.date" type="date" transfer @change="$refs.xTable.updateStatus(scope)"></vxe-input>
+            </template>
+          </vxe-column>
         </vxe-table>
         `,
         `
         import { defineComponent, ref } from 'vue'
-        import { VXETable, VxeTableInstance, VxeTablePropTypes, VxeTableDefines } from 'vxe-table'
+        import { VXETable, VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
 
         export default defineComponent({
           setup () {
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const tableData = ref([
               { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, address: 'test abc' },
@@ -258,7 +307,7 @@ export default defineComponent({
                   }
                 }
               ],
-              sex2: [
+              sex: [
                 { required: true, message: '性别必须填写' }
               ],
               age: [
@@ -271,7 +320,7 @@ export default defineComponent({
 
             const validEvent = async () => {
               const $table = xTable.value
-              const errMap = await $table.validate().catch(errMap => errMap)
+              const errMap = await $table.validate()
               if (errMap) {
                 VXETable.modal.message({ status: 'error', message: '校验不通过！' })
               } else {
@@ -281,13 +330,13 @@ export default defineComponent({
 
             const fullValidEvent = async () => {
               const $table = xTable.value
-              const errMap: VxeTableDefines.ValidatorErrorMapParams = await $table.fullValidate().catch(errMap => errMap)
+              const errMap = await $table.fullValidate()
               if (errMap) {
                 const msgList: string[] = []
-                Object.values(errMap).forEach(errList => {
-                  errList.forEach(params => {
+                Object.values(errMap).forEach((errList: any) => {
+                  errList.forEach((params: any) => {
                     const { rowIndex, column, rules } = params
-                    rules.forEach(rule => {
+                    rules.forEach((rule: any) => {
                       msgList.push(\`第 \${rowIndex + 1} 行 \${column.title} 校验错误：\${rule.message}\`)
                     })
                   })
@@ -313,7 +362,7 @@ export default defineComponent({
 
             const validAllEvent = async () => {
               const $table = xTable.value
-              const errMap = await $table.validate(true).catch(errMap => errMap)
+              const errMap = await $table.validate(true)
               if (errMap) {
                 VXETable.modal.message({ status: 'error', message: '校验不通过！' })
               } else {
@@ -325,7 +374,7 @@ export default defineComponent({
               const $table = xTable.value
               const selectRecords = $table.getCheckboxRecords()
               if (selectRecords.length > 0) {
-                const errMap = await $table.validate(selectRecords).catch(errMap => errMap)
+                const errMap = await $table.validate(selectRecords)
                 if (errMap) {
                   VXETable.modal.message({ status: 'error', message: '校验不通过！' })
                 } else {
@@ -340,9 +389,9 @@ export default defineComponent({
               const $table = xTable.value
               const { row: newRow } = await $table.insert({})
               // 插入一条数据并触发校验
-              const errMap = await $table.validate(newRow).catch(errMap => errMap)
+              const errMap = await $table.validate(newRow)
               if (errMap) {
-                // 校验不通过
+                // 校验失败
               }
             }
 

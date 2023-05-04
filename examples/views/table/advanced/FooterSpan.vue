@@ -76,7 +76,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeTablePropTypes } from '../../../../types/index'
+import { VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -172,13 +172,13 @@ export default defineComponent({
           if (_columnIndex === 0) {
             return '平均'
           }
-          if (['age', 'rate'].includes(column.property)) {
+          if (['age', 'rate'].includes(column.field)) {
             return meanNum(data, 'age')
           }
-          if (['name'].includes(column.property)) {
+          if (['name'].includes(column.field)) {
             return '合并了'
           }
-          if (['content'].includes(column.property)) {
+          if (['content'].includes(column.field)) {
             return '合并了'
           }
           return null
@@ -187,7 +187,7 @@ export default defineComponent({
           if (_columnIndex === 0) {
             return '和值'
           }
-          if (['age', 'rate'].includes(column.property)) {
+          if (['age', 'rate'].includes(column.field)) {
             return sumNum(data, 'age')
           }
           return null
@@ -263,13 +263,13 @@ export default defineComponent({
                   if (_columnIndex === 0) {
                     return '平均'
                   }
-                  if (['age', 'rate'].includes(column.property)) {
+                  if (['age', 'rate'].includes(column.field)) {
                     return meanNum(data, 'age')
                   }
-                  if (['name'].includes(column.property)) {
+                  if (['name'].includes(column.field)) {
                     return '合并了'
                   }
-                  if (['content'].includes(column.property)) {
+                  if (['content'].includes(column.field)) {
                     return '合并了'
                   }
                   return null
@@ -278,7 +278,7 @@ export default defineComponent({
                   if (_columnIndex === 0) {
                     return '和值'
                   }
-                  if (['age', 'rate'].includes(column.property)) {
+                  if (['age', 'rate'].includes(column.field)) {
                     return sumNum(data, 'age')
                   }
                   return null
@@ -366,13 +366,13 @@ export default defineComponent({
                   if (_columnIndex === 0) {
                     return '平均'
                   }
-                  if (['age', 'rate'].includes(column.property)) {
+                  if (['age', 'rate'].includes(column.field)) {
                     return meanNum(data, 'age')
                   }
-                  if (['name'].includes(column.property)) {
+                  if (['name'].includes(column.field)) {
                     return '合并了'
                   }
-                  if (['content'].includes(column.property)) {
+                  if (['content'].includes(column.field)) {
                     return '合并了'
                   }
                   return null
@@ -381,7 +381,7 @@ export default defineComponent({
                   if (_columnIndex === 0) {
                     return '和值'
                   }
-                  if (['age', 'rate'].includes(column.property)) {
+                  if (['age', 'rate'].includes(column.field)) {
                     return sumNum(data, 'age')
                   }
                   return null
@@ -466,13 +466,13 @@ export default defineComponent({
                   if (_columnIndex === 0) {
                     return '平均'
                   }
-                  if (['age', 'rate'].includes(column.property)) {
+                  if (['age', 'rate'].includes(column.field)) {
                     return meanNum(data, 'age')
                   }
-                  if (['name'].includes(column.property)) {
+                  if (['name'].includes(column.field)) {
                     return '合并了'
                   }
-                  if (['content'].includes(column.property)) {
+                  if (['content'].includes(column.field)) {
                     return '合并了'
                   }
                   return null
@@ -481,7 +481,7 @@ export default defineComponent({
                   if (_columnIndex === 0) {
                     return '和值'
                   }
-                  if (['age', 'rate'].includes(column.property)) {
+                  if (['age', 'rate'].includes(column.field)) {
                     return sumNum(data, 'age')
                   }
                   return null

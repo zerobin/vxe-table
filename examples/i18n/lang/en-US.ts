@@ -182,7 +182,7 @@ export default {
         badLineHeight: 'Dynamic row height with virtual scroll',
         badNonsupport: 'Unsupported',
 
-        module: 'Modules',
+        module: 'Components',
         button: 'Button',
         input: 'Input',
         textarea: 'Textarea',
@@ -272,7 +272,8 @@ export default {
         vxeFormGather: 'vxe-form-gather',
         vxeSwitch: 'vxe-switch',
         vxeList: 'vxe-list',
-        vxePulldown: 'vxe-pulldown'
+        vxePulldown: 'vxe-pulldown',
+        vxeIcon: 'vxe-icon'
       }
     },
     header: {
@@ -285,7 +286,9 @@ export default {
       button: {
         viewCode: 'View code',
         runDemo: 'Run demo',
-        showCode: 'Show demo',
+        copyCode: 'Copy code',
+        showCode: 'Show code',
+        hideCode: 'Hide code',
         refresh: 'Refresh',
         insert: 'Insert',
         save: 'Save',
@@ -324,16 +327,16 @@ export default {
       },
       other: {
         v1: 'v1+ (vue 2.6+ End of life) ~ 2020-04 Stop',
-        v2: 'v2+ (vue 2.6+ Old) ~ 2021-12 Stop',
+        v2: 'v2+ (vue 2.6+ End of life) ~ 2021-12 Stop',
         v3: 'v+ (vue 2.6+ Stable)',
         v3d5: '3.5+ (vue 2.6+ Sticky)',
-        v4: 'v4+ (vue 3.0+ Latest)',
-        v4d5: '4.5+ (vue 3.0+ Sticky)',
+        v4: 'v4+ (vue 3.2+ Latest)',
+        v4d5: '4.5+ (vue 3.2+ Sticky)',
         plan: {
           v1: 'v1 Based on vue2.6+, Support for all major browsers',
           v2: 'v2 Based on vue2.6+, Support for all major browsers',
           v3: 'v3 Support for modern browsers and partial compatibility with IE11 to improve rendering performance',
-          v4: 'v4 Based on vue3.0+, Only supports modern browsers, not IE'
+          v4: 'v4 Based on vue3.2+, Only supports modern browsers, not IE'
         },
         compatibility: 'Compatibility',
         releases: 'Releases',
@@ -389,7 +392,7 @@ export default {
           maxHeight: 'Maximum height of the table',
           syncResize: 'Automatically following a property change to recalculate the table is the same as manually calling the recalculate method',
           autoResize: 'Automatically listen for parent changes to recalculate the table (this may be used in scenarios where parent elements may be dynamically changing)',
-          resizable: 'Resizable',
+          resizable: 'Resizable，被 column-config.resizable 替换',
           stripe: 'Whether with zebra stripes(note that in the editable table scenario, the temporarily inserted data will not have a zebra-like pattern)',
           border: 'Border',
           round: 'Round border',
@@ -401,10 +404,10 @@ export default {
           footerAlign: 'Alignment of all footer columns',
           showHeader: 'Whether to display the header',
           startIndex: 'Obsolete, please use "seq-config.startIndex"',
-          highlightCurrentRow: 'Whether to highlight the current row',
-          highlightHoverRow: 'Mouse over a row to highlight',
-          highlightCurrentColumn: 'Whether to highlight the current column',
-          highlightHoverColumn: 'Mouse over whether to highlight a column',
+          highlightCurrentRow: '是否要高亮当前行，被 row-config.isCurrent 替换',
+          highlightHoverRow: '鼠标移到行是否要高亮显示，被 row-config.isHover 替换',
+          highlightCurrentColumn: '是否要高亮当前列，被 column-config.isCurrent 替换',
+          highlightHoverColumn: '鼠标移到列是否要高亮显，被 column-config.isHover 替换示',
           highlightCell: 'Only valid for edit-config configuration, whether to highlight cell borders during editing(Partial support only)',
           rowClassName: 'Append a className to the row',
           cellClassName: 'Append a className to the cell',
@@ -470,8 +473,7 @@ export default {
           params: '自定义参数（可以用来存放一些自定义的数据）',
 
           empty: 'Text content displayed when empty data',
-
-          currentChange: 'Only valid for highlightCurrentRow, the event that fires when the row is manually selected and the value changes',
+          currentChange: 'Only valid for row-config.isCurrent, the event that fires when the row is manually selected and the value changes',
           radioChange: 'Only works for type=radio, the event that is triggered when the value is manually checked and changed',
           selectChange: 'Obsolete, please use "checkbox-change"',
           checkboxChange: 'Only valid for type=checkbox, events that are triggered when checked manually and the value changes',
@@ -567,6 +569,7 @@ export default {
           zIndex: 'Custom style z-index (may be used for special situations, such as occlusion)',
           isArrow: 'Show arrow or not',
           enterable: 'Whether the mouse can go into tooltip',
+          enterDelay: '鼠标移入后延时多少才显示 tooltip',
           leaveDelay: 'How much delay to hide tooltip after mouse move'
         }
       },
@@ -689,7 +692,7 @@ export default {
           position: 'Only valid for type=modal. The default position of the window can be set to center display',
           zIndex: 'Custom style z-index (may be used for special situations, such as occlusion)',
           showTitleOverflow: 'Set the title content to appear as an ellipsis when it is too long',
-          fullscreen: 'Default maximized display',
+          fullscreen: '窗口打开时自动最大化显示',
           draggable: 'Whether to enable window dragging',
           dblclickZoom: 'It is only valid for type=modal. Is it allowed to enlarge or restore the window by double-clicking the head',
           remember: 'The memory function will remember the last operation state and restore the window state when the window is opened again',
@@ -782,6 +785,7 @@ export default {
       },
       pulldown: {
         desc: {
+          value: 'v-model Binding value',
           data: 'List data',
           size: 'Size',
           disabled: 'Disable',

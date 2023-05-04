@@ -5,20 +5,36 @@
     <vxe-toolbar custom></vxe-toolbar>
 
     <vxe-table
-      resizable
       show-overflow
       keep-source
       ref="xTree1"
+      :column-config="{resizable: true}"
       :tree-config="demo1.treeConfig"
       :menu-config="demo1.tableMenu"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :data="demo1.tableData"
       @menu-click="contextMenuClickEvent">
       <vxe-column type="checkbox" width="120" tree-node></vxe-column>
-      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.name" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="size" title="Size" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.size" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="type" title="Type" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.type" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="date" title="Date" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.date" type="date" transfer></vxe-input>
+        </template>
+      </vxe-column>
     </vxe-table>
 
     <pre>
@@ -44,11 +60,11 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance, VxeTablePropTypes, VxeTableEvents } from '../../../../types/index'
+import { VxeTableInstance, VxeTablePropTypes, VxeTableEvents } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTree1 = ref({} as VxeTableInstance)
+    const xTree1 = ref<VxeTableInstance>()
 
     const demo1 = reactive({
       treeConfig: {
@@ -75,19 +91,21 @@ export default defineComponent({
         },
         visibleMethod ({ row, type, options }) {
           const $table = xTree1.value
-          if (type === 'body') {
-            options.forEach(list => {
-              list.forEach(item => {
-                if (item.code === 'expand' || item.code === 'contract') {
-                  if (row && row.hasChild) {
-                    const isExpand = $table.isTreeExpandByRow(row)
-                    item.disabled = item.code === 'expand' ? isExpand : !isExpand
-                  } else {
-                    item.disabled = true
+          if ($table) {
+            if (type === 'body') {
+              options.forEach(list => {
+                list.forEach(item => {
+                  if (item.code === 'expand' || item.code === 'contract') {
+                    if (row && row.hasChild) {
+                      const isExpand = $table.isTreeExpandByRow(row)
+                      item.disabled = item.code === 'expand' ? isExpand : !isExpand
+                    } else {
+                      item.disabled = true
+                    }
                   }
-                }
+                })
               })
-            })
+            }
           }
           return true
         }
@@ -116,19 +134,21 @@ export default defineComponent({
 
     const contextMenuClickEvent: VxeTableEvents.MenuClick = ({ menu, row, column }) => {
       const $table = xTree1.value
-      switch (menu.code) {
-        case 'hideCurrColumn':
-          $table.hideColumn(column)
-          break
-        case 'showAllColumn':
-          $table.resetColumn()
-          break
-        case 'expand':
-          $table.setTreeExpand(row, true)
-          break
-        case 'contract':
-          $table.setTreeExpand(row, false)
-          break
+      if ($table) {
+        switch (menu.code) {
+          case 'hideCurrColumn':
+            $table.hideColumn(column)
+            break
+          case 'showAllColumn':
+            $table.resetColumn()
+            break
+          case 'expand':
+            $table.setTreeExpand(row, true)
+            break
+          case 'contract':
+            $table.setTreeExpand(row, false)
+            break
+        }
       }
     }
 
@@ -141,20 +161,36 @@ export default defineComponent({
         <vxe-toolbar custom></vxe-toolbar>
 
         <vxe-table
-          resizable
           show-overflow
           keep-source
           ref="xTree1"
+          :column-config="{resizable: true}"
           :tree-config="demo1.treeConfig"
           :menu-config="demo1.tableMenu"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :data="demo1.tableData"
           @menu-click="contextMenuClickEvent">
           <vxe-column type="checkbox" width="120" tree-node></vxe-column>
-          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.name" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="size" title="Size" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.size" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="type" title="Type" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.type" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="date" title="Date" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.date" type="date" transfer></vxe-input>
+            </template>
+          </vxe-column>
         </vxe-table>
         `,
         `
@@ -163,7 +199,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTree1 = ref({} as VxeTableInstance)
+            const xTree1 = ref<VxeTableInstance>()
 
             const demo1 = reactive({
               treeConfig: {

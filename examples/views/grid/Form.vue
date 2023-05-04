@@ -2,7 +2,20 @@
   <div>
     <p class="tip">表单，可以通过设置 <grid-api-link prop="form-config"/>={data, items} 渲染表单</p>
 
-    <vxe-grid v-bind="gridOptions" v-on="gridEvents"></vxe-grid>
+    <vxe-grid v-bind="gridOptions" v-on="gridEvents">
+      <template #name_item="{ data }">
+        <vxe-input v-model="data.name" type="text" placeholder="请输入名称"></vxe-input>
+      </template>
+      <template #sex_item="{ data }">
+        <vxe-select v-model="data.sex" transfer>
+          <vxe-option v-for="item in sexList1" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+        </vxe-select>
+      </template>
+      <template #operate_item>
+        <vxe-button type="submit" status="primary" content="查询"></vxe-button>
+        <vxe-button type="reset" content="重置"></vxe-button>
+      </template>
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -14,27 +27,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
-import { VxeGridProps, VxeGridListeners } from '../../../types/index'
+import { defineComponent, reactive, ref } from 'vue'
+import { VxeGridProps, VxeGridListeners } from 'vxe-table'
 
 export default defineComponent({
   setup () {
     const gridOptions = reactive<VxeGridProps>({
-      resizable: true,
       border: true,
       showOverflow: true,
       loading: false,
       height: 400,
       exportConfig: {},
+      columnConfig: {
+        resizable: true
+      },
       formConfig: {
         data: {
           name: '',
           sex: ''
         },
         items: [
-          { field: 'name', title: 'app.body.label.name', itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
-          { field: 'sex', title: '性别', titlePrefix: { message: '帮助信息！！！', icon: 'fa fa-info-circle' }, itemRender: { name: '$select', options: [] } },
-          { itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: '查询', status: 'primary' } }, { props: { type: 'reset', content: '重置' } }] } }
+          { field: 'name', title: 'Name', slots: { default: 'name_item' } },
+          { field: 'sex', title: '性别', titlePrefix: { message: '帮助信息！！！', icon: 'vxe-icon-question-circle-fill' }, slots: { default: 'sex_item' } },
+          { slots: { default: 'operate_item' } }
         ]
       },
       toolbarConfig: {
@@ -75,49 +90,61 @@ export default defineComponent({
 
     findList()
 
+    const sexList1 = ref<any[]>([])
+
     // 异步更新下拉选项
     setTimeout(() => {
-      const { formConfig } = gridOptions
-      if (formConfig && formConfig.items) {
-        const items1 = formConfig.items[1]
-        if (items1 && items1.itemRender) {
-          items1.itemRender.options = [
-            { value: '1', label: '男' },
-            { value: '0', label: '女' }
-          ]
-        }
-      }
+      sexList1.value = [
+        { value: '1', label: '男' },
+        { value: '0', label: '女' }
+      ]
     }, 200)
 
     return {
       gridOptions,
       gridEvents,
+      sexList1,
       demoCodes: [
         `
-        <vxe-grid v-bind="gridOptions" v-on="gridEvents"></vxe-grid>
+        <vxe-grid v-bind="gridOptions" v-on="gridEvents">
+          <template #name_item="{ data }">
+            <vxe-input v-model="data.name" type="text" placeholder="请输入名称"></vxe-input>
+          </template>
+          <template #sex_item="{ data }">
+            <vxe-select v-model="data.sex" transfer>
+              <vxe-option v-for="item in sexList1" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+            </vxe-select>
+          </template>
+          <template #operate_item>
+            <vxe-button type="submit" status="primary" content="查询"></vxe-button>
+            <vxe-button type="reset" content="重置"></vxe-button>
+          </template>
+        </vxe-grid>
         `,
         `
-        import { defineComponent, reactive } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VxeGridProps, VxeGridListeners } from 'vxe-table'
 
         export default defineComponent({
           setup () {
             const gridOptions = reactive<VxeGridProps>({
-              resizable: true,
               border: true,
               showOverflow: true,
               loading: false,
               height: 400,
               exportConfig: {},
+              columnConfig: {
+                resizable: true
+              },
               formConfig: {
                 data: {
                   name: '',
                   sex: ''
                 },
                 items: [
-                  { field: 'name', title: 'app.body.label.name', itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
-                  { field: 'sex', title: '性别', titlePrefix: { message: '帮助信息！！！', icon: 'fa fa-info-circle' }, itemRender: { name: '$select', options: [] } },
-                  { itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: '查询', status: 'primary' } }, { props: { type: 'reset', content: '重置' } }] } }
+                  { field: 'name', title: 'Name', slots: { default: 'name_item' } },
+                  { field: 'sex', title: '性别', titlePrefix: { message: '帮助信息！！！', icon: 'vxe-icon-question-circle-fill' }, slots: { default: 'sex_item' } },
+                  { slots: { default: 'operate_item' } }
                 ]
               },
               toolbarConfig: {
@@ -158,23 +185,20 @@ export default defineComponent({
 
             findList()
 
+            const sexList1 = ref<any[]>([])
+
             // 异步更新下拉选项
             setTimeout(() => {
-              const { formConfig } = gridOptions
-              if (formConfig && formConfig.items) {
-                const items1 = formConfig.items[1]
-                if (items1 && items1.itemRender) {
-                  items1.itemRender.options = [
-                    { value: '1', label: '男' },
-                    { value: '0', label: '女' }
-                  ]
-                }
-              }
+              sexList1.value = [
+                { value: '1', label: '男' },
+                { value: '0', label: '女' }
+              ]
             }, 200)
 
             return {
               gridOptions,
-              gridEvents
+              gridEvents,
+              sexList1
             }
           }
         })

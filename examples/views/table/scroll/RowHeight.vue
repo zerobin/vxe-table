@@ -4,17 +4,17 @@
 
     <vxe-table
       border
-      resizable
       show-overflow
       ref="xTable"
       height="500"
       :row-config="{height: 120}"
+      :column-config="{resizable: true}"
       :scroll-y="{gt: 0}"
       :loading="demo1.loading">
       <vxe-column type="seq" title="序号" width="100"></vxe-column>
       <vxe-column title="图片" width="140" align="center">
         <template #default>
-          <img src="/vxe-table/static/other/img1.gif" style="width: 100px;">
+          <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" style="width: 100px;">
         </template>
       </vxe-column>
       <vxe-column title="基本信息">
@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance } from '../../../../types/index'
+import { VxeTableInstance } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -48,7 +48,7 @@ export default defineComponent({
       loading: false
     })
 
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const mockList = (size: number) => {
       const list: any[] = []
@@ -87,17 +87,17 @@ export default defineComponent({
         `
         <vxe-table
           border
-          resizable
           show-overflow
           ref="xTable"
           height="500"
           :row-config="{height: 120}"
+          :column-config="{resizable: true}"
           :scroll-y="{gt: 0}"
           :loading="demo1.loading">
           <vxe-column type="seq" title="序号" width="100"></vxe-column>
           <vxe-column title="图片" width="140" align="center">
             <template #default>
-              <img src="/vxe-table/static/other/img1.gif" style="width: 100px;">
+              <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" style="width: 100px;">
             </template>
           </vxe-column>
           <vxe-column title="基本信息">
@@ -121,7 +121,7 @@ export default defineComponent({
               loading: false
             })
 
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const mockList = (size: number) => {
               const list: any[] = []

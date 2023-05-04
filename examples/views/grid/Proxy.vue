@@ -19,14 +19,16 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeGridProps } from '../../../types/index'
+import { VxeGridProps } from 'vxe-table'
 
 export default defineComponent({
   setup () {
     const gridOptions = reactive<VxeGridProps>({
       border: true,
-      resizable: false,
       height: 400,
+      columnConfig: {
+        resizable: true
+      },
       columns: [
         { type: 'checkbox', width: 50 },
         { type: 'seq', width: 60 },
@@ -75,8 +77,10 @@ export default defineComponent({
           setup () {
             const gridOptions = reactive<VxeGridProps>({
               border: true,
-              resizable: false,
               height: 400,
+              columnConfig: {
+                resizable: true
+              },
               columns: [
                 { type: 'checkbox', width: 50 },
                 { type: 'seq', width: 60 },

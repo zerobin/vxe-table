@@ -8,10 +8,10 @@
 
     <vxe-table
       border
-      highlight-hover-row
       show-footer
       class="mytable-footer"
       max-height="400"
+      :row-config="{isHover: true}"
       :footer-method="footerMethod1"
       :data="demo1.tableData">
       <vxe-column type="seq" width="60"></vxe-column>
@@ -93,7 +93,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeTablePropTypes } from '../../../../types/index'
+import { VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -161,7 +161,7 @@ export default defineComponent({
         } else {
           return 'col-red'
         }
-      } else if (column.property === 'age') {
+      } else if (column.field === 'age') {
         if ($rowIndex === 1) {
           return 'col-red'
         }
@@ -194,14 +194,14 @@ export default defineComponent({
           sums.push('和值')
           others.push('其他')
         } else {
-          let meanCell = null
-          let sumCell = null
+          let meanCell: any = null
+          let sumCell: any = null
           let otherCell = '-'
-          switch (column.property) {
+          switch (column.field) {
             case 'age':
             case 'amount':
-              meanCell = meanNum(data, column.property)
-              sumCell = sumNum(data, column.property)
+              meanCell = meanNum(data, column.field)
+              sumCell = sumNum(data, column.field)
               break
             case 'sex':
               otherCell = '无'
@@ -228,10 +228,10 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-hover-row
           show-footer
           class="mytable-footer"
           max-height="400"
+          :row-config="{isHover: true}"
           :footer-method="footerMethod1"
           :data="demo1.tableData">
           <vxe-column type="seq" width="60"></vxe-column>
@@ -344,14 +344,14 @@ export default defineComponent({
                   sums.push('和值')
                   others.push('其他')
                 } else {
-                  let meanCell = null
-                  let sumCell = null
+                  let meanCell: any = null
+                  let sumCell: any = null
                   let otherCell = '-'
-                  switch (column.property) {
+                  switch (column.field) {
                     case 'age':
                     case 'amount':
-                      meanCell = meanNum(data, column.property)
-                      sumCell = sumNum(data, column.property)
+                      meanCell = meanNum(data, column.field)
+                      sumCell = sumNum(data, column.field)
                       break
                     case 'sex':
                       otherCell = '无'
@@ -439,7 +439,7 @@ export default defineComponent({
                 } else {
                   return 'col-red'
                 }
-              } else if (column.property === 'age') {
+              } else if (column.field === 'age') {
                 if ($rowIndex === 1) {
                   return 'col-red'
                 }
@@ -472,14 +472,14 @@ export default defineComponent({
                   sums.push('和值')
                   others.push('其他')
                 } else {
-                  let meanCell = null
-                  let sumCell = null
+                  let meanCell: any = null
+                  let sumCell: any = null
                   let otherCell = '-'
-                  switch (column.property) {
+                  switch (column.field) {
                     case 'age':
                     case 'amount':
-                      meanCell = meanNum(data, column.property)
-                      sumCell = sumNum(data, column.property)
+                      meanCell = meanNum(data, column.field)
+                      sumCell = sumNum(data, column.field)
                       break
                     case 'sex':
                       otherCell = '无'

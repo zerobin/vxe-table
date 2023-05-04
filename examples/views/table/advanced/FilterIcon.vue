@@ -1,12 +1,12 @@
 <template>
   <div>
-    <p class="tip">改变图标，通过设置 <table-api-link prop="filter-config"/>={<table-api-link prop="iconMatch"/>, <table-api-link prop="iconMatch"/>} 局部替换默认的图标，例如第三方图标库：font-awesome、inconfont</p>
+    <p class="tip">改变图标，通过设置 <table-api-link prop="filter-config"/>={<table-api-link prop="iconMatch"/>, <table-api-link prop="iconMatch"/>} 局部替换默认的图标</p>
 
     <vxe-table
       border
-      highlight-hover-row
       height="400"
-      :filter-config="{iconNone: 'fa fa-wheelchair', iconMatch: 'fa fa-wheelchair-alt'}"
+      :row-config="{isCurrent: true, isHover: true}"
+      :filter-config="{iconNone: 'vxe-icon-question-circle-fill', iconMatch: 'vxe-icon-question-circle-fill'}"
       :loading="demo1.loading"
       :data="demo1.tableData">
       <vxe-column type="seq" width="60"></vxe-column>
@@ -64,9 +64,9 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-hover-row
           height="400"
-          :filter-config="{iconNone: 'fa fa-wheelchair', iconMatch: 'fa fa-wheelchair-alt'}"
+          :row-config="{isHover: true}"
+          :filter-config="{iconNone: 'vxe-icon-question-circle-fill', iconMatch: 'vxe-icon-question-circle-fill'}"
           :loading="demo1.loading"
           :data="demo1.tableData">
           <vxe-column type="seq" width="60"></vxe-column>

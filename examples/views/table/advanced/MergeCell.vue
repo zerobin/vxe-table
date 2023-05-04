@@ -9,14 +9,13 @@
 
     <vxe-table
       border
-      resizable
       show-footer
       ref="xTable"
       height="800"
       align="center"
       :loading="demo1.loading"
       :print-config="{}"
-      :column-config="{width: 90}"
+      :column-config="{resizable: true, width: 90}"
       :merge-cells="demo1.mergeCells"
       :merge-footer-items="demo1.mergeFooterItems"
       :footer-method="footerMethod"
@@ -82,12 +81,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
-import { VxeTablePropTypes, VxeTableInstance, VxeToolbarInstance } from '../../../../types/index'
+import { VxeTablePropTypes, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
-    const xToolbar = ref({} as VxeToolbarInstance)
+    const xTable = ref<VxeTableInstance>()
+    const xToolbar = ref<VxeToolbarInstance>()
 
     const demo1 = reactive({
       loading: false,
@@ -170,7 +169,7 @@ export default defineComponent({
 
     demo1.loading = true
     setTimeout(() => {
-      const list = []
+      const list: any[] = []
       for (let index = 0; index < 15; index++) {
         list.push({
           a: 'a' + index,
@@ -207,7 +206,9 @@ export default defineComponent({
       // 将表格和工具栏进行关联
       const $table = xTable.value
       const $toolbar = xToolbar.value
-      $table.connect($toolbar)
+      if ($table && $toolbar) {
+        $table.connect($toolbar)
+      }
     })
 
     return {
@@ -221,14 +222,13 @@ export default defineComponent({
 
         <vxe-table
           border
-          resizable
           show-footer
           ref="xTable"
           height="800"
           align="center"
           :loading="demo1.loading"
           :print-config="{}"
-          :column-config="{width: 90}"
+          :column-config="{resizable: true, width: 90}"
           :merge-cells="demo1.mergeCells"
           :merge-footer-items="demo1.mergeFooterItems"
           :footer-method="footerMethod"
@@ -370,7 +370,7 @@ export default defineComponent({
 
             demo1.loading = true
             setTimeout(() => {
-              const list = []
+              const list: any[] = []
               for (let index = 0; index < 15; index++) {
                 list.push({
                   a: 'a' + index,

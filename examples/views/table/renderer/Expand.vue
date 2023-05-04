@@ -1,14 +1,14 @@
 <template>
   <div>
     <p class="tip">
-      内容渲染 <table-column-api-link prop="content-render"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/master/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
+      内容渲染 <table-column-api-link prop="content-render"/>，查看 <a class="link" href="https://github.com/x-extends/vxe-table-docs/tree/main/v4/src/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
       renderExpand (renderOpts, params: { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $table }) 展开内容<br>
     </p>
 
     <vxe-table
       border
-      resizable
+      :column-config="{resizable: true}"
       :data="tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column type="expand" width="80" :content-render="{name: 'MyExpand'}"></vxe-column>
@@ -53,33 +53,31 @@ export default defineComponent({
         VXETable.renderer.add('MyExpand', {
           renderExpand (renderOpts, params) {
             const { row } = params
-            return [
-              <ul>
-                <li>
-                  <span>ID：</span>
-                  <span>{ row.id }</span>
-                </li>
-                <li>
-                  <span>Name：</span>
-                  <span>{ row.name }</span>
-                </li>
-                <li>
-                  <span>UpdateTime：</span>
-                  <span>{ row.updateTime }</span>
-                </li>
-                <li>
-                  <span>CreateTime：</span>
-                  <span>{ row.createTime }</span>
-                </li>
-              </ul>
-            ]
+            return <ul>
+              <li>
+                <span>ID：</span>
+                <span>{ row.id }</span>
+              </li>
+              <li>
+                <span>Name：</span>
+                <span>{ row.name }</span>
+              </li>
+              <li>
+                <span>UpdateTime：</span>
+                <span>{ row.updateTime }</span>
+              </li>
+              <li>
+                <span>CreateTime：</span>
+                <span>{ row.createTime }</span>
+              </li>
+            </ul>
           }
         })
         `,
         `
         <vxe-table
           border
-          resizable
+          :column-config="{resizable: true}"
           :data="tableData">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column type="expand" width="80" :content-render="{name: 'MyExpand'}"></vxe-column>

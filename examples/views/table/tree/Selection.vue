@@ -5,7 +5,7 @@
     </p>
 
     <vxe-table
-      resizable
+      :column-config="{resizable: true}"
       :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
       :data="demo1.tableData"
       :checkbox-config="{labelField: 'id', highlight: true}"
@@ -27,8 +27,8 @@
     <p class="tip">默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行</p>
 
     <vxe-table
-      resizable
       :row-config="{keyField: 'id'}"
+      :column-config="{resizable: true}"
       :data="demo2.tableData"
       :tree-config="{transform: true}"
       :checkbox-config="{labelField: 'name', checkRowKeys: [10053, 23666]}"
@@ -49,7 +49,7 @@
     <p class="tip">通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联，默认不显示头部复选框，可以通过 checkbox-config={<table-api-link prop="showHeader"/>} 设置</p>
 
     <vxe-table
-      resizable
+      :column-config="{resizable: true}"
       :data="demo3.tableData"
       :tree-config="{transform: true}"
       :checkbox-config="{labelField: 'name', checkStrictly: true}">
@@ -70,7 +70,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeTableEvents } from '../../../../types/index'
+import { VxeTableEvents } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -143,7 +143,8 @@ export default defineComponent({
       ]
     })
 
-    const selectChangeEvent: VxeTableEvents.CheckboxChange = ({ records }) => {
+    const selectChangeEvent: VxeTableEvents.CheckboxChange = ({ $table }) => {
+      const records = $table.getCheckboxRecords()
       console.info(`勾选${records.length}个树形节点`, records)
     }
 
@@ -155,7 +156,7 @@ export default defineComponent({
       demoCodes: [
         `
         <vxe-table
-          resizable
+          :column-config="{resizable: true}"
           :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
           :data="demo1.tableData"
           :checkbox-config="{labelField: 'id', highlight: true}"
@@ -196,7 +197,8 @@ export default defineComponent({
               ]
             })
 
-            const selectChangeEvent: VxeTableEvents.CheckboxChange = ({ records }) => {
+            const selectChangeEvent: VxeTableEvents.CheckboxChange = ({ $table }) => {
+              const records = $table.getCheckboxRecords()
               console.info(\`勾选\${records.length}个树形节点\`, records)
             }
 
@@ -209,8 +211,8 @@ export default defineComponent({
         `,
         `
         <vxe-table
-          resizable
-          row-id="id"
+          :row-config="{keyField: 'id'}"
+          :column-config="{resizable: true}"
           :data="demo2.tableData"
           :tree-config="{transform: true}"
           :checkbox-config="{labelField: 'name', checkRowKeys: [10053, 23666]}"
@@ -250,7 +252,8 @@ export default defineComponent({
               ]
             })
 
-            const selectChangeEvent: VxeTableEvents.CheckboxChange = ({ records }) => {
+            const selectChangeEvent: VxeTableEvents.CheckboxChange = ({ $table }) => {
+              const records = $table.getCheckboxRecords()
               console.info(\`勾选\${records.length}个树形节点\`, records)
             }
 
@@ -263,7 +266,7 @@ export default defineComponent({
         `,
         `
         <vxe-table
-          resizable
+          :column-config="{resizable: true}"
           :data="demo3.tableData"
           :tree-config="{transform: true}"
           :checkbox-config="{labelField: 'name', checkStrictly: true}">

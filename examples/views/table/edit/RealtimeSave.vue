@@ -4,19 +4,44 @@
 
     <vxe-table
       border
-      resizable
       keep-source
       show-overflow
       ref="xTable"
+      :column-config="{resizable: true}"
       :data="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-pencil'}"
+      :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
       @edit-closed="editClosedEvent">
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-column>
-      <vxe-column field="num1" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
-      <vxe-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.name" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="role" title="Role" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.role" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="sex" title="Sex" :edit-render="{}">
+        <template #default="{ row }">
+          <span>{{ formatSex(row.sex) }}</span>
+        </template>
+        <template #edit="{ row }">
+          <vxe-select v-model="row.sex" transfer>
+            <vxe-option v-for="item in sexList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+          </vxe-select>
+        </template>
+      </vxe-column>
+      <vxe-column field="num1" title="Number" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.num1" type="number"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="date13" title="Date" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.date13" type="date" transfer></vxe-input>
+        </template>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -30,12 +55,11 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTableEvents } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeTableEvents } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const tableData = ref([
       { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex2: ['0'], num1: 40, age: 28, address: 'Shenzhen', date12: '', date13: '' },
@@ -53,20 +77,32 @@ export default defineComponent({
       { label: '女', value: '0' }
     ])
 
+    const formatSex = (value: any) => {
+      if (value === '1') {
+        return '男'
+      }
+      if (value === '0') {
+        return '女'
+      }
+      return ''
+    }
+
     const editClosedEvent: VxeTableEvents.EditClosed = ({ row, column }) => {
       const $table = xTable.value
-      const field = column.property
-      const cellValue = row[field]
-      // 判断单元格值是否被修改
-      if ($table.isUpdateByRow(row, field)) {
-        setTimeout(() => {
-          VXETable.modal.message({
-            content: `局部保存成功！ ${field}=${cellValue}`,
-            status: 'success'
-          })
-          // 局部更新单元格为已保存状态
-          $table.reloadRow(row, null, field)
-        }, 300)
+      if ($table) {
+        const field = column.field
+        const cellValue = row[field]
+        // 判断单元格值是否被修改
+        if ($table.isUpdateByRow(row, field)) {
+          setTimeout(() => {
+            VXETable.modal.message({
+              content: `局部保存成功！ ${field}=${cellValue}`,
+              status: 'success'
+            })
+            // 局部更新单元格为已保存状态
+            $table.reloadRow(row, null, field)
+          }, 300)
+        }
       }
     }
 
@@ -74,24 +110,50 @@ export default defineComponent({
       xTable,
       tableData,
       sexList,
+      formatSex,
       editClosedEvent,
       demoCodes: [
         `
         <vxe-table
           border
-          resizable
           keep-source
           show-overflow
           ref="xTable"
+          :column-config="{resizable: true}"
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-pencil'}"
+          :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
           @edit-closed="editClosedEvent">
           <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-column>
-          <vxe-column field="num1" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
-          <vxe-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.name" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="role" title="Role" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.role" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="sex" title="Sex" :edit-render="{}">
+            <template #default="{ row }">
+              <span>{{ formatSex(row.sex) }}</span>
+            </template>
+            <template #edit="{ row }">
+              <vxe-select v-model="row.sex" transfer>
+                <vxe-option v-for="item in sexList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+              </vxe-select>
+            </template>
+          </vxe-column>
+          <vxe-column field="num1" title="Number" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.num1" type="number"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="date13" title="Date" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.date13" type="date" transfer></vxe-input>
+            </template>
+          </vxe-column>
         </vxe-table>
         `,
         `
@@ -100,7 +162,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const tableData = ref([
               { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex2: ['0'], num1: 40, age: 28, address: 'Shenzhen', date12: '', date13: '' },
@@ -118,9 +180,19 @@ export default defineComponent({
               { label: '女', value: '0' }
             ])
 
+            const formatSex = (value: any) => {
+              if (value === '1') {
+                return '男'
+              }
+              if (value === '0') {
+                return '女'
+              }
+              return ''
+            }
+
             const editClosedEvent: VxeTableEvents.EditClosed = ({ row, column }) => {
               const $table = xTable.value
-              const field = column.property
+              const field = column.field
               const cellValue = row[field]
               // 判断单元格值是否被修改
               if ($table.isUpdateByRow(row, field)) {
@@ -139,6 +211,7 @@ export default defineComponent({
               xTable,
               tableData,
               sexList,
+              formatSex,
               editClosedEvent
             }
           }

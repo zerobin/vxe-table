@@ -47,11 +47,11 @@
 
     <vxe-table
       border
-      resizable
       show-overflow
       keep-source
       ref="xTable"
       height="300"
+      :column-config="{resizable: true}"
       :loading="demo1.loading"
       :edit-rules="demo1.validRules"
       :mouse-config="{selected: true}"
@@ -60,9 +60,21 @@
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="100"></vxe-column>
-      <vxe-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="name" title="Name" sortable width="200" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template #edit="scope">
+          <vxe-input v-model="scope.row.name" type="text" @change="$refs.xTable.updateStatus(scope)"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="age" title="Age" width="200" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template #edit="scope">
+          <vxe-input v-model="scope.row.age" type="text" @change="$refs.xTable.updateStatus(scope)"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="sex" title="Sex" width="200" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template #edit="scope">
+          <vxe-input v-model="scope.row.sex" type="text" @change="$refs.xTable.updateStatus(scope)"></vxe-input>
+        </template>
+      </vxe-column>
       <vxe-column field="rate" title="Rate" width="200"></vxe-column>
       <vxe-column field="region" title="Region" width="200"></vxe-column>
       <vxe-column field="time" title="Time" width="200"></vxe-column>
@@ -103,12 +115,11 @@
 
 <script lang="tsx">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTablePropTypes } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const demo1 = reactive({
       loading: false,
@@ -124,7 +135,7 @@ export default defineComponent({
     })
 
     const mockList = (size: number) => {
-      const list = []
+      const list: any[] = []
       for (let index = 0; index < size; index++) {
         list.push({
           checked: false,
@@ -158,17 +169,20 @@ export default defineComponent({
 
     const validEvent = async () => {
       const $table = xTable.value
-      const errMap = await $table.validate().catch(errMap => errMap)
-      if (errMap) {
-        VXETable.modal.message({ status: 'error', content: '校验不通过！' })
-      } else {
-        VXETable.modal.message({ status: 'success', content: '校验成功！' })
+      if ($table) {
+        const errMap = await $table.validate()
+        if (errMap) {
+          VXETable.modal.message({ status: 'error', content: '校验不通过！' })
+        } else {
+          VXETable.modal.message({ status: 'success', content: '校验成功！' })
+        }
       }
     }
 
-    const fullValidEvent = () => {
+    const fullValidEvent = async () => {
       const $table = xTable.value
-      $table.fullValidate((errMap) => {
+      if ($table) {
+        const errMap = await $table.fullValidate()
         if (errMap) {
           const msgList: string[] = []
           Object.values(errMap).forEach((errList) => {
@@ -198,50 +212,60 @@ export default defineComponent({
         } else {
           VXETable.modal.message({ status: 'success', content: '校验成功！' })
         }
-      })
+      }
     }
 
     const selectValidEvent = async () => {
       const $table = xTable.value
-      const selectRecords = $table.getCheckboxRecords()
-      if (selectRecords.length > 0) {
-        const errMap = await $table.validate(selectRecords).catch(errMap => errMap)
-        if (errMap) {
-          VXETable.modal.message({ status: 'error', content: '校验不通过！' })
+      if ($table) {
+        const selectRecords = $table.getCheckboxRecords()
+        if (selectRecords.length > 0) {
+          const errMap = await $table.validate(selectRecords).catch(errMap => errMap)
+          if (errMap) {
+            VXETable.modal.message({ status: 'error', content: '校验不通过！' })
+          } else {
+            VXETable.modal.message({ status: 'success', content: '校验成功！' })
+          }
         } else {
-          VXETable.modal.message({ status: 'success', content: '校验成功！' })
+          VXETable.modal.message({ status: 'warning', content: '未选中数据！' })
         }
-      } else {
-        VXETable.modal.message({ status: 'warning', content: '未选中数据！' })
       }
     }
 
     const insertEvent = (row: any) => {
       const $table = xTable.value
-      const record = {
-        checked: false
+      if ($table) {
+        const record = {
+          checked: false
+        }
+        $table.insertAt(record, row).then(({ row }) => {
+          $table.setEditRow(row)
+        })
       }
-      $table.insertAt(record, row).then(({ row }) => {
-        $table.setActiveRow(row)
-      })
     }
 
     const getInsertEvent = () => {
       const $table = xTable.value
-      const insertRecords = $table.getInsertRecords()
-      VXETable.modal.alert(insertRecords.length)
+      if ($table) {
+        const insertRecords = $table.getInsertRecords()
+        VXETable.modal.alert(insertRecords.length)
+      }
     }
 
     const getRemoveEvent = () => {
       const $table = xTable.value
-      const removeRecords = $table.getRemoveRecords()
-      VXETable.modal.alert(removeRecords.length)
+      if ($table) {
+        const removeRecords = $table.getRemoveRecords()
+        VXETable.modal.alert(removeRecords.length)
+      }
     }
 
     const getUpdateEvent = () => {
       const $table = xTable.value
-      const updateRecords = $table.getUpdateRecords()
-      VXETable.modal.alert(updateRecords.length)
+      if ($table) {
+        const updateRecords = $table.getUpdateRecords()
+        VXETable.modal.alert(updateRecords.length)
+      }
     }
 
     findList()
@@ -304,11 +328,11 @@ export default defineComponent({
 
         <vxe-table
           border
-          resizable
           show-overflow
           keep-source
           ref="xTable"
           height="300"
+          :column-config="{resizable: true}"
           :loading="demo1.loading"
           :edit-rules="demo1.validRules"
           :mouse-config="{selected: true}"
@@ -317,9 +341,21 @@ export default defineComponent({
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}">
           <vxe-column type="checkbox" width="60"></vxe-column>
           <vxe-column type="seq" width="100"></vxe-column>
-          <vxe-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="name" title="Name" sortable width="200" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <template #edit="scope">
+              <vxe-input v-model="scope.row.name" type="text" @change="$refs.xTable.updateStatus(scope)"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="age" title="Age" width="200" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <template #edit="scope">
+              <vxe-input v-model="scope.row.age" type="text" @change="$refs.xTable.updateStatus(scope)"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="sex" title="Sex" width="200" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <template #edit="scope">
+              <vxe-input v-model="scope.row.sex" type="text" @change="$refs.xTable.updateStatus(scope)"></vxe-input>
+            </template>
+          </vxe-column>
           <vxe-column field="rate" title="Rate" width="200"></vxe-column>
           <vxe-column field="region" title="Region" width="200"></vxe-column>
           <vxe-column field="time" title="Time" width="200"></vxe-column>
@@ -334,7 +370,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const demo1 = reactive({
               loading: false,
@@ -350,7 +386,7 @@ export default defineComponent({
             })
 
             const mockList = (size: number) => {
-              const list = []
+              const list: any[] = []
               for (let index = 0; index < size; index++) {
                 list.push({
                   checked: false,
@@ -384,7 +420,7 @@ export default defineComponent({
 
             const validEvent = async () => {
               const $table = xTable.value
-              const errMap = await $table.validate().catch(errMap => errMap)
+              const errMap = await $table.validate()
               if (errMap) {
                 VXETable.modal.message({ status: 'error', content: '校验不通过！' })
               } else {
@@ -392,39 +428,38 @@ export default defineComponent({
               }
             }
 
-            const fullValidEvent = () => {
+            const fullValidEvent = async () => {
               const $table = xTable.value
-              $table.fullValidate((errMap) => {
-                if (errMap) {
-                  const msgList: string[] = []
-                  Object.values(errMap).forEach((errList) => {
-                    errList.forEach(params => {
-                      const { rowIndex, column, rules } = params
-                      rules.forEach(rule => {
-                        msgList.push(\`第 \${rowIndex + 1} 行 \${column.title} 校验错误：\${rule.message}\`)
-                      })
+              const errMap = await $table.fullValidate()
+              if (errMap) {
+                const msgList: string[] = []
+                Object.values(errMap).forEach((errList) => {
+                  errList.forEach(params => {
+                    const { rowIndex, column, rules } = params
+                    rules.forEach(rule => {
+                      msgList.push(\`第 \${rowIndex + 1} 行 \${column.title} 校验错误：\${rule.message}\`)
                     })
                   })
-                  VXETable.modal.message({
-                    status: 'error',
-                    slots: {
-                      default () {
-                        return [
-                          <div class="red" style="max-height: 400px;overflow: auto;">
-                            {
-                              msgList.map(msg => {
-                                return <div>{ msg }</div>
-                              })
-                            }
-                          </div>
-                        ]
-                      }
+                })
+                VXETable.modal.message({
+                  status: 'error',
+                  slots: {
+                    default () {
+                      return [
+                        <div class="red" style="max-height: 400px;overflow: auto;">
+                          {
+                            msgList.map(msg => {
+                              return <div>{ msg }</div>
+                            })
+                          }
+                        </div>
+                      ]
                     }
-                  })
-                } else {
-                  VXETable.modal.message({ status: 'success', content: '校验成功！' })
-                }
-              })
+                  }
+                })
+              } else {
+                VXETable.modal.message({ status: 'success', content: '校验成功！' })
+              }
             }
 
             const selectValidEvent = async () => {
@@ -448,7 +483,7 @@ export default defineComponent({
                 checked: false
               }
               $table.insertAt(record, row).then(({ row }) => {
-                $table.setActiveRow(row)
+                $table.setEditRow(row)
               })
             }
 

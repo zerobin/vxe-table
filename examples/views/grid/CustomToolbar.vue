@@ -11,6 +11,19 @@
         <vxe-button>保存</vxe-button>
         <vxe-button>导出</vxe-button>
       </template>
+
+      <template #name_edit="{ row }">
+        <vxe-input v-model="row.name"></vxe-input>
+      </template>
+      <template #nickname_edit="{ row }">
+        <vxe-input v-model="row.nickname"></vxe-input>
+      </template>
+      <template #role_edit="{ row }">
+        <vxe-input v-model="row.role"></vxe-input>
+      </template>
+      <template #address_edit="{ row }">
+        <vxe-input v-model="row.address"></vxe-input>
+      </template>
     </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -24,18 +37,20 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeGridProps } from '../../../types/index'
+import { VxeGridProps } from 'vxe-table'
 
 export default defineComponent({
   setup () {
     const gridOptions = reactive<VxeGridProps>({
       border: true,
-      resizable: true,
       keepSource: true,
       showOverflow: true,
       height: 530,
       id: 'toolbar_demo_2',
       loading: false,
+      columnConfig: {
+        resizable: true
+      },
       customConfig: {
         storage: true
       },
@@ -53,20 +68,20 @@ export default defineComponent({
       columns: [
         { type: 'checkbox', width: 50 },
         { type: 'seq', width: 60 },
-        { field: 'name', title: 'Name', editRender: { name: 'input' } },
+        { field: 'name', title: 'Name', editRender: { autofocus: '.vxe-input--inner' }, slots: { edit: 'name_edit' } },
         {
           title: '分类',
           children: [
-            { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+            { field: 'nickname', title: 'Nickname', editRender: {}, slots: { edit: 'nickname_edit' } },
             {
               title: '子类',
               children: [
-                { field: 'role', title: 'Role', editRender: { name: 'input' } }
+                { field: 'role', title: 'Role', editRender: {}, slots: { edit: 'role_edit' } }
               ]
             }
           ]
         },
-        { field: 'address', title: 'Address', showOverflow: true, editRender: { name: 'input' } }
+        { field: 'address', title: 'Address', showOverflow: true, editRender: {}, slots: { edit: 'address_edit' } }
       ],
       data: [
         { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
@@ -94,6 +109,19 @@ export default defineComponent({
             <vxe-button>保存</vxe-button>
             <vxe-button>导出</vxe-button>
           </template>
+
+          <template #name_edit="{ row }">
+            <vxe-input v-model="row.name"></vxe-input>
+          </template>
+          <template #nickname_edit="{ row }">
+            <vxe-input v-model="row.nickname"></vxe-input>
+          </template>
+          <template #role_edit="{ row }">
+            <vxe-input v-model="row.role"></vxe-input>
+          </template>
+          <template #address_edit="{ row }">
+            <vxe-input v-model="row.address"></vxe-input>
+          </template>
         </vxe-grid>
         `,
         `
@@ -104,12 +132,14 @@ export default defineComponent({
           setup () {
             const gridOptions = reactive<VxeGridProps>({
               border: true,
-              resizable: true,
               keepSource: true,
               showOverflow: true,
               height: 530,
               id: 'toolbar_demo_2',
               loading: false,
+              columnConfig: {
+                resizable: true
+              },
               customConfig: {
                 storage: true
               },
@@ -127,20 +157,20 @@ export default defineComponent({
               columns: [
                 { type: 'checkbox', width: 50 },
                 { type: 'seq', width: 60 },
-                { field: 'name', title: 'Name', editRender: { name: 'input' } },
+                { field: 'name', title: 'Name', editRender: { autofocus: '.vxe-input--inner' }, slots: { edit: 'name_edit' } },
                 {
                   title: '分类',
                   children: [
-                    { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+                    { field: 'nickname', title: 'Nickname', editRender: {}, slots: { edit: 'nickname_edit' } },
                     {
                       title: '子类',
                       children: [
-                        { field: 'role', title: 'Role', editRender: { name: 'input' } }
+                        { field: 'role', title: 'Role', editRender: {}, slots: { edit: 'role_edit' } }
                       ]
                     }
                   ]
                 },
-                { field: 'address', title: 'Address', showOverflow: true, editRender: { name: 'input' } }
+                { field: 'address', title: 'Address', showOverflow: true, editRender: {}, slots: { edit: 'address_edit' } }
               ],
               data: [
                 { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },

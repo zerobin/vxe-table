@@ -17,7 +17,7 @@
     <vxe-table
       ref="xTable"
       border
-      :expand-config="{iconOpen: 'fa fa-minus-square', iconClose: 'fa fa-plus-square'}"
+      :expand-config="{iconOpen: 'vxe-icon-question-circle-fill', iconClose: 'vxe-icon-question-circle-fill'}"
       :data="demo1.tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column type="expand" title="Name">
@@ -179,8 +179,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTablePropTypes } from '../../../../types/index'
+import { VXETable, VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -259,7 +258,7 @@ export default defineComponent({
         <vxe-table
           ref="xTable"
           border
-          :expand-config="{iconOpen: 'fa fa-minus-square', iconClose: 'fa fa-plus-square'}"
+          :expand-config="{iconOpen: 'vxe-icon-question-circle-fill', iconClose: 'vxe-icon-question-circle-fill'}"
           :data="demo1.tableData">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column type="expand" title="Name">

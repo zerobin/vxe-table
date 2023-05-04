@@ -12,8 +12,8 @@
 
     <vxe-table
       border
-      highlight-hover-row
       ref="xTable1"
+      :row-config="{isHover: true}"
       :data="demo1.tableData"
       @filter-visible="filterVisibleEvent"
       @filter-change="filterChangeEvent">
@@ -39,7 +39,7 @@
 
     <vxe-table
       border
-      highlight-hover-row
+      :row-config="{isHover: true}"
       :data="demo2.tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-colgroup title="基本信息">
@@ -69,11 +69,11 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, nextTick } from 'vue'
-import { VxeTableInstance, VxeColumnPropTypes, VxeTableEvents } from '../../../../types/index'
+import { VxeTableInstance, VxeColumnPropTypes, VxeTableEvents } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTable1 = ref({} as VxeTableInstance)
+    const xTable1 = ref<VxeTableInstance>()
 
     const demo1 = reactive({
       tableData: [
@@ -87,11 +87,11 @@ export default defineComponent({
     })
 
     const filterVisibleEvent: VxeTableEvents.FilterVisible = ({ column, visible }) => {
-      console.log(`${column.property} ${visible ? '打开' : '关闭'}筛选面板`)
+      console.log(`${column.field} ${visible ? '打开' : '关闭'}筛选面板`)
     }
 
     const filterChangeEvent: VxeTableEvents.FilterChange = ({ column }) => {
-      console.log(`${column.property} 筛选了数据`)
+      console.log(`${column.field} 筛选了数据`)
     }
 
     nextTick(() => {
@@ -141,8 +141,8 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-hover-row
           ref="xTable1"
+          :row-config="{isHover: true}"
           :data="demo1.tableData"
           @filter-visible="filterVisibleEvent"
           @filter-change="filterChangeEvent">
@@ -159,11 +159,11 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
-        import { VxeTableInstance, VxeTableEvents } from '../../../../types/index'
+        import { VxeTableInstance, VxeTableEvents } from 'vxe-table'
 
         export default defineComponent({
           setup () {
-            const xTable1 = ref({} as VxeTableInstance)
+            const xTable1 = ref<VxeTableInstance>()
 
             const demo1 = reactive({
               tableData: [
@@ -177,11 +177,11 @@ export default defineComponent({
             })
 
             const filterVisibleEvent: VxeTableEvents.FilterVisible = ({ column, visible }) => {
-              console.log(\`\${column.property} \${visible ? '打开' : '关闭'}筛选面板\`)
+              console.log(\`\${column.field} \${visible ? '打开' : '关闭'}筛选面板\`)
             }
 
             const filterChangeEvent: VxeTableEvents.FilterChange = ({ column }) => {
-              console.log(\`\${column.property} 筛选了数据\`)
+              console.log(\`\${column.field} 筛选了数据\`)
             }
 
             nextTick(() => {
@@ -203,7 +203,6 @@ export default defineComponent({
             return {
               xTable1,
               demo1,
-              filterNameMethod,
               filterAgeMethod,
               filterVisibleEvent,
               filterChangeEvent
@@ -214,7 +213,7 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-hover-row
+          :row-config="{isHover: true}"
           :data="demo2.tableData">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-colgroup title="基本信息">

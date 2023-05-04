@@ -6,9 +6,9 @@
 
     <vxe-table
       border
-      resizable
       ref="xTree1"
       :row-config="{keyField: 'id'}"
+      :column-config="{resizable: true}"
       :menu-config="demo1.tableMenu"
       :tree-config="demo1.treeConfig"
       :data="demo1.tableData"
@@ -30,11 +30,11 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance, VxeTablePropTypes, VxeTableEvents } from '../../../../types/index'
+import { VxeTableInstance, VxeTablePropTypes, VxeTableEvents } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTree1 = ref({} as VxeTableInstance)
+    const xTree1 = ref<VxeTableInstance>()
 
     const demo1 = reactive({
       treeConfig: {
@@ -67,19 +67,21 @@ export default defineComponent({
         },
         visibleMethod ({ row, type, options }) {
           const $table = xTree1.value
-          if (type === 'body') {
-            options.forEach(list => {
-              list.forEach(item => {
-                if (item.code === 'expand' || item.code === 'contract') {
-                  if (row && row.hasChild) {
-                    const isExpand = $table.isTreeExpandByRow(row)
-                    item.disabled = item.code === 'expand' ? isExpand : !isExpand
-                  } else {
-                    item.disabled = true
+          if ($table) {
+            if (type === 'body') {
+              options.forEach(list => {
+                list.forEach(item => {
+                  if (item.code === 'expand' || item.code === 'contract') {
+                    if (row && row.hasChild) {
+                      const isExpand = $table.isTreeExpandByRow(row)
+                      item.disabled = item.code === 'expand' ? isExpand : !isExpand
+                    } else {
+                      item.disabled = true
+                    }
                   }
-                }
+                })
               })
-            })
+            }
           }
           return true
         }
@@ -94,19 +96,21 @@ export default defineComponent({
 
     const contextMenuClickEvent: VxeTableEvents.MenuClick = ({ menu, row }) => {
       const $table = xTree1.value
-      switch (menu.code) {
-        case 'clearLoaded':
-          $table.clearTreeExpandLoaded(row)
-          break
-        case 'reloadNodes':
-          $table.reloadTreeExpand(row)
-          break
-        case 'expand':
-          $table.setTreeExpand(row, true)
-          break
-        case 'contract':
-          $table.setTreeExpand(row, false)
-          break
+      if ($table) {
+        switch (menu.code) {
+          case 'clearLoaded':
+            $table.clearTreeExpandLoaded(row)
+            break
+          case 'reloadNodes':
+            $table.reloadTreeExpand(row)
+            break
+          case 'expand':
+            $table.setTreeExpand(row, true)
+            break
+          case 'contract':
+            $table.setTreeExpand(row, false)
+            break
+        }
       }
     }
 
@@ -118,9 +122,9 @@ export default defineComponent({
         `
         <vxe-table
           border
-          resizable
           ref="xTree1"
-          row-id="id"
+          :row-config="{keyField: 'id'}"
+          :column-config="{resizable: true}"
           :menu-config="demo1.tableMenu"
           :tree-config="demo1.treeConfig"
           :data="demo1.tableData"
@@ -137,7 +141,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTree1 = ref({} as VxeTableInstance)
+            const xTree1 = ref<VxeTableInstance>()
 
             const demo1 = reactive({
               treeConfig: {
@@ -170,12 +174,11 @@ export default defineComponent({
                 },
                 visibleMethod ({ row, type, options }) {
                   const $table = xTree1.value
-                  const treeConfig = demo1.treeConfig
                   if (type === 'body') {
                     options.forEach(list => {
                       list.forEach(item => {
                         if (item.code === 'expand' || item.code === 'contract') {
-                          if (row && treeConfig.children && row[treeConfig.children] && row[treeConfig.children].length) {
+                          if (row && row.hasChild) {
                             const isExpand = $table.isTreeExpandByRow(row)
                             item.disabled = item.code === 'expand' ? isExpand : !isExpand
                           } else {

@@ -26,10 +26,10 @@
 
     <vxe-table
       border
-      resizable
       show-footer
       ref="xTable"
       height="500"
+      :column-config="{resizable: true}"
       :footer-method="footerMethod"
       :data="demo1.tableData"
       @checkbox-change="checkboxChangeEvent"
@@ -106,7 +106,7 @@
         </template>
         <template #footer>
           <span>
-            <img src="/vxe-table/static/other/img1.gif" style="width: 36px;">自定义模板<img src="/vxe-table/static/other/img2.gif" style="width: 30px;">
+            <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" style="width: 36px;">自定义模板<img src="https://n.sinaimg.cn/sinacn17/w120h120/20180314/89fc-fyscsmv5911424.gif" style="width: 30px;">
           </span>
         </template>
       </vxe-column>
@@ -142,9 +142,9 @@
         </span>
       </template>
       <template #right>
-        <img src="/vxe-table/static/other/img1.gif" height="34">
-        <img src="/vxe-table/static/other/img1.gif" height="34">
-        <img src="/vxe-table/static/other/img1.gif" height="34">
+        <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" height="34">
+        <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" height="34">
+        <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" height="34">
       </template>
     </vxe-pager>
 
@@ -164,8 +164,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTableEvents, VxeColumnPropTypes, VxeTablePropTypes, VxeCheckboxEvents } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeColumnPropTypes, VxeTablePropTypes } from 'vxe-table'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
@@ -179,14 +178,14 @@ export default defineComponent({
       isIndeterminate: false,
       selectRecords: [] as any[],
       tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc', flag: false, time: 1600261774531, html1: '<span style="color:red">自定义HTML</span>', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', flag: true, time: 1600261774531, html1: '<span style="color:orange">自定义HTML</span>', img1: '/vxe-table/static/other/img2.gif' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'test abc', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img2.gif' },
-        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai', flag: true, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 21, address: 'test abc', flag: true, time: 1600261774531, html1: '<span style="color:blue">自定义HTML</span>', img1: '/vxe-table/static/other/img2.gif' },
-        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'test abc', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' }
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc', flag: false, time: 1600261774531, html1: '<span style="color:red">自定义HTML</span>', img1: 'https://5b0988e595225.cdn.sohucs.com/images/20181014/dce7cdaa130440e8b609fad083877ef3.gif' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', flag: false, time: 1600261774531, html1: '', img1: 'https://5b0988e595225.cdn.sohucs.com/images/20181014/dce7cdaa130440e8b609fad083877ef3.gif' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', flag: true, time: 1600261774531, html1: '<span style="color:orange">自定义HTML</span>', img1: 'https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'test abc', flag: false, time: 1600261774531, html1: '', img1: 'https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai', flag: true, time: 1600261774531, html1: '', img1: 'https://5b0988e595225.cdn.sohucs.com/images/20181014/dce7cdaa130440e8b609fad083877ef3.gif' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 21, address: 'test abc', flag: true, time: 1600261774531, html1: '<span style="color:blue">自定义HTML</span>', img1: 'https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'test abc', flag: false, time: 1600261774531, html1: '', img1: 'https://5b0988e595225.cdn.sohucs.com/images/20181014/dce7cdaa130440e8b609fad083877ef3.gif' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc', flag: false, time: 1600261774531, html1: '', img1: 'https://5b0988e595225.cdn.sohucs.com/images/20181014/dce7cdaa130440e8b609fad083877ef3.gif' }
       ],
       tablePage: {
         total: 0,
@@ -195,7 +194,7 @@ export default defineComponent({
       }
     })
 
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const formatDate = (value: any) => {
       return XEUtils.toDateString(value, 'yyyy-MM-dd HH:mm:ss.S')
@@ -205,8 +204,8 @@ export default defineComponent({
       return row.sex === option.data
     }
 
-    const changeFilterEvent = (evnt: any, option: any, $panel: any) => {
-      $panel.changeOption(evnt, !!option.data, option)
+    const changeFilterEvent = (event: any, option: any, $panel: any) => {
+      $panel.changeOption(event, !!option.data, option)
     }
 
     const showDetailEvent = (row: any) => {
@@ -218,17 +217,21 @@ export default defineComponent({
       VXETable.modal.alert(`点击了表尾第${_columnIndex}列`)
     }
 
-    const checkboxChangeEvent: VxeTableEvents.CheckboxChange = ({ records }) => {
+    const checkboxChangeEvent = () => {
       const $table = xTable.value
-      demo1.isAllChecked = $table.isAllCheckboxChecked()
-      demo1.isIndeterminate = $table.isAllCheckboxIndeterminate()
-      demo1.selectRecords = records
+      if ($table) {
+        demo1.isAllChecked = $table.isAllCheckboxChecked()
+        demo1.isIndeterminate = $table.isAllCheckboxIndeterminate()
+        demo1.selectRecords = $table.getCheckboxRecords()
+      }
     }
 
-    const changeAllEvent: VxeCheckboxEvents.Change = () => {
+    const changeAllEvent = () => {
       const $table = xTable.value
-      $table.setAllCheckboxRow(demo1.isAllChecked)
-      demo1.selectRecords = $table.getCheckboxRecords()
+      if ($table) {
+        $table.setAllCheckboxRow(demo1.isAllChecked)
+        demo1.selectRecords = $table.getCheckboxRecords()
+      }
     }
 
     const sumNum = (list: any[], field: string) => {
@@ -242,8 +245,8 @@ export default defineComponent({
     const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
       return [
         columns.map(column => {
-          if (['sex', 'num'].includes(column.property)) {
-            return sumNum(data, column.property)
+          if (['sex', 'num'].includes(column.field)) {
+            return sumNum(data, column.field)
           }
           return null
         })
@@ -281,10 +284,10 @@ export default defineComponent({
 
         <vxe-table
           border
-          resizable
           show-footer
           ref="xTable"
           height="500"
+          :column-config="{resizable: true}"
           :footer-method="footerMethod"
           :data="demo1.tableData"
           @checkbox-change="checkboxChangeEvent"
@@ -361,7 +364,7 @@ export default defineComponent({
             </template>
             <template #footer>
               <span>
-                <img src="/vxe-table/static/other/img1.gif" style="width: 36px;">自定义模板<img src="/vxe-table/static/other/img2.gif" style="width: 30px;">
+                <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" style="width: 36px;">自定义模板<img src="https://n.sinaimg.cn/sinacn17/w120h120/20180314/89fc-fyscsmv5911424.gif" style="width: 30px;">
               </span>
             </template>
           </vxe-column>
@@ -397,9 +400,9 @@ export default defineComponent({
             </span>
           </template>
           <template #right>
-            <img src="/vxe-table/static/other/img1.gif" height="34">
-            <img src="/vxe-table/static/other/img1.gif" height="34">
-            <img src="/vxe-table/static/other/img1.gif" height="34">
+            <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" height="34">
+            <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" height="34">
+            <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" height="34">
           </template>
         </vxe-pager>
 
@@ -409,7 +412,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VXETable, VxeTableInstance, VxeTableEvents, VxeColumnPropTypes, VxeTablePropTypes, VxeCheckboxEvents } from 'vxe-table'
+        import { VXETable, VxeTableInstance, VxeColumnPropTypes, VxeTablePropTypes } from 'vxe-table'
         import XEUtils from 'xe-utils'
 
         export default defineComponent({
@@ -423,14 +426,14 @@ export default defineComponent({
               isIndeterminate: false,
               selectRecords: [] as any[],
               tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc', flag: false, time: 1600261774531, html1: '<span style="color:red">自定义HTML</span>', img1: '/vxe-table/static/other/img1.gif' },
-                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
-                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', flag: true, time: 1600261774531, html1: '<span style="color:orange">自定义HTML</span>', img1: '/vxe-table/static/other/img2.gif' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'test abc', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img2.gif' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai', flag: true, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
-                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 21, address: 'test abc', flag: true, time: 1600261774531, html1: '<span style="color:blue">自定义HTML</span>', img1: '/vxe-table/static/other/img2.gif' },
-                { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'test abc', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
-                { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' }
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc', flag: false, time: 1600261774531, html1: '<span style="color:red">自定义HTML</span>', img1: 'https://5b0988e595225.cdn.sohucs.com/images/20181014/dce7cdaa130440e8b609fad083877ef3.gif' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', flag: false, time: 1600261774531, html1: '', img1: 'https://5b0988e595225.cdn.sohucs.com/images/20181014/dce7cdaa130440e8b609fad083877ef3.gif' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', flag: true, time: 1600261774531, html1: '<span style="color:orange">自定义HTML</span>', img1: 'https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'test abc', flag: false, time: 1600261774531, html1: '', img1: 'https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai', flag: true, time: 1600261774531, html1: '', img1: 'https://5b0988e595225.cdn.sohucs.com/images/20181014/dce7cdaa130440e8b609fad083877ef3.gif' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 21, address: 'test abc', flag: true, time: 1600261774531, html1: '<span style="color:blue">自定义HTML</span>', img1: 'https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif' },
+                { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'test abc', flag: false, time: 1600261774531, html1: '', img1: 'https://5b0988e595225.cdn.sohucs.com/images/20181014/dce7cdaa130440e8b609fad083877ef3.gif' },
+                { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc', flag: false, time: 1600261774531, html1: '', img1: 'https://5b0988e595225.cdn.sohucs.com/images/20181014/dce7cdaa130440e8b609fad083877ef3.gif' }
               ],
               tablePage: {
                 total: 0,
@@ -439,7 +442,7 @@ export default defineComponent({
               }
             })
 
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const formatDate = (value: any) => {
               return XEUtils.toDateString(value, 'yyyy-MM-dd HH:mm:ss.S')
@@ -449,8 +452,8 @@ export default defineComponent({
               return row.sex === option.data
             }
 
-            const changeFilterEvent = (evnt: any, option: any, $panel: any) => {
-              $panel.changeOption(evnt, !!option.data, option)
+            const changeFilterEvent = (event: any, option: any, $panel: any) => {
+              $panel.changeOption(event, !!option.data, option)
             }
 
             const showDetailEvent = (row: any) => {
@@ -462,14 +465,14 @@ export default defineComponent({
               VXETable.modal.alert(\`点击了表尾第\${_columnIndex}列\`)
             }
 
-            const checkboxChangeEvent: VxeTableEvents.CheckboxChange = ({ records }) => {
+            const checkboxChangeEvent = () => {
               const $table = xTable.value
               demo1.isAllChecked = $table.isAllCheckboxChecked()
               demo1.isIndeterminate = $table.isAllCheckboxIndeterminate()
-              demo1.selectRecords = records
+              demo1.selectRecords = $table.getCheckboxRecords()
             }
 
-            const changeAllEvent: VxeCheckboxEvents.Change = () => {
+            const changeAllEvent = () => {
               const $table = xTable.value
               $table.setAllCheckboxRow(demo1.isAllChecked)
               demo1.selectRecords = $table.getCheckboxRecords()
@@ -486,8 +489,8 @@ export default defineComponent({
             const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
               return [
                 columns.map(column => {
-                  if (['sex', 'num'].includes(column.property)) {
-                    return sumNum(data, column.property)
+                  if (['sex', 'num'].includes(column.field)) {
+                    return sumNum(data, column.field)
                   }
                   return null
                 })

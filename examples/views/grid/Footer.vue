@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeGridProps } from '../../../types/index'
+import { VxeGridProps } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -41,10 +41,12 @@ export default defineComponent({
     const gridOptions = reactive<VxeGridProps>({
       border: true,
       stripe: true,
-      resizable: true,
       showFooter: true,
       height: 400,
       exportConfig: {},
+      columnConfig: {
+        resizable: true
+      },
       toolbarConfig: {
         export: true,
         zoom: true
@@ -72,8 +74,8 @@ export default defineComponent({
             if (columnIndex === 0) {
               return '和值'
             }
-            if (['age', 'rate'].includes(column.property)) {
-              return sumNum(data, column.property)
+            if (['age', 'rate'].includes(column.field)) {
+              return sumNum(data, column.field)
             }
             return ''
           }),
@@ -81,8 +83,8 @@ export default defineComponent({
             if (columnIndex === 0) {
               return '平均'
             }
-            if (['age', 'rate'].includes(column.property)) {
-              return meanNum(data, column.property)
+            if (['age', 'rate'].includes(column.field)) {
+              return meanNum(data, column.field)
             }
             return ''
           })
@@ -121,10 +123,12 @@ export default defineComponent({
             const gridOptions = reactive<VxeGridProps>({
               border: true,
               stripe: true,
-              resizable: true,
               showFooter: true,
               height: 400,
               exportConfig: {},
+              columnConfig: {
+                resizable: true
+              },
               toolbarConfig: {
                 export: true,
                 zoom: true
@@ -152,8 +156,8 @@ export default defineComponent({
                     if (columnIndex === 0) {
                       return '和值'
                     }
-                    if (['age', 'rate'].includes(column.property)) {
-                      return sumNum(data, column.property)
+                    if (['age', 'rate'].includes(column.field)) {
+                      return sumNum(data, column.field)
                     }
                     return ''
                   }),
@@ -161,8 +165,8 @@ export default defineComponent({
                     if (columnIndex === 0) {
                       return '平均'
                     }
-                    if (['age', 'rate'].includes(column.property)) {
-                      return meanNum(data, column.property)
+                    if (['age', 'rate'].includes(column.field)) {
+                      return meanNum(data, column.field)
                     }
                     return ''
                   })

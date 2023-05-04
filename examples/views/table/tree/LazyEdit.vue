@@ -13,17 +13,33 @@
     <vxe-table
       border
       show-overflow
-      resizable
       keep-source
-      ref="xTree1"
+      ref="xTable1"
       :row-config="{keyField: 'id'}"
+      :column-config="{resizable: true}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :tree-config="demo1.tableTree"
       :data="demo1.tableData">
-      <vxe-column field="name" title="Name" width="260" tree-node :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
+      <vxe-column field="name" title="Name" width="260" tree-node :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.name" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="size" title="Size" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.size" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="type" title="Type" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.type" type="text"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="date" title="Date" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.date" type="date" transfer></vxe-input>
+        </template>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -37,8 +53,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTablePropTypes } from '../../../../types/index'
+import { VXETable, VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -68,16 +83,18 @@ export default defineComponent({
       ] as any[]
     })
 
-    const xTree1 = ref({} as VxeTableInstance)
+    const xTable1 = ref<VxeTableInstance>()
 
     const getUpdateEvent = () => {
-      const $table = xTree1.value
-      const updateRecords = $table.getUpdateRecords()
-      VXETable.modal.alert(updateRecords.length)
+      const $table = xTable1.value
+      if ($table) {
+        const updateRecords = $table.getUpdateRecords()
+        VXETable.modal.alert(updateRecords.length)
+      }
     }
 
     return {
-      xTree1,
+      xTable1,
       demo1,
       getUpdateEvent,
       demoCodes: [
@@ -91,17 +108,33 @@ export default defineComponent({
         <vxe-table
           border
           show-overflow
-          resizable
           keep-source
-          ref="xTree1"
-          row-id="id"
+          ref="xTable1"
+          :row-config="{keyField: 'id'}"
+          :column-config="{resizable: true}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :tree-config="demo1.tableTree"
           :data="demo1.tableData">
-          <vxe-column field="name" title="Name" width="260" tree-node :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
+          <vxe-column field="name" title="Name" width="260" tree-node :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.name" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="size" title="Size" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.size" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="type" title="Type" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.type" type="text"></vxe-input>
+            </template>
+          </vxe-column>
+          <vxe-column field="date" title="Date" :edit-render="{}">
+            <template #edit="{ row }">
+              <vxe-input v-model="row.date" type="date" transfer></vxe-input>
+            </template>
+          </vxe-column>
         </vxe-table>
         `,
         `
@@ -136,16 +169,16 @@ export default defineComponent({
               ] as any[]
             })
 
-            const xTree1 = ref({} as VxeTableInstance)
+            const xTable1 = ref<VxeTableInstance>()
 
             const getUpdateEvent = () => {
-              const $table = xTree1.value
+              const $table = xTable1.value
               const updateRecords = $table.getUpdateRecords()
               VXETable.modal.alert(updateRecords.length)
             }
 
             return {
-              xTree1,
+              xTable1,
               demo1,
               getUpdateEvent
             }

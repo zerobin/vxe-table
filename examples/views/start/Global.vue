@@ -21,21 +21,25 @@ export default defineComponent({
           // size: null, // 全局尺寸
           // zIndex: 999, // 全局 zIndex 起始值，如果项目的的 z-index 样式值过大时就需要跟随设置更大，避免被遮挡
           // version: 0, // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
+          // loadingText: '加载中...', // 全局loading提示内容，如果为null则不显示文本
           // table: {
           //   showHeader: true,
           //   keepSource: false,
-          //   animat: true,
-          //   delayHover: 250,
           //   showOverflow: null,
           //   showHeaderOverflow: null,
           //   showFooterOverflow: null,
           //   size: null,
-          //   resizable: false,
           //   autoResize: false,
           //   stripe: false,
           //   border: false,
           //   round: false,
           //   emptyText: '暂无数据',
+          //   resizeConfig: {
+          //     refreshDelay: 250
+          //   },
+          //   rowConfig: {
+          //     keyField: '_X_ROW_KEY' // 行数据的唯一主键字段名
+          //   },
           //   radioConfig: {
           //     trigger: 'default'
           //   },
@@ -60,19 +64,20 @@ export default defineComponent({
           //     showIcon: true
           //   },
           //   treeConfig: {
+          //     rowField: 'id',
+          //     parentField: 'parentId',
           //     children: 'children',
           //     hasChild: 'hasChild',
+          //     mapChildren: '_X_ROW_CHILD',
           //     indent: 20,
           //     showIcon: true
           //   },
           //   tooltipConfig: {
-          //     theme: 'dark',
-          //     enterable: false
+          //     enterable: true
           //   },
           //   menuConfig: {
           //     visibleMethod () {}
           //   },
-          //   rowId: '_XID', // 行数据的唯一主键字段名
           //   editConfig: {
           //     mode: 'cell',
           //     showAsterisk: true
@@ -91,6 +96,10 @@ export default defineComponent({
           //   },
           //   scrollY: {
           //     gt: 100
+          //   },
+          //   loading: {
+          //     icon: 'vxe-icon-spinner roll',
+          //     text: '加载中...'
           //   }
           // },
           // grid: {
@@ -133,11 +142,14 @@ export default defineComponent({
           // },
           // form: {
           //   preventSubmit: false
+          //   size: null,
+          //   colon: false,
           //   validConfig: {
           //     autoPos: true
           //   },
-          //   size: null,
-          //   colon: false,
+          //   tooltipConfig: {
+          //     enterable: true
+          //   },
           //   titleAsterisk: true
           // },
           // input: {
@@ -160,6 +172,9 @@ export default defineComponent({
           // select: {
           //   size: null,
           //   transfer: false,
+          //   optionConfig: {
+          //     keyField: '_X_OPTION_KEY' // 选项数据的唯一主键字段名
+          //   },
           //   multiCharOverflow: 8
           // },
           // toolbar: {

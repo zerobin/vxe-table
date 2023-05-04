@@ -21,11 +21,11 @@
 
     <vxe-table
       border
-      resizable
       show-overflow
       show-header-overflow
       ref="xTable"
       height="600"
+      :column-config="{resizable: true}"
       :loading="demo1.loading"
       :scroll-y="{mode: 'wheel'}">
       <vxe-column type="seq" width="100" fixed="left"></vxe-column>
@@ -68,8 +68,7 @@
 
 <script lang="ts">
 import { defineComponent, nextTick, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance } from '../../../../types/index'
+import { VXETable, VxeTableInstance } from 'vxe-table'
 import XEUtils from 'xe-utils'
 
 const dataList: any[] = []
@@ -81,7 +80,7 @@ export default defineComponent({
       tableData: []
     })
 
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const mockList = (rowSize: number): Promise<any[]> => {
       return new Promise(resolve => {
@@ -163,11 +162,11 @@ export default defineComponent({
 
         <vxe-table
           border
-          resizable
           show-overflow
           show-header-overflow
           ref="xTable"
           height="600"
+          :column-config="{resizable: true}"
           :loading="demo1.loading"
           :scroll-y="{mode: 'wheel'}">
           <vxe-column type="seq" width="100" fixed="left"></vxe-column>
@@ -201,7 +200,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, nextTick, reactive, ref } from 'vue'
-        import { VXETable, VxeTableInstance } from '../../../../types/index'
+        import { VXETable, VxeTableInstance } from 'vxe-table'
         import XEUtils from 'xe-utils'
 
         const dataList: any[] = []
@@ -213,7 +212,7 @@ export default defineComponent({
               tableData: []
             })
 
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const mockList = (rowSize: number): Promise<any[]> => {
               return new Promise(resolve => {

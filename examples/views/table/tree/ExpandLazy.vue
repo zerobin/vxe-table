@@ -6,7 +6,7 @@
 
     <vxe-table
       border
-      resizable
+      :column-config="{resizable: true}"
       :tree-config="{transform: true}"
       :expand-config="tableExpand"
       :data="tableData">
@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VxeTablePropTypes } from '../../../../types/index'
+import { VxeTablePropTypes } from 'vxe-table'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
@@ -98,7 +98,7 @@ export default defineComponent({
         `
         <vxe-table
           border
-          resizable
+          :column-config="{resizable: true}"
           :tree-config="{transform: true}"
           :expand-config="tableExpand"
           :data="tableData">

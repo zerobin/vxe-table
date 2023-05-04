@@ -9,12 +9,12 @@
       @cell-menu="cellContextMenuEvent"
       @menu-click="contextMenuClickEvent">
       <template #toolbar_buttons>
-        <vxe-input clearable class="search-input" v-model="apiData.filterName" type="search" :placeholder="`vxe-${apiData.apiName} ${$t('app.api.apiSearch')}`" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
+        <vxe-input clearable class="search-input" v-model="apiData.filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.apiSearch')}`" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
       </template>
 
       <template #default_version="{ row }">
         <template v-if="row.version === 'pro'">
-          <a class="link pro" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins/#/pro" target="_blank">pro</a>
+          <a class="link pro" :href="pluginApiUrl" target="_blank">查看pro</a>
         </template>
         <template v-else-if="row.disabled">
           <span class="disabled">已废弃</span>
@@ -37,13 +37,15 @@
 <script lang="ts">
 import { computed, defineComponent, nextTick, reactive, watch, ref } from 'vue'
 import { RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
-import i18n from '@/i18n'
-import router from '@/router'
+import { useAppStore } from '@/store/app'
+import i18n from '../../i18n'
+import router from '../../router'
 import XEUtils from 'xe-utils'
-import pack from '../../../package.json'
 
-import { VxeGridInstance, VxeGridProps } from '../../../types/index'
+import { VXETable, VxeGridInstance, VxeGridProps } from 'vxe-table'
 
+import XEClipboard from 'xe-clipboard'
+import iconAPI from '../../api/icon'
 import tableAPI from '../../api/table'
 import colgroupAPI from '../../api/colgroup'
 import columnAPI from '../../api/column'
@@ -81,6 +83,7 @@ import pulldownAPI from '../../api/pulldown'
 // const tags: any = window.tags = {}
 
 // const tagMaps = [
+//   ['vxe-icon', iconAPI, { description: '图标' }],
 //   ['vxe-table', tableAPI, { subtags: ['vxe-colgroup', 'vxe-column'], description: '基础表格' }],
 //   ['vxe-colgroup', colgroupAPI, { subtags: ['vxe-column'], description: '基础表格 - 分组列' }],
 //   ['vxe-column', columnAPI, { description: '基础表格 - 列' }],
@@ -123,14 +126,19 @@ import pulldownAPI from '../../api/pulldown'
 
 export default defineComponent({
   setup () {
+    const appStore = useAppStore()
+    const docsVersion = computed(() => appStore.docsVersion)
+    const pluginApiUrl = computed(() => appStore.pluginApiUrl)
+
     const q = (router.currentRoute.value.query.q || router.currentRoute.value.query.filterName) as string
+
     const apiData = reactive({
       filterName: q ? decodeURIComponent(q) : '',
       defaultExpandRows: [] as string[],
       tableData: [] as any[]
     })
 
-    const xGrid = ref({} as VxeGridInstance)
+    const xGrid = ref<VxeGridInstance>()
 
     const apiName = computed(() => {
       const $route = router.currentRoute.value
@@ -138,7 +146,7 @@ export default defineComponent({
     })
 
     const checkColumnMethod = ({ column }: any) => {
-      if (['name', 'desc'].includes(column.property)) {
+      if (['name', 'desc'].includes(column.field)) {
         return false
       }
       return true
@@ -146,12 +154,16 @@ export default defineComponent({
 
     const headerCellContextMenuEvent = ({ column }: any) => {
       const $grid = xGrid.value
-      $grid.setCurrentColumn(column)
+      if ($grid) {
+        $grid.setCurrentColumn(column)
+      }
     }
 
     const cellContextMenuEvent = ({ row }: any) => {
       const $grid = xGrid.value
-      $grid.setCurrentRow(row)
+      if ($grid) {
+        $grid.setCurrentRow(row)
+      }
     }
 
     const handleSearch = () => {
@@ -201,6 +213,9 @@ export default defineComponent({
         setTimeout(() => {
           let apis: any[] = []
           switch ($route.params.name) {
+            case 'icon':
+              apis = iconAPI
+              break
             case 'table':
               apis = tableAPI
               break
@@ -301,70 +316,84 @@ export default defineComponent({
       })
     }
 
-    const contextMenuClickEvent = ({ menu, column }: any) => {
+    const contextMenuClickEvent = ({ menu, row, column }: any) => {
       const $grid = xGrid.value
-      switch (menu.code) {
-        case 'hideColumn':
-          $grid.hideColumn(column)
-          break
-        case 'showAllColumn':
-          $grid.resetColumn({ visible: true })
-          break
-        case 'resetColumn':
-          $grid.resetColumn(true)
-          break
-        case 'exportHTMLAPI':
-          $grid.exportData({
-            type: 'html',
-            data: XEUtils.toTreeArray(apiData.tableData, { children: 'list' }),
-            filename: `vxe-${apiName.value}_v${pack.version}`
-          })
-          break
-        case 'exportXLSXAPI':
-          $grid.exportData({
-            type: 'xlsx',
-            data: XEUtils.toTreeArray(apiData.tableData, { children: 'list' }),
-            filename: `vxe-${apiName.value}_v${pack.version}`
-          })
-          break
-        case 'resize':
-          apiData.filterName = ''
-          apiData.tableData = []
-          nextTick(() => {
-            $grid.clearAll()
-            loadList()
-          })
-          break
-        case 'exportAPI':
-          $grid.exportData({
-            filename: `vxe-${apiName.value}_v${pack.version}.csv`
-          })
-          break
-        case 'allExpand':
-          $grid.setAllTreeExpand(true)
-          break
-        case 'allShrink':
-          $grid.clearTreeExpand()
-          break
+      if ($grid) {
+        switch (menu.code) {
+          case 'hideColumn':
+            $grid.hideColumn(column)
+            break
+          case 'showAllColumn':
+            $grid.resetColumn({ visible: true })
+            break
+          case 'resetColumn':
+            $grid.resetColumn(true)
+            break
+          case 'exportHTMLAPI':
+            $grid.exportData({
+              type: 'html',
+              data: XEUtils.toTreeArray(apiData.tableData, { children: 'list' }),
+              filename: `vxe-${apiName.value}_v${docsVersion.value}`
+            })
+            break
+          case 'exportXLSXAPI':
+            $grid.exportData({
+              type: 'xlsx',
+              data: XEUtils.toTreeArray(apiData.tableData, { children: 'list' }),
+              filename: `vxe-${apiName.value}_v${docsVersion.value}`
+            })
+            break
+          case 'copy':
+            if (row && column) {
+              if (XEClipboard.copy(row[column.field])) {
+                VXETable.modal.message({ content: i18n.global.t('app.body.msg.copyToClipboard'), status: 'success' })
+              }
+            }
+            break
+          case 'resize':
+            apiData.filterName = ''
+            apiData.tableData = []
+            nextTick(() => {
+              $grid.clearAll()
+              loadList()
+            })
+            break
+          case 'exportAPI':
+            $grid.exportData({
+              filename: `vxe-${apiName.value}_v${docsVersion.value}.csv`
+            })
+            break
+          case 'allExpand':
+            $grid.setAllTreeExpand(true)
+            break
+          case 'allShrink':
+            $grid.clearTreeExpand()
+            break
+        }
       }
     }
 
     const gridOptions = reactive<VxeGridProps>({
-      resizable: true,
       autoResize: true,
-      highlightCurrentRow: true,
-      highlightHoverRow: true,
-      highlightCurrentColumn: true,
       height: 'auto',
-      rowId: 'id',
       loading: false,
       cellClassName ({ row, column }) {
         return {
           'api-pro': row.version === 'pro',
           'api-disabled': row.disabled,
           'api-abandoned': row.abandoned,
-          'disabled-line-through': (row.disabled) && column.property === 'name'
+          'disabled-line-through': (row.disabled) && column.field === 'name'
         }
+      },
+      rowConfig: {
+        keyField: 'id',
+        isHover: true,
+        isCurrent: true
+      },
+      columnConfig: {
+        resizable: true,
+        isHover: true,
+        isCurrent: true
       },
       customConfig: {
         storage: true,
@@ -383,16 +412,19 @@ export default defineComponent({
               { code: 'resetColumn', name: '重置个性化数据' }
             ],
             [
-              { code: 'exportXLSXAPI', name: '导出文档.xlsx', prefixIcon: 'fa fa-download' }
+              { code: 'exportXLSXAPI', name: '导出文档.xlsx' }
             ]
           ]
         },
         body: {
           options: [
             [
+              { code: 'copy', name: 'app.body.label.copy' }
+            ],
+            [
               { code: 'resize', name: '重新加载' },
-              { code: 'exportHTMLAPI', name: '导出文档.html', prefixIcon: 'fa fa-download' },
-              { code: 'exportXLSXAPI', name: '导出文档.xlsx', prefixIcon: 'fa fa-download' }
+              { code: 'exportHTMLAPI', name: '导出文档.html' },
+              { code: 'exportXLSXAPI', name: '导出文档.xlsx' }
             ],
             [
               { code: 'allExpand', name: '全部展开' },
@@ -413,19 +445,18 @@ export default defineComponent({
         }
       },
       tooltipConfig: {
-        contentMethod ({ type, row, column }) {
+        showAll: true,
+        contentMethod ({ type, row }) {
           if (type === 'body') {
-            if (column.property === 'name') {
-              if (row.disabled) {
-                return '该参数已经被废弃了，除非不打算更新版本，否则不应该被使用'
-              } else if (row.abandoned) {
-                return '该参数属于评估阶段，谨慎使用，后续有可能会被废弃的风险'
-              } else if (row.version === 'pro') {
-                return '该参数属于 pro 扩展插件的功能'
-              }
+            if (row.disabled) {
+              return '该参数已经被废弃了，除非不打算更新版本，否则不应该被使用'
+            } else if (row.abandoned) {
+              return '该参数属于评估阶段，谨慎使用，后续有可能会被废弃的风险'
+            } else if (row.version === 'pro') {
+              return '该参数属于 pro 扩展插件的功能'
             }
           }
-          return null
+          return ''
         }
       },
       toolbarConfig: {
@@ -444,7 +475,7 @@ export default defineComponent({
           type: 'html',
           treeNode: true,
           minWidth: 280,
-          titleHelp: {
+          titlePrefix: {
             message: '参数名称及使用，如果是在 CDN 环境中使用 kebab-case（短横线式），\n如果项目基于 vue-cli 脚手架可以使用 camelCase（驼峰式）'
           },
           filters: [
@@ -454,11 +485,11 @@ export default defineComponent({
             { label: 'Methods', value: 'Methods' }
           ]
         },
-        { field: 'desc', title: 'app.api.title.desc', type: 'html', minWidth: 200 },
+        { field: 'desc', title: 'app.api.title.desc', type: 'html', minWidth: 300 },
         { field: 'type', title: 'app.api.title.type', type: 'html', minWidth: 140 },
         { field: 'enum', title: 'app.api.title.enum', type: 'html', minWidth: 150 },
-        { field: 'defVal', title: 'app.api.title.defVal', type: 'html', minWidth: 160, titleHelp: { message: '部分参数可支持全局设置，具体请查阅相关说明' } },
-        { field: 'version', title: 'app.api.title.version', type: 'html', minWidth: 120, titleHelp: { message: '该文档与最新版本保持同步，如果遇到参数无效时，\n请检查当前使用的版本号是否支持该参数' }, slots: { default: 'default_version' } }
+        { field: 'defVal', title: 'app.api.title.defVal', type: 'html', minWidth: 160, titlePrefix: { message: '部分参数可支持全局设置，具体请查阅相关说明' } },
+        { field: 'version', title: 'app.api.title.version', type: 'html', width: 120, titlePrefix: { message: '该文档与最新版本保持同步，如果遇到参数无效时，\n请检查当前使用的版本号是否支持该参数' }, slots: { default: 'default_version' } }
       ],
       data: []
     })
@@ -477,6 +508,8 @@ export default defineComponent({
 
     return {
       xGrid,
+      pluginApiUrl,
+
       apiData,
       apiName,
       gridOptions,

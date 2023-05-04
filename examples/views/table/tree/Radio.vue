@@ -1,11 +1,11 @@
 <template>
   <div>
     <p class="tip">
-      使用 <table-api-link prop="highlight-current-row"/> 方式
+      使用 <table-api-link prop="row-config"/>.<table-api-link prop="isCurrent"/> 方式
     </p>
 
     <vxe-table
-      highlight-current-row
+      :row-config="{isCurrent: true}"
       :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
       :data="demo1.tableData">
       <vxe-column field="name" title="Name" tree-node></vxe-column>
@@ -43,9 +43,9 @@
     <p class="tip">当然也可以两种方式同时使用</p>
 
     <vxe-table
-      resizable
-      highlight-current-row
       ref="xTree3"
+      :row-config="{isCurrent: true}"
+      :column-config="{resizable: true}"
       :tree-config="{transform: true}"
       :radio-config="{labelField: 'name', trigger: 'row'}"
       :data="demo3.tableData"
@@ -71,7 +71,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance, VxeTableEvents } from '../../../../types/index'
+import { VxeTableInstance, VxeTableEvents } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -145,7 +145,7 @@ export default defineComponent({
       ]
     })
 
-    const xTree3 = ref({} as VxeTableInstance)
+    const xTree3 = ref<VxeTableInstance>()
 
     const currentChangeEvent: VxeTableEvents.CurrentChange = ({ row }) => {
       demo3.selectRow = row
@@ -153,9 +153,11 @@ export default defineComponent({
 
     const clearCurrentRowEvent = () => {
       const $table = xTree3.value
-      demo3.selectRow = null
-      $table.clearRadioRow()
-      $table.clearCurrentRow()
+      if ($table) {
+        demo3.selectRow = null
+        $table.clearRadioRow()
+        $table.clearCurrentRow()
+      }
     }
 
     return {
@@ -168,7 +170,7 @@ export default defineComponent({
       demoCodes: [
         `
         <vxe-table
-          highlight-current-row
+          :row-config="{isCurrent: true}"
           :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
           :data="demo1.tableData">
           <vxe-column field="name" title="Name" tree-node></vxe-column>
@@ -256,9 +258,9 @@ export default defineComponent({
         `,
         `
         <vxe-table
-          resizable
-          highlight-current-row
           ref="xTree3"
+          :row-config="{isCurrent: true}"
+          :column-config="{resizable: true}"
           :tree-config="{transform: true}"
           :radio-config="{labelField: 'name', trigger: 'row'}"
           :data="demo3.tableData"
@@ -303,7 +305,7 @@ export default defineComponent({
               ]
             })
 
-            const xTree3 = ref({} as VxeTableInstance)
+            const xTree3 = ref<VxeTableInstance>()
 
             const currentChangeEvent: VxeTableEvents.CurrentChange = ({ row }) => {
               demo3.selectRow = row

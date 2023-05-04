@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.icons') }}</h2>
-    <p class="tip">如果项目已有适合的图标，例如第三方图标库：font-awesome、inconfont，可通过配置替换并自行调整相关的样式即可</p>
+    <p class="tip">如果项目已有适合的图标，可通过配置替换并自行调整相关的样式即可</p>
     <pre>
       <pre-code class="typescript">
         import VXETable from 'vxe-table'
@@ -24,6 +24,11 @@
             TABLE_EXPAND_LOADED: 'vxe-icon-spinner roll',
             TABLE_EXPAND_OPEN: 'vxe-icon-arrow-right rotate90',
             TABLE_EXPAND_CLOSE: 'vxe-icon-arrow-right',
+            TABLE_CHECKBOX_CHECKED: 'vxe-icon-checkbox-checked',
+            TABLE_CHECKBOX_UNCHECKED: 'vxe-icon-checkbox-unchecked',
+            TABLE_CHECKBOX_INDETERMINATE: 'vxe-icon-checkbox-indeterminate',
+            TABLE_RADIO_CHECKED: 'vxe-icon-radio-checked',
+            TABLE_RADIO_UNCHECKED: 'vxe-icon-radio-unchecked',
 
             // button
             BUTTON_DROPDOWN: 'vxe-icon-arrow-down',

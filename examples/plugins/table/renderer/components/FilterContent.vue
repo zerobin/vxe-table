@@ -2,7 +2,7 @@
   <div class="my-filter-content">
     <div class="my-fc-search">
       <div class="my-fc-search-top">
-        <vxe-input v-model="demo1.option.data.sVal" placeholder="搜索" suffix-icon="fa fa-search"></vxe-input>
+        <vxe-input v-model="demo1.option.data.sVal" placeholder="搜索"></vxe-input>
       </div>
       <div class="my-fc-search-content">
         <template v-if="demo1.valList.length">
@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, reactive } from 'vue'
-import { VxeGlobalRendererHandles } from '../../../../../types/index'
+import { VxeGlobalRendererHandles } from 'vxe-table'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
@@ -59,7 +59,7 @@ export default defineComponent({
         const { fullData } = $table.getTableData()
         const option = column.filters[0]
         const { vals } = option.data
-        const colValList = Object.keys(XEUtils.groupBy(fullData, column.property)).map((val) => {
+        const colValList = Object.keys(XEUtils.groupBy(fullData, column.field)).map((val) => {
           return {
             checked: vals.includes(val),
             value: val

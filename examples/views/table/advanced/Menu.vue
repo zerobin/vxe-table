@@ -5,8 +5,8 @@
     <vxe-table
       border
       show-footer
-      highlight-current-row
-      highlight-current-column
+      :row-config="{isCurrent: true}"
+      :column-config="{isCurrent: true}"
       :footer-method="footerMethod"
       :data="demo1.tableData"
       :menu-config="demo1.tableMenu"
@@ -42,8 +42,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeTableEvents, VxeTablePropTypes } from '../../../../types/index'
+import { VXETable, VxeTableEvents, VxeTablePropTypes } from 'vxe-table'
+import XEClipboard from 'xe-clipboard'
 
 export default defineComponent({
   setup () {
@@ -68,10 +68,10 @@ export default defineComponent({
         body: {
           options: [
             [
-              { code: 'copy', name: '复制', prefixIcon: 'vxe-icon-copy', className: 'my-copy-item' }
+              { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'vxe-icon-question-circle-fill', className: 'my-copy-item' }
             ],
             [
-              { code: 'remove', name: '删除', prefixIcon: 'vxe-icon-delete-fill' },
+              { code: 'remove', name: '删除', prefixIcon: 'vxe-icon-question-circle-fill color-red' },
               {
                 name: '筛选',
                 children: [
@@ -82,11 +82,11 @@ export default defineComponent({
               {
                 code: 'sort',
                 name: '排序',
-                prefixIcon: 'fa fa-sort color-blue',
+                prefixIcon: 'vxe-icon-question-circle-fill color-blue',
                 children: [
                   { code: 'clearSort', name: '清除排序' },
-                  { code: 'sortAsc', name: '升序', prefixIcon: 'fa fa-sort-alpha-asc color-orange' },
-                  { code: 'sortDesc', name: '倒序', prefixIcon: 'fa fa-sort-alpha-desc color-orange' }
+                  { code: 'sortAsc', name: '升序', prefixIcon: 'vxe-icon-question-circle-fill color-orange' },
+                  { code: 'sortDesc', name: '倒序', prefixIcon: 'vxe-icon-question-circle-fill color-orange' }
                 ]
               },
               { code: 'print', name: '打印', disabled: true }
@@ -108,7 +108,9 @@ export default defineComponent({
         case 'copy':
           // 示例
           if (row && column) {
-            VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
+            if (XEClipboard.copy(row[column.field])) {
+              VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
+            }
           }
           break
         default:
@@ -130,8 +132,8 @@ export default defineComponent({
           if (columnIndex === 0) {
             return '平均'
           }
-          if (['age', 'rate'].includes(column.property)) {
-            return meanNum(data, column.property)
+          if (['age', 'rate'].includes(column.field)) {
+            return meanNum(data, column.field)
           }
           return null
         })
@@ -147,8 +149,8 @@ export default defineComponent({
         <vxe-table
           border
           show-footer
-          highlight-current-row
-          highlight-current-column
+          :row-config="{isCurrent: true}"
+          :column-config="{isCurrent: true}"
           :footer-method="footerMethod"
           :data="demo1.tableData"
           :menu-config="demo1.tableMenu"
@@ -163,6 +165,7 @@ export default defineComponent({
         `
         import { defineComponent, reactive } from 'vue'
         import { VXETable, VxeTableEvents, VxeTablePropTypes } from 'vxe-table'
+        import XEClipboard from 'xe-clipboard'
 
         export default defineComponent({
           setup () {
@@ -187,10 +190,10 @@ export default defineComponent({
                 body: {
                   options: [
                     [
-                      { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', className: 'my-copy-item' }
+                      { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'vxe-icon-question-circle-fill', className: 'my-copy-item' }
                     ],
                     [
-                      { code: 'remove', name: '删除', prefixIcon: 'fa fa-trash-o color-red' },
+                      { code: 'remove', name: '删除', prefixIcon: 'vxe-icon-question-circle-fill color-red' },
                       {
                         name: '筛选',
                         children: [
@@ -201,11 +204,11 @@ export default defineComponent({
                       {
                         code: 'sort',
                         name: '排序',
-                        prefixIcon: 'fa fa-sort color-blue',
+                        prefixIcon: 'vxe-icon-question-circle-fill color-blue',
                         children: [
                           { code: 'clearSort', name: '清除排序' },
-                          { code: 'sortAsc', name: '升序', prefixIcon: 'fa fa-sort-alpha-asc color-orange' },
-                          { code: 'sortDesc', name: '倒序', prefixIcon: 'fa fa-sort-alpha-desc color-orange' }
+                          { code: 'sortAsc', name: '升序', prefixIcon: 'vxe-icon-question-circle-fill color-orange' },
+                          { code: 'sortDesc', name: '倒序', prefixIcon: 'vxe-icon-question-circle-fill color-orange' }
                         ]
                       },
                       { code: 'print', name: '打印', disabled: true }
@@ -227,7 +230,9 @@ export default defineComponent({
                 case 'copy':
                   // 示例
                   if (row && column) {
-                    VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
+                    if (XEClipboard.copy(row[column.field])) {
+                      VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
+                    }
                   }
                   break
                 default:
@@ -249,8 +254,8 @@ export default defineComponent({
                   if (columnIndex === 0) {
                     return '平均'
                   }
-                  if (['age', 'rate'].includes(column.property)) {
-                    return meanNum(data, column.property)
+                  if (['age', 'rate'].includes(column.field)) {
+                    return meanNum(data, column.field)
                   }
                   return null
                 })

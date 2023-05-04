@@ -69,12 +69,12 @@
       <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
 
-    <p class="tip">默认展开指定行，通过 <table-api-link prop="expandRowKeys"/> 参数设置默认展开行，指定默认值需要有 <table-api-link prop="row-id"/></p>
+    <p class="tip">默认展开指定行，通过 <table-api-link prop="expandRowKeys"/> 参数设置默认展开行，指定默认值需要有 <table-api-link prop="row-config"/>.<table-api-link prop="keyField"/></p>
 
     <vxe-table
       border
       :row-config="{keyField: 'id'}"
-      :expand-config="{height: 60, expandRowKeys: [10004]}"
+      :expand-config="{expandRowKeys: [10004]}"
       :data="demo2.tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column type="expand" width="60">
@@ -170,11 +170,11 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
-import { VxeTableInstance, VxeTableEvents, VxeColumnPropTypes } from '../../../../types/index'
+import { VxeTableInstance, VxeTableEvents, VxeColumnPropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTable1 = ref({} as VxeTableInstance)
+    const xTable1 = ref<VxeTableInstance>()
 
     const demo1 = reactive({
       seqFixed: null as VxeColumnPropTypes.Fixed,
@@ -198,7 +198,9 @@ export default defineComponent({
       demo1.seqFixed = demo1.seqFixed ? null : 'left'
       nextTick(() => {
         const $table = xTable1.value
-        $table.refreshColumn()
+        if ($table) {
+          $table.refreshColumn()
+        }
       })
     }
 
@@ -206,7 +208,9 @@ export default defineComponent({
       demo1.expandFixed = demo1.expandFixed ? null : 'left'
       nextTick(() => {
         const $table = xTable1.value
-        $table.refreshColumn()
+        if ($table) {
+          $table.refreshColumn()
+        }
       })
     }
 
@@ -214,7 +218,9 @@ export default defineComponent({
       demo1.ageFixed = demo1.ageFixed ? null : 'right'
       nextTick(() => {
         const $table = xTable1.value
-        $table.refreshColumn()
+        if ($table) {
+          $table.refreshColumn()
+        }
       })
     }
 
@@ -317,7 +323,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTable1 = ref({} as VxeTableInstance)
+            const xTable1 = ref<VxeTableInstance>()
 
             const demo1 = reactive({
               seqFixed: null as VxeColumnPropTypes.Fixed,
@@ -383,7 +389,7 @@ export default defineComponent({
         `
         <vxe-table
           border
-          row-id="id"
+          :row-config="{keyField: 'id'}"
           :expand-config="{expandRowKeys: [10004]}"
           :data="demo2.tableData">
           <vxe-column type="seq" width="60"></vxe-column>

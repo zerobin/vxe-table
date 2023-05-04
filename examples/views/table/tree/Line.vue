@@ -6,10 +6,9 @@
     </p>
 
     <vxe-table
-      resizable
       show-overflow
-      highlight-hover-row
-      :row-config="{useKey: true}"
+      :row-config="{isHover: true, useKey: true}"
+      :column-config="{resizable: true}"
       :tree-config="{transform: true, rowField: 'id', parentField: 'parentId', line: true}"
       :data="demo1.tableData"
       :scroll-y="{enabled: false}">
@@ -29,13 +28,11 @@
     <p class="tip">复选框</p>
 
     <vxe-table
-      resizable
       show-overflow
-      highlight-hover-row
-      highlight-current-row
       size="medium"
-      :row-config="{useKey: true}"
-      :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon-arrow-right rotate45', iconClose: 'vxe-icon-arrow-right'}"
+      :row-config="{isCurrent: true, isHover: true, useKey: true}"
+      :column-config="{resizable: true}"
+      :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon-caret-right rotate45', iconClose: 'vxe-icon-caret-right'}"
       :checkbox-config="{labelField: 'name'}"
       :data="demo2.tableData"
       :scroll-y="{enabled: false}">
@@ -55,13 +52,12 @@
     <p class="tip">自定义图标，通过设置 <table-api-link prop="tree-config"/>={<table-api-link prop="iconOpen"/>, <table-api-link prop="iconClose"/>} 局部替换默认的图标</p>
 
     <vxe-table
-      resizable
       show-overflow
-      highlight-hover-row
       size="small"
-      :row-config="{useKey: true}"
+      :row-config="{isHover: true, useKey: true}"
+      :column-config="{resizable: true}"
       :radio-config="{labelField: 'name'}"
-      :tree-config="{accordion: true, line: true, iconOpen: 'vxe-icon-minus', iconClose: 'vxe-icon-add'}"
+      :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon-square-minus-fill', iconClose: 'vxe-icon-square-plus-fill'}"
       :data="demo3.tableData"
       :scroll-y="{enabled: false}">
       <vxe-column type="radio" title="Name" tree-node></vxe-column>
@@ -80,24 +76,23 @@
     <p class="tip">更多自定义</p>
 
     <vxe-table
-      resizable
       show-overflow
-      highlight-hover-row
       ref="xTree"
       size="mini"
-      :row-config="{useKey: true}"
+      :row-config="{isHover: true, useKey: true}"
+      :column-config="{resizable: true}"
       :checkbox-config="{labelField: 'name'}"
-      :tree-config="{line: true, iconOpen: 'vxe-icon-minus', iconClose: 'vxe-icon-add'}"
+      :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon-square-minus', iconClose: 'vxe-icon-square-plus'}"
       :data="demo4.tableData"
       :scroll-y="{enabled: false}">
       <vxe-column type="checkbox" title="Name" tree-node>
         <template #default="{ row }">
           <span>
             <template v-if="row.children && row.children.length">
-              <i class="tree-node-icon fa" :class="$refs.xTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
+              <i class="tree-node-icon" :class="$refs.xTree.isTreeExpandByRow(row) ? 'vxe-icon-folder-open' : 'vxe-icon-folder'"></i>
             </template>
             <template v-else>
-              <i class="tree-node-icon fa fa-file-o"></i>
+              <i class="tree-node-icon vxe-icon-file-txt"></i>
             </template>
             <span>{{ row.name }}</span>
           </span>
@@ -171,63 +166,47 @@ export default defineComponent({
 
     const demo3 = reactive({
       tableData: [
-        { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
-        {
-          id: 1005,
-          name: 'Test2',
-          type: 'mp4',
-          size: null,
-          date: '2021-04-01',
-          children: [
-            { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
-            { id: 20045, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
-            {
-              id: 10053,
-              name: 'test abc96',
-              type: 'avi',
-              size: null,
-              date: '2021-04-01',
-              children: [
-                { id: 24330, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
-                { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
-                { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
-              ]
-            }
-          ]
-        },
-        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
-        { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
+        { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+        { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+        { id: 20045, parentId: 24300, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
+        { id: 10053, parentId: 24300, name: 'test abc96', type: 'avi', size: null, date: '2021-04-01' },
+        { id: 24330, parentId: 10053, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
+        { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+        { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 23677, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23671, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23672, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23688, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23681, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23682, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' },
+        { id: 24566, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
       ]
     })
 
     const demo4 = reactive({
       tableData: [
-        { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
-        {
-          id: 1005,
-          name: 'Test2',
-          type: 'mp4',
-          size: null,
-          date: '2021-04-01',
-          children: [
-            { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
-            { id: 20045, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
-            {
-              id: 10053,
-              name: 'test abc96',
-              type: 'avi',
-              size: null,
-              date: '2021-04-01',
-              children: [
-                { id: 24330, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
-                { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
-                { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
-              ]
-            }
-          ]
-        },
-        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
-        { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
+        { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+        { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+        { id: 20045, parentId: 24300, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
+        { id: 10053, parentId: 24300, name: 'test abc96', type: 'avi', size: null, date: '2021-04-01' },
+        { id: 24330, parentId: 10053, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
+        { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+        { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 23677, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23671, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23672, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23688, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23681, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23682, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' },
+        { id: 24566, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
       ]
     })
 
@@ -236,7 +215,220 @@ export default defineComponent({
       demo2,
       demo3,
       demo4,
-      demoCodes: []
+      demoCodes: [
+        `
+        <vxe-table
+          show-overflow
+          :row-config="{isHover: true, useKey: true}"
+          :column-config="{resizable: true}"
+          :tree-config="{transform: true, rowField: 'id', parentField: 'parentId', line: true}"
+          :data="demo1.tableData"
+          :scroll-y="{enabled: false}">
+          <vxe-column field="name" title="Name" tree-node></vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
+        </vxe-table>
+        `,
+        `
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo1 = reactive({
+              tableData: [
+                { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+                { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                { id: 20045, parentId: 24300, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
+                { id: 10053, parentId: 24300, name: 'test abc96', type: 'avi', size: null, date: '2021-04-01' },
+                { id: 24330, parentId: 10053, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 23677, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23671, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23672, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23688, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23681, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23682, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' },
+                { id: 24566, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+              ]
+            })
+            return {
+              demo1
+            }
+          }
+        })
+        `,
+        `
+        <vxe-table
+          show-overflow
+          size="medium"
+          :row-config="{isCurrent: true, isHover: true, useKey: true}"
+          :column-config="{resizable: true}"
+          :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon-caret-right rotate45', iconClose: 'vxe-icon-caret-right'}"
+          :checkbox-config="{labelField: 'name'}"
+          :data="demo2.tableData"
+          :scroll-y="{enabled: false}">
+          <vxe-column type="checkbox" title="Name" width="280" tree-node></vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
+        </vxe-table>
+        `,
+        `
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo2 = reactive({
+              tableData: [
+                { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+                { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                { id: 20045, parentId: 24300, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
+                { id: 10053, parentId: 24300, name: 'test abc96', type: 'avi', size: null, date: '2021-04-01' },
+                { id: 24330, parentId: 10053, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 23677, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23671, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23672, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23688, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23681, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23682, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' },
+                { id: 24566, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+              ]
+            })
+            return {
+              demo2
+            }
+          }
+        })
+        `,
+        `
+        <vxe-table
+          show-overflow
+          size="small"
+          :row-config="{isHover: true, useKey: true}"
+          :column-config="{resizable: true}"
+          :radio-config="{labelField: 'name'}"
+          :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon-square-minus-fill', iconClose: 'vxe-icon-square-plus-fill'}"
+          :data="demo3.tableData"
+          :scroll-y="{enabled: false}">
+          <vxe-column type="radio" title="Name" tree-node></vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
+        </vxe-table>
+        `,
+        `
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo3 = reactive({
+              tableData: [
+                { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+                { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                { id: 20045, parentId: 24300, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
+                { id: 10053, parentId: 24300, name: 'test abc96', type: 'avi', size: null, date: '2021-04-01' },
+                { id: 24330, parentId: 10053, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 23677, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23671, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23672, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23688, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23681, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23682, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' },
+                { id: 24566, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+              ]
+            })
+            return {
+              demo3
+            }
+          }
+        })
+        `,
+        `
+        <vxe-table
+          show-overflow
+          ref="xTree"
+          size="mini"
+          :row-config="{isHover: true, useKey: true}"
+          :column-config="{resizable: true}"
+          :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon-square-minus', iconClose: 'vxe-icon-square-plus'}"
+          :data="demo4.tableData"
+          :scroll-y="{enabled: false}">
+          <vxe-column field="name" title="Name" tree-node>
+            <template #default="{ row }">
+              <span>
+                <template v-if="row.children && row.children.length">
+                  <i class="tree-node-icon" :class="$refs.xTree.isTreeExpandByRow(row) ? 'vxe-icon-folder-open' : 'vxe-icon-folder'"></i>
+                </template>
+                <template v-else>
+                  <i class="tree-node-icon vxe-icon-file-txt"></i>
+                </template>
+                <span>{{ row.name }}</span>
+              </span>
+            </template>
+          </vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
+        </vxe-table>
+        `,
+        `
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo4 = reactive({
+              tableData: [
+                { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+                { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                { id: 20045, parentId: 24300, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
+                { id: 10053, parentId: 24300, name: 'test abc96', type: 'avi', size: null, date: '2021-04-01' },
+                { id: 24330, parentId: 10053, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 23677, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23671, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23672, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23688, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23681, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23682, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' },
+                { id: 24566, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+              ]
+            })
+            return {
+              demo4
+            }
+          }
+        })
+        `,
+        `
+        .tree-node-icon {
+          width: 16px;
+          text-align: center;
+        }
+        `
+      ]
     }
   }
 })

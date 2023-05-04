@@ -35,18 +35,20 @@
 
 <script lang="tsx">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeGridInstance, VxeGridPropTypes, VxeGridProps } from '../../../../types/index'
+import { VxeGridInstance, VxeGridPropTypes, VxeGridProps } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xGrid = ref({} as VxeGridInstance)
+    const xGrid = ref<VxeGridInstance>()
 
     const gridOptions = reactive({
       border: true,
       showOverflow: true,
       showHeaderOverflow: true,
       height: 500,
-      rowId: 'id',
+      rowConfig: {
+        keyField: 'id'
+      },
       checkboxConfig: {
         checkField: 'checked',
         labelField: 'id'
@@ -89,7 +91,7 @@ export default defineComponent({
     const findDataList = (size: number): Promise<any[]> => {
       return new Promise(resolve => {
         setTimeout(() => {
-          const list = []
+          const list: any[] = []
           for (let index = 0; index < size; index++) {
             const key = rowIndex++
             const item: any = { id: key, checked: false }
@@ -213,14 +215,16 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xGrid = ref({} as VxeGridInstance)
+            const xGrid = ref<VxeGridInstance>()
 
             const gridOptions = reactive({
               border: true,
               showOverflow: true,
               showHeaderOverflow: true,
               height: 500,
-              rowId: 'id',
+              rowConfig: {
+                keyField: 'id'
+              },
               checkboxConfig: {
                 checkField: 'checked',
                 labelField: 'id'
@@ -263,7 +267,7 @@ export default defineComponent({
             const findDataList = (size: number): Promise<any[]> => {
               return new Promise(resolve => {
                 setTimeout(() => {
-                  const list = []
+                  const list: any[] = []
                   for (let index = 0; index < size; index++) {
                     const key = rowIndex++
                     const item: any = { id: key, checked: false }

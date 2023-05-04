@@ -15,9 +15,9 @@
     </vxe-toolbar>
 
     <vxe-table
-      highlight-hover-row
       ref="xTable"
       height="400"
+      :row-config="{isHover: true}"
       :export-config="{}"
       :data="demo1.tableData1">
       <vxe-column type="seq" width="60"></vxe-column>
@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance, VxeColumnPropTypes, VxeButtonEvents } from '../../../../types/index'
+import { VxeTableInstance, VxeColumnPropTypes, VxeButtonEvents } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -60,7 +60,7 @@ export default defineComponent({
       { label: '男', value: '1' }
     ]
 
-    const xTable = ref({} as VxeTableInstance)
+    const xTable = ref<VxeTableInstance>()
 
     const formatterSex: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
       const item = sexList.find(item => item.value === cellValue)
@@ -73,15 +73,19 @@ export default defineComponent({
 
     const exportDataEvent: VxeButtonEvents.Click = () => {
       const $table = xTable.value
-      $table.openExport({
-        // 默认勾选源
-        original: true
-      })
+      if ($table) {
+        $table.openExport({
+          // 默认勾选源
+          original: true
+        })
+      }
     }
 
     const importDataEvent: VxeButtonEvents.Click = () => {
       const $table = xTable.value
-      $table.importData()
+      if ($table) {
+        $table.importData()
+      }
     }
 
     return {
@@ -102,9 +106,9 @@ export default defineComponent({
         </vxe-toolbar>
 
         <vxe-table
-          highlight-hover-row
           ref="xTable"
           height="400"
+          :row-config="{isHover: true}"
           :export-config="{}"
           :data="demo1.tableData1">
           <vxe-column type="seq" width="60"></vxe-column>
@@ -138,7 +142,7 @@ export default defineComponent({
               { label: '男', value: '1' }
             ]
 
-            const xTable = ref({} as VxeTableInstance)
+            const xTable = ref<VxeTableInstance>()
 
             const formatterSex: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
               const item = sexList.find(item => item.value === cellValue)

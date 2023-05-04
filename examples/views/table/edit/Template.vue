@@ -17,7 +17,7 @@
       ref="xTable"
       :loading="demo1.loading"
       :data="demo1.tableData"
-      :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}"
+      :edit-config="{trigger: 'click', mode: 'cell', icon: 'vxe-icon-question-circle-fill'}"
       @checkbox-change="checkboxChangeEvent"
       @checkbox-all="checkboxChangeEvent">
       <vxe-column type="checkbox" width="60"></vxe-column>
@@ -36,7 +36,7 @@
             <template #dropdown>
               <ul class="my-downpanel1">
                 <li v-for="item in demo1.downList" :key="item.value" @click="changeNameEvent(item, row)">
-                  <i class="fa fa-user-o"></i>
+                  <i class="vxe-icon-question-circle-fill"></i>
                   <span>{{ item.label }}</span>
                 </li>
               </ul>
@@ -103,9 +103,9 @@
         </span>
       </template>
       <template #right>
-        <img src="/vxe-table/static/other/img1.gif" height="34">
-        <img src="/vxe-table/static/other/img1.gif" height="34">
-        <img src="/vxe-table/static/other/img1.gif" height="34">
+        <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" height="34">
+        <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" height="34">
+        <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" height="34">
       </template>
     </vxe-pager>
 
@@ -121,7 +121,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance, VxeTableEvents, VxePulldownInstance } from '../../../../types/index'
+import { VxeTableInstance, VxePulldownInstance } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -145,20 +145,24 @@ export default defineComponent({
       }
     })
 
-    const xTable = ref({} as VxeTableInstance)
-    const xDown1 = ref({} as VxePulldownInstance)
+    const xTable = ref<VxeTableInstance>()
+    const xDown1 = ref<VxePulldownInstance>()
 
-    const checkboxChangeEvent: VxeTableEvents.CheckboxChange = ({ records }) => {
+    const checkboxChangeEvent = () => {
       const $table = xTable.value
-      demo1.isAllChecked = $table.isAllCheckboxChecked()
-      demo1.isIndeterminate = $table.isAllCheckboxIndeterminate()
-      demo1.selectRecords = records
+      if ($table) {
+        demo1.isAllChecked = $table.isAllCheckboxChecked()
+        demo1.isIndeterminate = $table.isAllCheckboxIndeterminate()
+        demo1.selectRecords = $table.getCheckboxRecords()
+      }
     }
 
     const changeAllEvent = () => {
       const $table = xTable.value
-      $table.setAllCheckboxRow(demo1.isAllChecked)
-      demo1.selectRecords = $table.getCheckboxRecords()
+      if ($table) {
+        $table.setAllCheckboxRow(demo1.isAllChecked)
+        demo1.selectRecords = $table.getCheckboxRecords()
+      }
     }
 
     const clickDownEvent = () => {
@@ -207,7 +211,7 @@ export default defineComponent({
           ref="xTable"
           :loading="demo1.loading"
           :data="demo1.tableData"
-          :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}"
+          :edit-config="{trigger: 'click', mode: 'cell', icon: 'vxe-icon-question-circle-fill'}"
           @checkbox-change="checkboxChangeEvent"
           @checkbox-all="checkboxChangeEvent">
           <vxe-column type="checkbox" width="60"></vxe-column>
@@ -226,7 +230,7 @@ export default defineComponent({
                 <template #dropdown>
                   <ul class="my-downpanel1">
                     <li v-for="item in demo1.downList" :key="item.value" @click="changeNameEvent(item, row)">
-                      <i class="fa fa-user-o"></i>
+                      <i class="vxe-icon-question-circle-fill"></i>
                       <span>{{ item.label }}</span>
                     </li>
                   </ul>
@@ -293,15 +297,15 @@ export default defineComponent({
             </span>
           </template>
           <template #right>
-            <img src="/vxe-table/static/other/img1.gif" height="34">
-            <img src="/vxe-table/static/other/img1.gif" height="34">
-            <img src="/vxe-table/static/other/img1.gif" height="34">
+            <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" height="34">
+            <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" height="34">
+            <img src="https://pic2.zhimg.com/50/v2-f7031359103859e1ed38559715ef5f3f_hd.gif" height="34">
           </template>
         </vxe-pager>
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VxeTableInstance, VxeTableEvents, VxePulldownInstance } from 'vxe-table'
+        import { VxeTableInstance, VxePulldownInstance } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -325,14 +329,14 @@ export default defineComponent({
               }
             })
 
-            const xTable = ref({} as VxeTableInstance)
-            const xDown1 = ref({} as VxePulldownInstance)
+            const xTable = ref<VxeTableInstance>()
+            const xDown1 = ref<VxePulldownInstance>()
 
-            const checkboxChangeEvent: VxeTableEvents.CheckboxChange = ({ records }) => {
+            const checkboxChangeEvent = () => {
               const $table = xTable.value
               demo1.isAllChecked = $table.isAllCheckboxChecked()
               demo1.isIndeterminate = $table.isAllCheckboxIndeterminate()
-              demo1.selectRecords = records
+              demo1.selectRecords = $table.getCheckboxRecords()
             }
 
             const changeAllEvent = () => {

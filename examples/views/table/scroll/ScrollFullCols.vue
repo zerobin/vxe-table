@@ -3,7 +3,8 @@
     <p class="tip">
       虚拟滚动渲染，左右固定列<br>
       大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性，建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="loadColumn"/> 函数<br>
-      对于多选 type=<table-column-api-link prop="checkbox"/> 当数据量海量时应该绑定 <table-api-link prop="checkField"/> 属性渲染速度更快
+      对于多选 type=<table-column-api-link prop="checkbox"/> 当数据量海量时应该绑定 <table-api-link prop="checkField"/> 属性渲染速度更快<br>
+      <span class="green">（性能优化：横向虚拟滚动由列宽决定性能，每一列的列宽越大就越流畅；纵向虚拟滚动由行高决定性能，每一行的高度越高就越流畅）</span>
     </p>
 
     <vxe-grid ref="xGrid" v-bind="gridOptions">
@@ -47,9 +48,7 @@
 
 <script lang="ts">
 import { defineComponent, nextTick, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
-import { VxeGridInstance, VxeGridProps } from '../../../../types/index'
-import XEUtils from 'xe-utils'
+import { VXETable, VxeGridInstance, VxeGridProps } from 'vxe-table'
 
 const columnList: any[] = []
 const dataList: any[] = []
@@ -59,13 +58,17 @@ export default defineComponent({
     const gridOptions = reactive({
       border: true,
       showOverflow: true,
-      rowKey: true,
       showHeaderOverflow: true,
-      highlightHoverRow: true,
-      highlightCurrentRow: true,
       height: 600,
-      resizable: true,
       loading: false,
+      rowConfig: {
+        useKey: true,
+        isHover: true,
+        isCurrent: true
+      },
+      columnConfig: {
+        resizable: true
+      },
       toolbarConfig: {
         slots: {
           buttons: 'toolbar_buttons'
@@ -77,7 +80,7 @@ export default defineComponent({
       }
     } as VxeGridProps)
 
-    const xGrid = ref({} as VxeGridInstance)
+    const xGrid = ref<VxeGridInstance>()
 
     const mockColumns = (colSize: number): Promise<any[]> => {
       return new Promise(resolve => {
@@ -94,7 +97,8 @@ export default defineComponent({
               })
             }
           }
-          const result = XEUtils.clone(columnList.slice(0, colSize), true)
+          // 模拟数据
+          const result = JSON.parse(JSON.stringify(columnList.slice(0, colSize)))
           resolve(result)
         }, 100)
       })
@@ -157,7 +161,8 @@ export default defineComponent({
               })
             }
           }
-          const result = XEUtils.clone(dataList.slice(0, rowSize), true)
+          // 模拟数据
+          const result = JSON.parse(JSON.stringify(dataList.slice(0, rowSize)))
           resolve(result)
         }, 100)
       })
@@ -190,8 +195,10 @@ export default defineComponent({
 
     const getSelectEvent = () => {
       const $grid = xGrid.value
-      const selectRecords = $grid.getCheckboxRecords()
-      VXETable.modal.alert(`${selectRecords.length}`)
+      if ($grid) {
+        const selectRecords = $grid.getCheckboxRecords()
+        VXETable.modal.alert(`${selectRecords.length}`)
+      }
     }
 
     nextTick(() => {
@@ -224,7 +231,6 @@ export default defineComponent({
         `
         import { defineComponent, nextTick, reactive, ref } from 'vue'
         import { VXETable, VxeGridInstance, VxeGridProps } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         const columnList: any[] = []
         const dataList: any[] = []
@@ -234,13 +240,17 @@ export default defineComponent({
             const gridOptions = reactive({
               border: true,
               showOverflow: true,
-              rowKey: true,
               showHeaderOverflow: true,
-              highlightHoverRow: true,
-              highlightCurrentRow: true,
               height: 600,
-              resizable: true,
               loading: false,
+              rowConfig: {
+                useKey: true,
+                isHover: true,
+                isCurrent: true
+              },
+              columnConfig: {
+                resizable: true
+              },
               toolbarConfig: {
                 slots: {
                   buttons: 'toolbar_buttons'
@@ -252,7 +262,7 @@ export default defineComponent({
               }
             } as VxeGridProps)
 
-            const xGrid = ref({} as VxeGridInstance)
+            const xGrid = ref<VxeGridInstance>()
 
             const mockColumns = (colSize: number): Promise<any[]> => {
               return new Promise(resolve => {
@@ -269,7 +279,8 @@ export default defineComponent({
                       })
                     }
                   }
-                  const result = XEUtils.clone(columnList.slice(0, colSize), true)
+                  // 模拟数据
+                  const result = JSON.parse(JSON.stringify(columnList.slice(0, colSize)))
                   resolve(result)
                 }, 100)
               })
@@ -332,7 +343,8 @@ export default defineComponent({
                       })
                     }
                   }
-                  const result = XEUtils.clone(dataList.slice(0, rowSize), true)
+                  // 模拟数据
+                  const result = JSON.parse(JSON.stringify(dataList.slice(0, rowSize)))
                   resolve(result)
                 }, 100)
               })

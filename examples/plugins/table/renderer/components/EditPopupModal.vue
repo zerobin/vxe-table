@@ -1,7 +1,7 @@
 <template>
   <div class="edit-popup-modal">
-    <vxe-input class="edit-popup-input" v-model="demo1.row[demo1.column.property]" placeholder="请选择"></vxe-input>
-    <vxe-button class="edit-popup-button" icon="fa fa-list" type="text" @click="popupEvent"></vxe-button>
+    <vxe-input class="edit-popup-input" v-model="demo1.row[demo1.column.field]" placeholder="请选择"></vxe-input>
+    <vxe-button class="edit-popup-button" type="text" @click="popupEvent"></vxe-button>
     <vxe-modal
       show-footer
       class-name="vxe-table--ignore-clear edit-popup-box"
@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, reactive, ref } from 'vue'
-import { VxeGridInstance, VxeGridProps, VxePagerEvents, VxeGlobalRendererHandles } from '../../../../../types/index'
+import { VxeGridInstance, VxeGridProps, VxePagerEvents, VxeGlobalRendererHandles } from 'vxe-table'
 
 export default defineComponent({
   name: 'EditPopupModal',
@@ -35,10 +35,12 @@ export default defineComponent({
     const xGrid = ref({} as VxeGridInstance)
 
     const gridOptions = reactive({
-      highlightHoverRow: true,
       autoResize: true,
       height: 'auto',
       loading: false,
+      rowConfig: {
+        isHover: true
+      },
       pagerConfig: {
         total: 0,
         currentPage: 1,
@@ -104,7 +106,7 @@ export default defineComponent({
       if (column) {
         const $grid = xGrid.value
         const selectRecords = $grid.getCheckboxRecords()
-        row[column.property] = `${selectRecords.length}条`
+        row[column.field] = `${selectRecords.length}条`
       }
     }
 

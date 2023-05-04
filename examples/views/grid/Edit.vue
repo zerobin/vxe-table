@@ -4,15 +4,36 @@
 
     <vxe-grid ref="xGrid" v-bind="gridOptions" v-on="gridEvents">
       <template #operate="{ row }">
-        <template v-if="$refs.xGrid.isActiveByRow(row)">
-          <vxe-button icon="fa fa-save" status="primary" title="保存" circle @click="saveRowEvent(row)"></vxe-button>
+        <template v-if="$refs.xGrid.isEditByRow(row)">
+          <vxe-button status="primary" title="保存" circle @click="saveRowEvent(row)"></vxe-button>
         </template>
         <template v-else>
-          <vxe-button icon="fa fa-edit" title="编辑" circle @click="editRowEvent(row)"></vxe-button>
+          <vxe-button title="编辑" circle @click="editRowEvent(row)"></vxe-button>
         </template>
-        <vxe-button icon="fa fa-trash" title="删除" circle @click="removeRowEvent(row)"></vxe-button>
-        <vxe-button icon="fa fa-eye" title="查看" circle></vxe-button>
-        <vxe-button icon="fa fa-gear" title="设置" circle></vxe-button>
+        <vxe-button title="删除" circle @click="removeRowEvent(row)"></vxe-button>
+        <vxe-button title="查看" circle></vxe-button>
+        <vxe-button title="设置" circle></vxe-button>
+      </template>
+
+      <template #name_edit="{ row }">
+        <vxe-input v-model="row.name"></vxe-input>
+      </template>
+      <template #nickname_edit="{ row }">
+        <vxe-input v-model="row.nickname"></vxe-input>
+      </template>
+      <template #sex_default="{ row }">
+        <span>{{ formatSex(row.sex) }}</span>
+      </template>
+      <template #sex_edit="{ row }">
+        <vxe-select v-model="row.sex" transfer>
+          <vxe-option v-for="item in sexList1" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+        </vxe-select>
+      </template>
+      <template #role_edit="{ row }">
+        <vxe-input v-model="row.role"></vxe-input>
+      </template>
+      <template #describe_edit="{ row }">
+        <vxe-input v-model="row.describe"></vxe-input>
       </template>
     </vxe-grid>
 
@@ -27,8 +48,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../packages/all'
-import { VxeGridInstance, VxeGridListeners, VxeGridProps } from '../../../types/index'
+import { VXETable, VxeGridInstance, VxeGridListeners, VxeGridProps } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -36,11 +56,13 @@ export default defineComponent({
 
     const gridOptions = reactive<VxeGridProps>({
       border: true,
-      resizable: true,
       keepSource: true,
       showOverflow: true,
       height: 530,
       loading: false,
+      columnConfig: {
+        resizable: true
+      },
       pagerConfig: {
         total: 0,
         currentPage: 1,
@@ -50,21 +72,25 @@ export default defineComponent({
       editConfig: {
         trigger: 'manual',
         mode: 'row',
-        showStatus: true,
-        icon: 'fa fa-file-text-o'
+        showStatus: true
       },
       columns: [
         { type: 'seq', width: 60 },
         { type: 'checkbox', width: 50 },
-        { field: 'name', title: 'Name', editRender: { name: 'input' } },
-        { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-        { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
-        { field: 'role', title: 'Role', editRender: { name: 'input' } },
-        { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } },
+        { field: 'name', title: 'Name', editRender: { autofocus: '.vxe-input--inner' }, slots: { edit: 'name_edit' } },
+        { field: 'nickname', title: 'Nickname', editRender: { autofocus: '.vxe-input--inner' }, slots: { edit: 'nickname_edit' } },
+        { field: 'sex', title: 'Sex', editRender: {}, slots: { default: 'sex_default', edit: 'sex_edit' } },
+        { field: 'role', title: 'Role', editRender: {}, slots: { edit: 'role_edit' } },
+        { field: 'describe', title: 'Describe', showOverflow: true, editRender: {}, slots: { edit: 'describe_edit' } },
         { title: '操作', width: 200, slots: { default: 'operate' } }
       ],
       data: []
     })
+
+    const sexList1 = ref([
+      { value: '1', label: '男' },
+      { value: '0', label: '女' }
+    ])
 
     const findList = () => {
       gridOptions.loading = true
@@ -98,17 +124,27 @@ export default defineComponent({
       }
     }
 
+    const formatSex = (value: any) => {
+      if (value === '1') {
+        return '男'
+      }
+      if (value === '0') {
+        return '女'
+      }
+      return ''
+    }
+
     const editRowEvent = (row: any) => {
       const $grid = xGrid.value
       if ($grid) {
-        $grid.setActiveRow(row)
+        $grid.setEditRow(row)
       }
     }
 
     const saveRowEvent = async () => {
       const $grid = xGrid.value
       if ($grid) {
-        await $grid.clearActived()
+        await $grid.clearEdit()
         gridOptions.loading = true
         // 模拟异步保存
         setTimeout(() => {
@@ -128,25 +164,13 @@ export default defineComponent({
       }
     }
 
-    setTimeout(() => {
-      const $grid = xGrid.value
-      // 异步更新下拉选项
-      if ($grid) {
-        const column = $grid.getColumnByField('sex')
-        if (column && column.editRender) {
-          column.editRender.options = [
-            { value: '1', label: '男' },
-            { value: '0', label: '女' }
-          ]
-        }
-      }
-    }, 300)
-
     findList()
 
     return {
       xGrid,
+      sexList1,
       gridOptions,
+      formatSex,
       gridEvents,
       editRowEvent,
       saveRowEvent,
@@ -155,15 +179,36 @@ export default defineComponent({
         `
         <vxe-grid ref="xGrid" v-bind="gridOptions" v-on="gridEvents">
           <template #operate="{ row }">
-            <template v-if="$refs.xGrid.isActiveByRow(row)">
-              <vxe-button icon="fa fa-save" status="primary" title="保存" circle @click="saveRowEvent(row)"></vxe-button>
+            <template v-if="$refs.xGrid.isEditByRow(row)">
+              <vxe-button status="primary" title="保存" circle @click="saveRowEvent(row)"></vxe-button>
             </template>
             <template v-else>
-              <vxe-button icon="fa fa-edit" title="编辑" circle @click="editRowEvent(row)"></vxe-button>
+              <vxe-button title="编辑" circle @click="editRowEvent(row)"></vxe-button>
             </template>
-            <vxe-button icon="fa fa-trash" title="删除" circle @click="removeRowEvent(row)"></vxe-button>
-            <vxe-button icon="fa fa-eye" title="查看" circle></vxe-button>
-            <vxe-button icon="fa fa-gear" title="设置" circle></vxe-button>
+            <vxe-button title="删除" circle @click="removeRowEvent(row)"></vxe-button>
+            <vxe-button title="查看" circle></vxe-button>
+            <vxe-button title="设置" circle></vxe-button>
+          </template>
+
+          <template #name_edit="{ row }">
+            <vxe-input v-model="row.name"></vxe-input>
+          </template>
+          <template #nickname_edit="{ row }">
+            <vxe-input v-model="row.nickname"></vxe-input>
+          </template>
+          <template #sex_default="{ row }">
+            <span>{{ formatSex(row.sex) }}</span>
+          </template>
+          <template #sex_edit="{ row }">
+            <vxe-select v-model="row.sex" transfer>
+              <vxe-option v-for="item in sexList1" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+            </vxe-select>
+          </template>
+          <template #role_edit="{ row }">
+            <vxe-input v-model="row.role"></vxe-input>
+          </template>
+          <template #describe_edit="{ row }">
+            <vxe-input v-model="row.describe"></vxe-input>
           </template>
         </vxe-grid>
         `,
@@ -177,11 +222,13 @@ export default defineComponent({
 
             const gridOptions = reactive<VxeGridProps>({
               border: true,
-              resizable: true,
               keepSource: true,
               showOverflow: true,
               height: 530,
               loading: false,
+              columnConfig: {
+                resizable: true
+              },
               pagerConfig: {
                 total: 0,
                 currentPage: 1,
@@ -191,21 +238,25 @@ export default defineComponent({
               editConfig: {
                 trigger: 'manual',
                 mode: 'row',
-                showStatus: true,
-                icon: 'fa fa-file-text-o'
+                showStatus: true
               },
               columns: [
                 { type: 'seq', width: 60 },
                 { type: 'checkbox', width: 50 },
-                { field: 'name', title: 'Name', editRender: { name: 'input' } },
-                { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-                { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
-                { field: 'role', title: 'Role', editRender: { name: 'input' } },
-                { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } },
+                { field: 'name', title: 'Name', editRender: { autofocus: '.vxe-input--inner' }, slots: { edit: 'name_edit' } },
+                { field: 'nickname', title: 'Nickname', editRender: { autofocus: '.vxe-input--inner' }, slots: { edit: 'nickname_edit' } },
+                { field: 'sex', title: 'Sex', editRender: {}, slots: { default: 'sex_default', edit: 'sex_edit' } },
+                { field: 'role', title: 'Role', editRender: {}, slots: { edit: 'role_edit' } },
+                { field: 'describe', title: 'Describe', showOverflow: true, editRender: {}, slots: { edit: 'describe_edit' } },
                 { title: '操作', width: 200, slots: { default: 'operate' } }
               ],
               data: []
             })
+
+            const sexList1 = ref([
+              { value: '1', label: '男' },
+              { value: '0', label: '女' }
+            ])
 
             const findList = () => {
               gridOptions.loading = true
@@ -239,17 +290,27 @@ export default defineComponent({
               }
             }
 
+            const formatSex = (value: any) => {
+              if (value === '1') {
+                return '男'
+              }
+              if (value === '0') {
+                return '女'
+              }
+              return ''
+            }
+
             const editRowEvent = (row: any) => {
               const $grid = xGrid.value
               if ($grid) {
-                $grid.setActiveRow(row)
+                $grid.setEditRow(row)
               }
             }
 
             const saveRowEvent = async () => {
               const $grid = xGrid.value
               if ($grid) {
-                await $grid.clearActived()
+                await $grid.clearEdit()
                 gridOptions.loading = true
                 // 模拟异步保存
                 setTimeout(() => {
@@ -269,25 +330,13 @@ export default defineComponent({
               }
             }
 
-            setTimeout(() => {
-              const $grid = xGrid.value
-              // 异步更新下拉选项
-              if ($grid) {
-                const column = $grid.getColumnByField('sex')
-                if (column && column.editRender) {
-                  column.editRender.options = [
-                    { value: '1', label: '男' },
-                    { value: '0', label: '女' }
-                  ]
-                }
-              }
-            }, 300)
-
             findList()
 
             return {
               xGrid,
+              sexList1,
               gridOptions,
+              formatSex,
               gridEvents,
               editRowEvent,
               saveRowEvent,

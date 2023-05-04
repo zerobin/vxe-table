@@ -1,12 +1,13 @@
 <template>
   <div>
     <h1>{{ $t('app.aside.nav.commands') }}</h1>
-    <p class="tip">将工具栏按钮或数据代理中常用的指令注册成全局可复用</p>
+    <p class="tip">
+      将工具栏按钮或数据代理中常用的指令注册成全局可复用<br>
+      <span class="red">（注：高级功能难度较高，不适合非前端和初级前端使用）</span>
+    </p>
     <vxe-table
-      resizable
-      highlight-current-row
-      highlight-hover-row
-      highlight-current-column
+      :row-config="{isCurrent: true, isHover: true}"
+      :column-config="{resizable: true, isCurrent: true}"
       :data="tableData">
       <vxe-column field="name" title="app.api.title.prop" min-width="280" tree-node></vxe-column>
       <vxe-column field="desc" title="app.api.title.desc" min-width="200"></vxe-column>
@@ -75,7 +76,7 @@ export default defineComponent({
           border
           :data="tableData">
           <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
           <vxe-column field="sex" title="sex"></vxe-column>
           <vxe-column field="age" title="Age"></vxe-column>
         </vxe-table>

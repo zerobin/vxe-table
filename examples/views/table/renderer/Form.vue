@@ -1,23 +1,28 @@
 <template>
   <div>
     <p class="tip">
-      表单-项渲染 <grid-api-link prop="itemRender"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/master/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
+      表单-项渲染 <grid-api-link prop="itemRender"/>，查看 <a class="link" href="https://github.com/x-extends/vxe-table-docs/tree/main/v4/src/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
-      renderItemTitle (renderOpts: any, params: { data, item, property, $form }) 表单项标题<br>
-      renderItemContent (renderOpts: any, params: { data, item, property, $form }) 表单项内容<br>
-      itemVisibleMethod (params: { data, property }) 表单项可视函数<br>
-      itemResetMethod (params: { data, property }) 表单项重置函数<br>
+      itemClassName: string | (params: { data, field, $form }) => string 表单项className<br>
+      renderItemTitle (renderOpts: any, params: { data, item, field, $form }) 表单项标题<br>
+      renderItemContent (renderOpts: any, params: { data, item, field, $form }) 表单项内容<br>
+      itemVisibleMethod (params: { data, field }) 表单项可视函数<br>
+      itemResetMethod (params: { data, field }) 表单项重置函数<br>
     </p>
 
     <vxe-grid
       border
-      resizable
       height="400"
+      :column-config="{resizable: true}"
       :export-config="{}"
       :toolbar-config="{export: true, custom: true}"
       :form-config="demo1.tableForm"
       :proxy-config="demo1.tableProxy"
       :columns="demo1.tableColumn">
+      <template #btns>
+        <vxe-button type="submit" content="查询"></vxe-button>
+        <vxe-button type="reset" content="重置"></vxe-button>
+      </template>
     </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -64,8 +69,7 @@ export default defineComponent({
         items: [
           { field: 'name', title: '名称', itemRender: { name: 'FormItemInput', props: { clearable: true, placeholder: '请输入名称' } } },
           { field: 'age', title: '年龄', itemRender: { name: 'FormItemInput', props: { type: 'number', clearable: true, placeholder: '请输入年龄' } } },
-          { itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
-          { itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
+          { slots: { default: 'btns' } }
         ]
       },
       tableProxy: {
@@ -85,23 +89,25 @@ export default defineComponent({
         VXETable.renderer.add('FormItemInput', {
           // 项显示模板
           renderItemContent (renderOpts, params) {
-            const { data, property } = params
-            return [
-              <input v-model={ data[property] } text="text"></input>
-            ]
+            const { data, field } = params
+            return <input v-model={ data[field] } text="text"></input>
           }
         })
         `,
         `
         <vxe-grid
           border
-          resizable
           height="400"
+          :column-config="{resizable: true}"
           :export-config="{}"
           :toolbar-config="{export: true, custom: true}"
           :form-config="demo1.tableForm"
           :proxy-config="demo1.tableProxy"
           :columns="demo1.tableColumn">
+          <template #btns>
+            <vxe-button type="submit" content="查询"></vxe-button>
+            <vxe-button type="reset" content="重置"></vxe-button>
+          </template>
         </vxe-grid>
         `,
         `
@@ -138,8 +144,7 @@ export default defineComponent({
                 items: [
                   { field: 'name', title: '名称', itemRender: { name: 'FormItemInput', props: { clearable: true, placeholder: '请输入名称' } } },
                   { field: 'age', title: '年龄', itemRender: { name: 'FormItemInput', props: { type: 'number', clearable: true, placeholder: '请输入年龄' } } },
-                  { itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
-                  { itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
+                  { slots: { default: 'btns' } }
                 ]
               },
               tableProxy: {

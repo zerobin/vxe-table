@@ -1,4 +1,4 @@
-import { VXETable } from '../../../../packages/all'
+import { VXETable } from 'vxe-table'
 
 // 创建一个简单的超链接渲染
 VXETable.renderer.add('MyLink', {
@@ -6,8 +6,6 @@ VXETable.renderer.add('MyLink', {
   renderDefault (renderOpts, params) {
     const { row, column } = params
     const { events = {} } = renderOpts
-    return [
-      <a class="link" onClick={ () => events.click(params) }>{row[column.property]}</a>
-    ]
+    return <a class="link" onClick={ () => events.click(params) }>{row[column.field]}</a>
   }
 })

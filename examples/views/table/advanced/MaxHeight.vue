@@ -4,10 +4,10 @@
 
     <vxe-table
       border
-      resizable
       show-footer
       show-overflow
       max-height="400"
+      :column-config="{resizable: true}"
       :loading="demo1.loading"
       :data="demo1.tableData"
       :footer-method="footerMethod">
@@ -33,10 +33,10 @@
 
     <vxe-table
       border
-      resizable
       show-footer
       show-overflow
       max-height="400"
+      :column-config="{resizable: true}"
       :loading="demo2.loading"
       :data="demo2.tableData"
       :footer-method="footerMethod">
@@ -61,7 +61,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeTablePropTypes } from '../../../../types/index'
+import { VxeTablePropTypes } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -124,8 +124,8 @@ export default defineComponent({
           if (columnIndex === 0) {
             return '平均'
           }
-          if (['age', 'rate'].includes(column.property)) {
-            return meanNum(data, column.property).toFixed(2)
+          if (['age', 'rate'].includes(column.field)) {
+            return meanNum(data, column.field).toFixed(2)
           }
           return null
         }),
@@ -133,8 +133,8 @@ export default defineComponent({
           if (columnIndex === 0) {
             return '和值'
           }
-          if (['age', 'rate'].includes(column.property)) {
-            return sumNum(data, column.property)
+          if (['age', 'rate'].includes(column.field)) {
+            return sumNum(data, column.field)
           }
           return null
         })
@@ -150,10 +150,10 @@ export default defineComponent({
         `
         <vxe-table
           border
-          resizable
           show-footer
           show-overflow
           max-height="400"
+          :column-config="{resizable: true}"
           :loading="demo1.loading"
           :data="demo1.tableData"
           :footer-method="footerMethod">
@@ -211,8 +211,8 @@ export default defineComponent({
                   if (columnIndex === 0) {
                     return '平均'
                   }
-                  if (['age', 'rate'].includes(column.property)) {
-                    return meanNum(data, column.property).toFixed(2)
+                  if (['age', 'rate'].includes(column.field)) {
+                    return meanNum(data, column.field).toFixed(2)
                   }
                   return null
                 }),
@@ -220,8 +220,8 @@ export default defineComponent({
                   if (columnIndex === 0) {
                     return '和值'
                   }
-                  if (['age', 'rate'].includes(column.property)) {
-                    return sumNum(data, column.property)
+                  if (['age', 'rate'].includes(column.field)) {
+                    return sumNum(data, column.field)
                   }
                   return null
                 })
@@ -239,10 +239,10 @@ export default defineComponent({
         `
         <vxe-table
           border
-          resizable
           show-footer
           show-overflow
           max-height="400"
+          :column-config="{resizable: true}"
           :loading="demo2.loading"
           :data="demo2.tableData"
           :footer-method="footerMethod">
@@ -306,8 +306,8 @@ export default defineComponent({
                   if (columnIndex === 0) {
                     return '平均'
                   }
-                  if (['age', 'rate'].includes(column.property)) {
-                    return meanNum(data, column.property).toFixed(2)
+                  if (['age', 'rate'].includes(column.field)) {
+                    return meanNum(data, column.field).toFixed(2)
                   }
                   return null
                 }),
@@ -315,8 +315,8 @@ export default defineComponent({
                   if (columnIndex === 0) {
                     return '和值'
                   }
-                  if (['age', 'rate'].includes(column.property)) {
-                    return sumNum(data, column.property)
+                  if (['age', 'rate'].includes(column.field)) {
+                    return sumNum(data, column.field)
                   }
                   return null
                 })

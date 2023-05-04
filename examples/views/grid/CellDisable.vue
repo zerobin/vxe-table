@@ -1,8 +1,21 @@
 <template>
   <div>
-    <p class="tip">通过 <table-api-link prop="edit-config"/>.<table-api-link prop="activeMethod"/> 方法来判断单元格是否禁用，禁用后不可编辑</p>
+    <p class="tip">通过 <table-api-link prop="edit-config"/>.<table-api-link prop="beforeEditMethod"/> 方法来判断单元格是否禁用，禁用后不可编辑</p>
 
-    <vxe-grid v-bind="gridOptions1" @edit-disabled="editDisabledEvent"></vxe-grid>
+    <vxe-grid v-bind="gridOptions1" @edit-disabled="editDisabledEvent">
+      <template #name_edit="{ row }">
+        <vxe-input v-model="row.name"></vxe-input>
+      </template>
+      <template #sex_edit="{ row }">
+        <vxe-input v-model="row.sex"></vxe-input>
+      </template>
+      <template #age_edit="{ row }">
+        <vxe-input v-model="row.age"></vxe-input>
+      </template>
+      <template #address_edit="{ row }">
+        <vxe-input v-model="row.address"></vxe-input>
+      </template>
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -13,7 +26,20 @@
 
     <p class="tip">禁用第二行编辑</p>
 
-    <vxe-grid v-bind="gridOptions2" @edit-disabled="editDisabledEvent"></vxe-grid>
+    <vxe-grid v-bind="gridOptions2" @edit-disabled="editDisabledEvent">
+      <template #name_edit="{ row }">
+        <vxe-input v-model="row.name"></vxe-input>
+      </template>
+      <template #sex_edit="{ row }">
+        <vxe-input v-model="row.sex"></vxe-input>
+      </template>
+      <template #age_edit="{ row }">
+        <vxe-input v-model="row.age"></vxe-input>
+      </template>
+      <template #address_edit="{ row }">
+        <vxe-input v-model="row.address"></vxe-input>
+      </template>
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -26,7 +52,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeGridProps, VxeGridInstance, VxeGridEvents } from '../../../types/index'
+import { VxeGridProps, VxeGridInstance, VxeGridEvents } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -36,7 +62,7 @@ export default defineComponent({
       editConfig: {
         trigger: 'click',
         mode: 'cell',
-        activeMethod ({ columnIndex }) {
+        beforeEditMethod ({ columnIndex }) {
           if (columnIndex === 1) {
             return false
           }
@@ -45,10 +71,10 @@ export default defineComponent({
       },
       columns: [
         { type: 'seq', width: 50 },
-        { field: 'name', title: 'app.body.label.name', editRender: { name: 'input' } },
-        { field: 'sex', title: 'app.body.label.sex', editRender: { name: 'input' } },
-        { field: 'age', title: 'Age', editRender: { name: 'input' } },
-        { field: 'address', title: 'Address', editRender: { name: 'input' } }
+        { field: 'name', title: 'Name', editRender: {}, slots: { edit: 'name_edit' } },
+        { field: 'sex', title: 'Sex', editRender: {}, slots: { edit: 'sex_edit' } },
+        { field: 'age', title: 'Age', editRender: {}, slots: { edit: 'age_edit' } },
+        { field: 'address', title: 'Address', editRender: {}, slots: { edit: 'address_edit' } }
       ],
       data: [
         { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
@@ -63,7 +89,7 @@ export default defineComponent({
       console.log('禁止编辑')
     }
 
-    const xGrid2 = ref({} as VxeGridInstance)
+    const xGrid2 = ref<VxeGridInstance>()
 
     const gridOptions2 = reactive<VxeGridProps>({
       border: true,
@@ -71,7 +97,7 @@ export default defineComponent({
       editConfig: {
         trigger: 'click',
         mode: 'cell',
-        activeMethod ({ rowIndex }) {
+        beforeEditMethod ({ rowIndex }) {
           if (rowIndex === 1) {
             return false
           }
@@ -80,10 +106,10 @@ export default defineComponent({
       },
       columns: [
         { type: 'seq', width: 50 },
-        { field: 'name', title: 'app.body.label.name', editRender: { name: 'input', attrs: { disabled: false } } },
-        { field: 'sex', title: 'app.body.label.sex', editRender: { name: 'input', attrs: { disabled: false } } },
-        { field: 'age', title: 'Age', editRender: { name: 'input', attrs: { disabled: false } } },
-        { field: 'address', title: 'Address', editRender: { name: 'input' } }
+        { field: 'name', title: 'Name', editRender: {}, slots: { edit: 'name_edit' } },
+        { field: 'sex', title: 'Sex', editRender: {}, slots: { edit: 'sex_edit' } },
+        { field: 'age', title: 'Age', editRender: {}, slots: { edit: 'age_edit' } },
+        { field: 'address', title: 'Address', editRender: {}, slots: { edit: 'address_edit' } }
       ],
       data: [
         { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
@@ -101,7 +127,20 @@ export default defineComponent({
       gridOptions2,
       demoCodes: [
         `
-        <vxe-grid v-bind="gridOptions1" @edit-disabled="editDisabledEvent"></vxe-grid>
+        <vxe-grid v-bind="gridOptions1" @edit-disabled="editDisabledEvent">
+          <template #name_edit="{ row }">
+            <vxe-input v-model="row.name"></vxe-input>
+          </template>
+          <template #sex_edit="{ row }">
+            <vxe-input v-model="row.sex"></vxe-input>
+          </template>
+          <template #age_edit="{ row }">
+            <vxe-input v-model="row.age"></vxe-input>
+          </template>
+          <template #address_edit="{ row }">
+            <vxe-input v-model="row.address"></vxe-input>
+          </template>
+        </vxe-grid>
         `,
         `
         import { defineComponent, reactive } from 'vue'
@@ -115,7 +154,7 @@ export default defineComponent({
               editConfig: {
                 trigger: 'click',
                 mode: 'cell',
-                activeMethod ({ columnIndex }) {
+                beforeEditMethod ({ columnIndex }) {
                   if (columnIndex === 1) {
                     return false
                   }
@@ -124,10 +163,10 @@ export default defineComponent({
               },
               columns: [
                 { type: 'seq', width: 50 },
-                { field: 'name', title: 'app.body.label.name', editRender: { name: 'input' } },
-                { field: 'sex', title: 'app.body.label.sex', editRender: { name: 'input' } },
-                { field: 'age', title: 'Age', editRender: { name: 'input' } },
-                { field: 'address', title: 'Address', editRender: { name: 'input' } }
+                { field: 'name', title: 'Name', editRender: {}, slots: { edit: 'name_edit' } },
+                { field: 'sex', title: 'Sex', editRender: {}, slots: { edit: 'sex_edit' } },
+                { field: 'age', title: 'Age', editRender: {}, slots: { edit: 'age_edit' } },
+                { field: 'address', title: 'Address', editRender: {}, slots: { edit: 'address_edit' } }
               ],
               data: [
                 { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
@@ -150,7 +189,20 @@ export default defineComponent({
         })
         `,
         `
-        <vxe-grid ref="xGrid2" v-bind="gridOptions2" @edit-actived="editDisabledEvent"></vxe-grid>
+        <vxe-grid ref="xGrid2" v-bind="gridOptions2" @edit-actived="editDisabledEvent">
+          <template #name_edit="{ row }">
+            <vxe-input v-model="row.name"></vxe-input>
+          </template>
+          <template #sex_edit="{ row }">
+            <vxe-input v-model="row.sex"></vxe-input>
+          </template>
+          <template #age_edit="{ row }">
+            <vxe-input v-model="row.age"></vxe-input>
+          </template>
+          <template #address_edit="{ row }">
+            <vxe-input v-model="row.address"></vxe-input>
+          </template>
+        </vxe-grid>
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
@@ -158,7 +210,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xGrid2 = ref({} as VxeGridInstance)
+            const xGrid2 = ref<VxeGridInstance>()
 
             const gridOptions2 = reactive<VxeGridProps>({
               border: true,
@@ -166,7 +218,7 @@ export default defineComponent({
               editConfig: {
                 trigger: 'click',
                 mode: 'cell',
-                activeMethod ({ rowIndex }) {
+                beforeEditMethod ({ rowIndex }) {
                   if (rowIndex === 1) {
                     return false
                   }
@@ -175,10 +227,10 @@ export default defineComponent({
               },
               columns: [
                 { type: 'seq', width: 50 },
-                { field: 'name', title: 'app.body.label.name', editRender: { name: 'input', attrs: { disabled: false } } },
-                { field: 'sex', title: 'app.body.label.sex', editRender: { name: 'input', attrs: { disabled: false } } },
-                { field: 'age', title: 'Age', editRender: { name: 'input', attrs: { disabled: false } } },
-                { field: 'address', title: 'Address', editRender: { name: 'input' } }
+                { field: 'name', title: 'Name', editRender: {}, slots: { edit: 'name_edit' } },
+                { field: 'sex', title: 'Sex', editRender: {}, slots: { edit: 'sex_edit' } },
+                { field: 'age', title: 'Age', editRender: {}, slots: { edit: 'age_edit' } },
+                { field: 'address', title: 'Address', editRender: {}, slots: { edit: 'address_edit' } }
               ],
               data: [
                 { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },

@@ -51,7 +51,7 @@ export default {
 
         more: '复杂表格',
         events: '事件绑定',
-        template: '自定义模板',
+        template: '自定义模板、插槽',
         dynamic: '使用 v-for 动态实现',
         customCheckbox: '自定义复选框',
         customRadio: '自定义单选框',
@@ -71,8 +71,8 @@ export default {
         print: '打印',
         customPrint: '高级打印',
         fixedType: '固定类型 + 导入/导出',
-        contextMenu: '右键菜单',
-        menuPrivilege: '右键菜单 + 权限控制',
+        contextMenu: '快捷菜单',
+        menuPrivilege: '快捷菜单 + 权限控制',
         footerImmediately: '表尾 + 实时更新合计',
         expandRow: '展开行',
         expandRowIcon: '展开行 + 更多自定义',
@@ -120,7 +120,7 @@ export default {
         edit: '可编辑',
         crudToolbar: '增删改查 + 工具栏',
         lazy: '懒加载',
-        lazyMenu: '懒加载 + 右键菜单',
+        lazyMenu: '懒加载 + 快捷菜单',
         lazyEdit: '懒加载 + 可编辑',
         treeLine: '连接线',
         full: '完整功能',
@@ -181,7 +181,7 @@ export default {
         badLineHeight: '动态行高与虚拟滚动的取舍',
         badNonsupport: '不被支持的用法',
 
-        module: '功能模块',
+        module: '功能组件',
         button: '按钮',
         input: '输入框',
         textarea: '文本域',
@@ -220,13 +220,13 @@ export default {
         exportXLSXPlugin: 'plugin-export 导入/导出 xlsx',
         exportPDFPlugin: 'plugin-export 导出 pdf',
         rendererPlugin: 'plugin-renderer 更多渲染',
-        menusPlugin: 'plugin-menus 右键菜单集',
+        menusPlugin: 'plugin-menus 快捷菜单集',
         treeRowPlugin: 'plugin-virtual-tree 虚拟树',
         treeColPlugin: 'plugin-virtual-tree 横向与纵向',
 
         formats: '(全局复用) 格式化',
         commands: '(全局复用) 指令注册',
-        menus: '(全局复用) 右键菜单',
+        menus: '(全局复用) 快捷菜单',
 
         renderer: '(高级用法) 渲染器',
         rendererFilter: '筛选渲染',
@@ -270,7 +270,8 @@ export default {
         vxeFormGather: 'vxe-form-gather',
         vxeSwitch: 'vxe-switch',
         vxeList: 'vxe-list',
-        vxePulldown: 'vxe-pulldown'
+        vxePulldown: 'vxe-pulldown',
+        vxeIcon: 'vxe-icon'
       }
     },
     header: {
@@ -283,7 +284,9 @@ export default {
       button: {
         viewCode: '查看代码',
         runDemo: '在线运行',
+        copyCode: '复制代码',
         showCode: '显示代码',
+        hideCode: '隐藏代码',
         refresh: '刷新',
         insert: '新增',
         save: '保存',
@@ -322,16 +325,16 @@ export default {
       },
       other: {
         v1: 'v1+ (vue 2.6+ 停止维护) ~ 2020-04 停止更新',
-        v2: 'v2+ (vue 2.6+ 旧版本) ~ 2021-12 停止更新',
+        v2: 'v2+ (vue 2.6+ 停止维护) ~ 2021-12 停止更新',
         v3: 'v3+ (vue 2.6+ 稳定版)',
         v3d5: '3.5+ (vue 2.6+ 粘性表格)',
-        v4: 'v4+ (vue 3.0+ 最新版)',
-        v4d5: '4.5+ (vue 3.0+ 粘性表格)',
+        v4: 'v4+ (vue 3.2+ 最新版)',
+        v4d5: '4.5+ (vue 3.2+ 粘性表格)',
         plan: {
           v1: 'v1 基于 vue2.6+，支持所有主流的浏览器，实现表格的一切实用的功能',
           v2: 'v2 基于 vue2.6+，支持所有主流的浏览器，同时兼具功能与性能',
           v3: 'v3 基于 vue2.6+，支持现代浏览器并部分兼容 IE11，提升渲染性能',
-          v4: 'v4 基于 vue3.0+，只支持现代浏览器，不支持 IE'
+          v4: 'v4 基于 vue3.2+，只支持现代浏览器，不支持 IE'
         },
         compatibility: '兼容性变动',
         releases: '更新日志',
@@ -387,7 +390,7 @@ export default {
           maxHeight: '表格的最大高度',
           syncResize: '自动跟随某个属性的变化去重新计算表格，和手动调用 recalculate 方法是一样的效果（对于通过某个属性来控制显示/隐藏切换时可能会用到）',
           autoResize: '自动监听父元素的变化去重新计算表格（对于父元素可能存在动态变化、显示隐藏的容器中、列宽异常等场景中的可能会用到）',
-          resizable: '所有的列是否允许拖动列宽调整大小',
+          resizable: '所有的列是否允许拖动列宽调整大小，被 column-config.resizable 替换',
           stripe: '是否带有斑马纹（需要注意的是，在可编辑表格场景下，临时插入的数据不会有斑马纹样式）',
           border: '是否带有边框',
           round: '是否为圆角边框',
@@ -399,10 +402,10 @@ export default {
           footerAlign: '所有的表尾列的对齐方式',
           showHeader: '是否显示表头',
           startIndex: '即将废弃，请使用 seq-config.startIndex',
-          highlightCurrentRow: '是否要高亮当前行',
-          highlightHoverRow: '鼠标移到行是否要高亮显示',
-          highlightCurrentColumn: '是否要高亮当前列',
-          highlightHoverColumn: '鼠标移到列是否要高亮显示',
+          highlightCurrentRow: '是否要高亮当前行，被 row-config.isCurrent 替换',
+          highlightHoverRow: '鼠标移到行是否要高亮显示，被 row-config.isHover 替换',
+          highlightCurrentColumn: '是否要高亮当前列，被 column-config.isCurrent 替换',
+          highlightHoverColumn: '鼠标移到列是否要高亮显，被 column-config.isHover 替换示',
           highlightCell: '只对 edit-config 配置时有效，是否在编辑时高亮单元格边框（只支持部分）',
           rowClassName: '给行附加 className',
           cellClassName: '给单元格附加 className',
@@ -450,7 +453,7 @@ export default {
           tooltipConfig: 'tooltip 配置项',
           expandConfig: '展开行配置项（不支持虚拟滚动）',
           treeConfig: '树形结构配置项',
-          menuConfig: '右键菜单配置项',
+          menuConfig: '快捷菜单配置项',
           contextMenu: '即将废弃，请使用 menu-config',
           clipConfig: '复制/粘贴配置项',
           fnrConfig: '查找/替换配置项',
@@ -467,9 +470,9 @@ export default {
 
           params: '自定义参数（可以用来存放一些自定义的数据）',
 
-          empty: '空数据时显示的文本内容',
+          empty: '自定义空数据时显示模板',
 
-          currentChange: '只对 highlightCurrentRow 有效，当手动选中行并且值发生改变时触发的事件',
+          currentChange: '只对 row-config.isCurrent 有效，当手动选中行并且值发生改变时触发的事件',
           radioChange: '只对 type=radio 有效，当手动勾选并且值发生改变时触发的事件',
           selectChange: '即将废弃，请使用 checkbox-change',
           checkboxChange: '只对 type=checkbox 有效，当手动勾选并且值发生改变时触发的事件',
@@ -494,7 +497,7 @@ export default {
           resizableChange: '当列宽拖动发生变化时会触发该事件',
           toggleExpandChange: '当行展开或收起时会触发该事件',
           toggleTreeChange: '当树节点展开或收起时会触发该事件',
-          menuClick: '只对 menu-config 配置时有效，当点击右键菜单时会触发该事件',
+          menuClick: '只对 menu-config 配置时有效，当点击快捷菜单时会触发该事件',
           contextMenuClick: '即将废弃，请使用 menu-click',
           cellSelected: '只对 mouse-config.selected 配置时有效，单元格被选中时会触发该事件',
           editClosed: '只对 edit-config 配置时有效，单元格编辑状态下被关闭时会触发该事件',
@@ -565,6 +568,7 @@ export default {
           zIndex: '自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）',
           isArrow: '是否显示箭头',
           enterable: '鼠标是否可进入到 tooltip 中',
+          enterDelay: '鼠标移入后延时多少才显示 tooltip',
           leaveDelay: '鼠标移出后延时多少才隐藏 tooltip'
         }
       },
@@ -687,7 +691,7 @@ export default {
           position: '只对 type=modal 有效，窗口的默认位置，可以设置为 center 居中显示',
           zIndex: '自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）',
           showTitleOverflow: '设置标题内容过长时显示为省略号',
-          fullscreen: '默认最大化显示',
+          fullscreen: '窗口打开时自动最大化显示',
           draggable: '是否启用窗口拖动',
           dblclickZoom: '只对 type=modal 有效，是否允许通过双击头部放大或还原窗口',
           remember: '记忆功能，会记住最后操作状态，再次打开窗口时还原窗口状态',
@@ -780,6 +784,7 @@ export default {
       },
       pulldown: {
         desc: {
+          value: 'v-model 绑定值',
           data: '列表数据',
           size: '尺寸',
           disabled: '是否禁用',

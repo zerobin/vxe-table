@@ -31,12 +31,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../packages/all'
-import { VxeGridInstance, VxeGridProps, VxeGridEvents } from '../../../types/index'
+import { VXETable, VxeGridInstance, VxeGridProps, VxeGridEvents } from 'vxe-table'
+import XEClipboard from 'xe-clipboard'
 
 export default defineComponent({
   setup () {
-    const xGrid = ref({} as VxeGridInstance)
+    const xGrid = ref<VxeGridInstance>()
 
     const sumNum = (list: any[], field: string) => {
       let count = 0
@@ -48,9 +48,13 @@ export default defineComponent({
 
     const gridOptions = reactive<VxeGridProps>({
       border: true,
-      resizable: true,
       showFooter: true,
-      highlightCurrentRow: true,
+      rowConfig: {
+        isCurrent: true
+      },
+      columnConfig: {
+        resizable: true
+      },
       columns: [
         { type: 'checkbox', width: 50 },
         { type: 'seq', width: 60 },
@@ -71,35 +75,35 @@ export default defineComponent({
         header: {
           options: [
             [
-              { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
+              { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false }
             ]
           ]
         },
         body: {
           options: [
             [
-              { code: 'copy', name: '复制内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
+              { code: 'copy', name: '复制内容', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false },
               { code: 'clear', name: '清除内容', visible: true, disabled: false },
               { code: 'reload', name: '刷新表格', visible: true, disabled: false }
             ],
             [
-              { code: 'myPrint', name: '打印', prefixIcon: 'fa fa-print', visible: true, disabled: false },
-              { code: 'myExport', name: '导出.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
+              { code: 'myPrint', name: '打印', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false },
+              { code: 'myExport', name: '导出.csv', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false }
             ]
           ]
         },
         footer: {
           options: [
             [
-              { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
+              { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false }
             ]
           ]
         },
         visibleMethod ({ options, column }) {
           // 示例：只有 name 列允许操作，清除按钮只能在 age 才显示
           // 显示之前处理按钮的操作权限
-          const isDisabled = !column || column.property !== 'name'
-          const isVisible = column && column.property === 'age'
+          const isDisabled = !column || column.field !== 'name'
+          const isVisible = column && column.field === 'age'
           options.forEach(list => {
             list.forEach(item => {
               if (item.code === 'copy') {
@@ -119,8 +123,8 @@ export default defineComponent({
             if (columnIndex === 0) {
               return '和值'
             }
-            if (['age'].includes(column.property)) {
-              return sumNum(data, column.property)
+            if (['age'].includes(column.field)) {
+              return sumNum(data, column.field)
             }
             return '-'
           })
@@ -130,26 +134,32 @@ export default defineComponent({
 
     const cellContextMenuEvent: VxeGridEvents.CellMenu = ({ row }) => {
       const $grid = xGrid.value
-      $grid.setCurrentRow(row)
+      if ($grid) {
+        $grid.setCurrentRow(row)
+      }
     }
 
     const contextMenuClickEvent: VxeGridEvents.MenuClick = ({ menu, row, column }) => {
       const $grid = xGrid.value
-      switch (menu.code) {
-        case 'copy':
-          if (row && column) {
-            VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
-          }
-          break
-        case 'clear':
-          $grid.clearData(row, column.property)
-          break
-        case 'myPrint':
-          $grid.print()
-          break
-        case 'myExport':
-          $grid.exportData()
-          break
+      if ($grid) {
+        switch (menu.code) {
+          case 'copy':
+            if (row && column) {
+              if (XEClipboard.copy(row[column.field])) {
+                VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
+              }
+            }
+            break
+          case 'clear':
+            $grid.clearData(row, column.field)
+            break
+          case 'myPrint':
+            $grid.print()
+            break
+          case 'myExport':
+            $grid.exportData()
+            break
+        }
       }
     }
 
@@ -169,10 +179,11 @@ export default defineComponent({
         `
         import { defineComponent, reactive, ref } from 'vue'
         import { VXETable, VxeGridInstance, VxeGridProps, VxeGridEvents } from 'vxe-table'
+        import XEClipboard from 'xe-clipboard'
 
         export default defineComponent({
           setup () {
-            const xGrid = ref({} as VxeGridInstance)
+            const xGrid = ref<VxeGridInstance>()
 
             const sumNum = (list: any[], field: string) => {
               let count = 0
@@ -184,9 +195,13 @@ export default defineComponent({
 
             const gridOptions = reactive<VxeGridProps>({
               border: true,
-              resizable: true,
               showFooter: true,
-              highlightCurrentRow: true,
+              rowConfig: {
+                isCurrent: true
+              },
+              columnConfig: {
+                resizable: true
+              },
               columns: [
                 { type: 'checkbox', width: 50 },
                 { type: 'seq', width: 60 },
@@ -207,35 +222,35 @@ export default defineComponent({
                 header: {
                   options: [
                     [
-                      { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
+                      { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false }
                     ]
                   ]
                 },
                 body: {
                   options: [
                     [
-                      { code: 'copy', name: '复制内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
+                      { code: 'copy', name: '复制内容', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false },
                       { code: 'clear', name: '清除内容', visible: true, disabled: false },
                       { code: 'reload', name: '刷新表格', visible: true, disabled: false }
                     ],
                     [
-                      { code: 'myPrint', name: '打印', prefixIcon: 'fa fa-print', visible: true, disabled: false },
-                      { code: 'myExport', name: '导出.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
+                      { code: 'myPrint', name: '打印', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false },
+                      { code: 'myExport', name: '导出.csv', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false }
                     ]
                   ]
                 },
                 footer: {
                   options: [
                     [
-                      { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
+                      { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'vxe-icon-question-circle-fill', visible: true, disabled: false }
                     ]
                   ]
                 },
                 visibleMethod ({ options, column }) {
                   // 示例：只有 name 列允许操作，清除按钮只能在 age 才显示
                   // 显示之前处理按钮的操作权限
-                  const isDisabled = !column || column.property !== 'name'
-                  const isVisible = column && column.property === 'age'
+                  const isDisabled = !column || column.field !== 'name'
+                  const isVisible = column && column.field === 'age'
                   options.forEach(list => {
                     list.forEach(item => {
                       if (item.code === 'copy') {
@@ -255,8 +270,8 @@ export default defineComponent({
                     if (columnIndex === 0) {
                       return '和值'
                     }
-                    if (['age'].includes(column.property)) {
-                      return sumNum(data, column.property)
+                    if (['age'].includes(column.field)) {
+                      return sumNum(data, column.field)
                     }
                     return '-'
                   })
@@ -274,11 +289,13 @@ export default defineComponent({
               switch (menu.code) {
                 case 'copy':
                   if (row && column) {
-                    VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
+                    if (XEClipboard.copy(row[column.field])) {
+                      VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
+                    }
                   }
                   break
                 case 'clear':
-                  $grid.clearData(row, column.property)
+                  $grid.clearData(row, column.field)
                   break
                 case 'myPrint':
                   $grid.print()

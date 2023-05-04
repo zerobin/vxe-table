@@ -1,3 +1,8 @@
+/*
+ * @Date: 2023-05-04 11:39:00
+ * @LastEditors: 庄鸿斌
+ * @LastEditTime: 2023-05-04 15:36:49
+ */
 const path = require('path')
 const pkg = require('./package.json')
 const { defineConfig } = require('@vue/cli-service')
@@ -30,6 +35,9 @@ module.exports = defineConfig({
     },
     output: {
       library: 'VXETable'
+    },
+    externals: {
+      'highlight.js': 'hljs'
     }
   },
   chainWebpack (config) {

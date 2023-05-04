@@ -14,10 +14,10 @@
 
     <vxe-table
       border
-      resizable
       ref="xTable"
       id="toolbar_demo5"
       height="400"
+      :column-config="{resizable: true}"
       :custom-config="demo1.tableCustom"
       :data="demo1.tableData"
       @resizable-change="resizableChangeEvent">
@@ -39,12 +39,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
-import { VxeTablePropTypes, VxeTableInstance, VxeToolbarInstance, VxeTableEvents } from '../../../../types/index'
+import { VxeTablePropTypes, VxeTableInstance, VxeToolbarInstance, VxeTableEvents } from 'vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTable = ref({} as VxeTableInstance)
-    const xToolbar = ref({} as VxeToolbarInstance)
+    const xTable = ref<VxeTableInstance>()
+    const xToolbar = ref<VxeToolbarInstance>()
 
     const demo1 = reactive({
       tableData: [
@@ -60,7 +60,7 @@ export default defineComponent({
       tableCustom: {
         storage: true,
         checkMethod ({ column }) {
-          if (column.property === 'role') {
+          if (column.field === 'role') {
             return false
           }
           return true
@@ -70,20 +70,24 @@ export default defineComponent({
 
     const resizableChangeEvent: VxeTableEvents.ResizableChange = () => {
       const $table = xTable.value
-      const columns = $table.getColumns()
-      const customData = columns.map(column => {
-        return {
-          width: column.renderWidth
-        }
-      })
-      console.log(customData)
+      if ($table) {
+        const columns = $table.getColumns()
+        const customData = columns.map(column => {
+          return {
+            width: column.renderWidth
+          }
+        })
+        console.log(customData)
+      }
     }
 
     nextTick(() => {
       // 将表格和工具栏进行关联
       const $table = xTable.value
       const $toolbar = xToolbar.value
-      $table.connect($toolbar)
+      if ($table && $toolbar) {
+        $table.connect($toolbar)
+      }
     })
 
     return {
@@ -102,10 +106,10 @@ export default defineComponent({
 
         <vxe-table
           border
-          resizable
           ref="xTable"
           id="toolbar_demo5"
           height="400"
+          :column-config="{resizable: true}"
           :custom-config="demo1.tableCustom"
           :data="demo1.tableData"
           @resizable-change="resizableChangeEvent">
@@ -122,8 +126,8 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTable = ref({} as VxeTableInstance)
-            const xToolbar = ref({} as VxeToolbarInstance)
+            const xTable = ref<VxeTableInstance>()
+            const xToolbar = ref<VxeToolbarInstance>()
 
             const demo1 = reactive({
               tableData: [
@@ -139,7 +143,7 @@ export default defineComponent({
               tableCustom: {
                 storage: true,
                 checkMethod ({ column }) {
-                  if (column.property === 'role') {
+                  if (column.field === 'role') {
                     return false
                   }
                   return true

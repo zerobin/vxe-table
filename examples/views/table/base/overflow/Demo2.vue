@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 import { ref, reactive } from 'vue'
-import { VxeTablePropTypes } from 'vxe-table'
+import { VxeTablePropTypes } from '@types'
 
 const tableData = ref([
   { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },

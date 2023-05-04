@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-05-04 11:39:00
  * @LastEditors: 庄鸿斌
- * @LastEditTime: 2023-05-04 15:36:49
+ * @LastEditTime: 2023-05-04 18:26:53
  */
 const path = require('path')
 const pkg = require('./package.json')
@@ -30,14 +30,15 @@ module.exports = defineConfig({
     },
     resolve: {
       alias: {
-        '@': resolve('examples')
+        '@': resolve('examples'),
+        'vxe-table': resolve('packages/all.ts'),
+        '@types': resolve('types/all'),
+        '@styles': resolve('styles'),
+        '@packages': resolve('packages')
       }
     },
     output: {
       library: 'VXETable'
-    },
-    externals: {
-      'highlight.js': 'hljs'
     }
   },
   chainWebpack (config) {
@@ -54,7 +55,8 @@ module.exports = defineConfig({
       } else {
         config
           .set('externals', {
-            'xe-utils': XEUtils
+            'xe-utils': XEUtils,
+            'highlight.js': 'hljs'
           })
       }
     }

@@ -170,7 +170,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
-import { VxeTableInstance, VxeTableEvents, VxeColumnPropTypes } from 'vxe-table'
+import { VxeTableInstance, VxeTableEvents, VxeColumnPropTypes } from '@types'
 
 export default defineComponent({
   setup () {

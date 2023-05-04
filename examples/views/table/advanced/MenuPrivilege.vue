@@ -45,7 +45,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable, VxeTableInstance, VxeTableEvents, VxeTablePropTypes } from 'vxe-table'
+import { VXETable } from 'vxe-table'
+import { VxeTableInstance, VxeTableEvents, VxeTablePropTypes } from '@types'
 import XEClipboard from 'xe-clipboard'
 
 export default defineComponent({

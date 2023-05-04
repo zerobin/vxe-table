@@ -37,7 +37,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { VXETable, VxeTableInstance } from 'vxe-table'
+import { VXETable } from 'vxe-table'
+import { VxeTableInstance } from '@types'
 import XEUtils from 'xe-utils'
 
 interface RowVO {

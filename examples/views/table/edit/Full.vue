@@ -72,7 +72,8 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, nextTick, computed } from 'vue'
 import { useAppStore } from '@/store/app'
-import { VXETable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+import { VXETable } from 'vxe-table'
+import { VxeTableInstance, VxeToolbarInstance } from '@types'
 
 export default defineComponent({
   setup () {
@@ -282,7 +283,8 @@ export default defineComponent({
         `
         import { defineComponent, reactive, ref, nextTick, computed } from 'vue'
         import { useAppStore } from '@/store/app'
-        import { VXETable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+        import { VXETable } from 'vxe-table'
+import { VxeTableInstance, VxeToolbarInstance } from '@types'
 
         export default defineComponent({
           setup () {

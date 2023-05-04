@@ -38,8 +38,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance, VxeColumnPropTypes, VxeButtonEvents } from 'vxe-table'
-
+import { VxeTableInstance, VxeColumnPropTypes, VxeButtonEvents } from '@types'
 export default defineComponent({
   setup () {
     const demo1 = reactive({

@@ -41,8 +41,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VxeTableInstance } from 'vxe-table'
-
+import { VxeTableInstance } from '@types'
 export default defineComponent({
   setup () {
     const xTable = ref<VxeTableInstance>()
@@ -90,7 +89,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, ref } from 'vue'
-        import { VxeTableInstance } from 'vxe-table'
+        import { VxeTableInstance } from '@types'
 
         export default defineComponent({
           setup () {

@@ -53,7 +53,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeColumnPropTypes } from 'vxe-table'
+import { VxeColumnPropTypes } from '@types'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
@@ -122,7 +122,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
-        import { VxeColumnPropTypes } from 'vxe-table'
+        import { VxeColumnPropTypes } from '@types'
         import XEUtils from 'xe-utils'
 
         export default defineComponent({

@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeTablePropTypes } from 'vxe-table'
+import { VxeTablePropTypes } from '@types'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
@@ -228,7 +228,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
-        import { VxeTablePropTypes } from 'vxe-table'
+        import { VxeTablePropTypes } from '@types'
         import XEUtils from 'xe-utils'
 
         export default defineComponent({

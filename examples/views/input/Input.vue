@@ -241,7 +241,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeInputPropTypes, VxeInputDefines } from 'vxe-table'
+import { VxeInputPropTypes, VxeInputDefines } from '@types'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({

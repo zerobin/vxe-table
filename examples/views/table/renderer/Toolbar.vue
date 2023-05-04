@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeGridInstance } from 'vxe-table'
+import { VxeGridInstance } from '@types'
 
 export default defineComponent({
   setup () {

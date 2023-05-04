@@ -164,7 +164,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable, VxeTableInstance, VxeColumnPropTypes, VxeTablePropTypes } from 'vxe-table'
+import { VXETable } from 'vxe-table'
+import { VxeTableInstance, VxeColumnPropTypes, VxeTablePropTypes } from '@types'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({

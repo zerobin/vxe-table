@@ -1,3 +1,8 @@
+<!--
+ * @Date: 2023-05-04 14:56:37
+ * @LastEditors: 庄鸿斌
+ * @LastEditTime: 2023-05-04 18:15:30
+-->
 <template>
   <div class="my-filter-input">
     <vxe-input type="text" v-model="demo1.option.data" placeholder="支持回车筛选" @keyup="keyupEvent" @input="changeOptionEvent"></vxe-input>
@@ -6,7 +11,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, reactive } from 'vue'
-import { VxeInputEvents, VxeGlobalRendererHandles } from 'vxe-table'
+import { VxeInputEvents, VxeGlobalRendererHandles } from '@types'
 
 export default defineComponent({
   name: 'FilterInput',

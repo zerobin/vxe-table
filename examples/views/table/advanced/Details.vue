@@ -44,7 +44,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeTableEvents } from 'vxe-table'
+import { VxeTableEvents } from '@types'
 
 export default defineComponent({
   setup () {

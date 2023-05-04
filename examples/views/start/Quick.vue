@@ -222,7 +222,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, ref, reactive } from 'vue'
-        import { VxeGridProps } from 'vxe-table'
+        import { VxeGridProps } from '@types'
 
         interface UserVO {
           id: number;

@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeTablePropTypes, VxeTableEvents } from 'vxe-table'
+import { VxeTablePropTypes, VxeTableEvents } from '@types'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({

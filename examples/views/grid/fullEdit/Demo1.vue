@@ -6,7 +6,8 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue'
-import { VXETable, VxeGridInstance, VxeGridListeners, VxeGridProps } from 'vxe-table'
+import { VXETable } from 'vxe-table'
+import { VxeGridInstance, VxeGridListeners, VxeGridProps } from '@types'
 import XEUtils from 'xe-utils'
 
 const serveApiUrl = 'https://api.vxetable.cn/demo'

@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VxeColumnPropTypes } from 'vxe-table'
+import { VxeColumnPropTypes } from '@types'
 
 export default defineComponent({
   setup () {
@@ -67,7 +67,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, ref } from 'vue'
-        import { VxeColumnPropTypes } from 'vxe-table'
+        import { VxeColumnPropTypes } from '@types'
 
         export default defineComponent({
           setup () {

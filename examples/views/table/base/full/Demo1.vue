@@ -26,7 +26,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { VxeColumnPropTypes } from 'vxe-table'
+import { VxeColumnPropTypes } from '@types'
 
 const loading = ref(false)
 const tableData = ref<any[]>([])

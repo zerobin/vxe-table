@@ -49,7 +49,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable, VxeTableInstance } from 'vxe-table'
+import { VXETable } from 'vxe-table'
+import { VxeTableInstance } from '@types'
 
 export default defineComponent({
   setup () {
@@ -159,7 +160,8 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VXETable, VxeTableInstance } from 'vxe-table'
+        import { VXETable } from 'vxe-table'
+import { VxeTableInstance } from '@types'
 
         export default defineComponent({
           setup () {

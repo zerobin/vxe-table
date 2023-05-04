@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VxeTablePropTypes } from 'vxe-table'
+import { VxeTablePropTypes } from '@types'
 
 export default defineComponent({
   setup () {
@@ -133,7 +133,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, ref } from 'vue'
-        import { VxeTablePropTypes } from 'vxe-table'
+        import { VxeTablePropTypes } from '@types'
 
         export default defineComponent({
           setup () {

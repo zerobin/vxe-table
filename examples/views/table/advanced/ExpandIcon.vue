@@ -179,7 +179,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VXETable, VxeTablePropTypes } from 'vxe-table'
+import { VxeTablePropTypes } from '@types'
+import { VXETable } from 'vxe-table'
 
 export default defineComponent({
   setup () {
@@ -315,7 +316,7 @@ export default defineComponent({
                 { id: 10006, name: 'Test6', role: 'Designer', sex: '1', age: 21, address: 'test abc' }
               ]
             })
-          
+
             return {
               demo1
             }
@@ -463,7 +464,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
-        import { VxeTablePropTypes } from 'vxe-table'
+        import { VxeTablePropTypes } from '@types'
 
         export default defineComponent({
           setup () {

@@ -34,7 +34,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { VxeTableEvents } from 'vxe-table'
+import { VxeTableEvents } from '@types'
 
 interface RowVO {
   id: number

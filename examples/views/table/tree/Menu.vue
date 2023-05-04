@@ -60,7 +60,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance, VxeTablePropTypes, VxeTableEvents } from 'vxe-table'
+import { VxeTableInstance, VxeTablePropTypes, VxeTableEvents } from '@types'
 
 export default defineComponent({
   setup () {
@@ -195,7 +195,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VxeTableInstance, VxeTablePropTypes, VxeTableEvents } from 'vxe-table'
+        import { VxeTableInstance, VxeTablePropTypes, VxeTableEvents } from '@types'
 
         export default defineComponent({
           setup () {

@@ -1,3 +1,8 @@
+<!--
+ * @Date: 2023-05-04 14:56:37
+ * @LastEditors: 庄鸿斌
+ * @LastEditTime: 2023-05-04 17:39:00
+-->
 <template>
   <div>
     <vxe-grid
@@ -179,7 +184,8 @@
 
 <script lang="tsx" setup>
 import { reactive, ref } from 'vue'
-import { VXETable, VxeGridInstance, VxeGridProps } from 'vxe-table'
+import { VXETable } from 'vxe-table'
+import { VxeGridInstance, VxeGridProps } from '@types'
 
 interface RowVO {
   id: number

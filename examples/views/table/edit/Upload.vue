@@ -41,7 +41,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, nextTick } from 'vue'
-import { VXETable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+import { VXETable } from 'vxe-table'
+import { VxeTableInstance, VxeToolbarInstance } from '@types'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
@@ -123,7 +124,8 @@ export default defineComponent({
         `,
         `
         import { defineComponent, ref, nextTick } from 'vue'
-        import { VXETable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+        import { VXETable } from 'vxe-table'
+import { VxeTableInstance, VxeToolbarInstance } from '@types'
         import XEUtils from 'xe-utils'
 
         export default defineComponent({

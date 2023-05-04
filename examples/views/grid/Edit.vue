@@ -48,7 +48,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable, VxeGridInstance, VxeGridListeners, VxeGridProps } from 'vxe-table'
+import { VxeGridInstance, VxeGridListeners, VxeGridProps } from '@types'
+import { VXETable } from 'vxe-table'
 
 export default defineComponent({
   setup () {

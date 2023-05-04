@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VxeTableInstance, VxeTableEvents, VxeColumnPropTypes } from 'vxe-table'
+import { VxeTableInstance, VxeTableEvents, VxeColumnPropTypes } from '@types'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({

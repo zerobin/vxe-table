@@ -52,7 +52,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType, reactive, computed } from 'vue'
-import { VXETable, VxeGlobalRendererHandles } from 'vxe-table'
+import { VXETable } from 'vxe-table'
+import { VxeGlobalRendererHandles } from '@types'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({

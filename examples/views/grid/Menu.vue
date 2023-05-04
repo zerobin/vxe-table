@@ -31,7 +31,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable, VxeGridInstance, VxeGridProps, VxeGridEvents } from 'vxe-table'
+import { VxeGridInstance, VxeGridProps, VxeGridEvents } from '@types'
+import { VXETable } from 'vxe-table'
 import XEClipboard from 'xe-clipboard'
 
 export default defineComponent({

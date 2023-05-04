@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, nextTick } from 'vue'
-import { VxeGridProps } from 'vxe-table'
+import { VxeGridProps } from '@types'
 
 export default defineComponent({
   setup () {

@@ -21,7 +21,19 @@
     "paths": {
       "@/*": [
         "examples/*"
-      ]
+      ],
+      "vxe-table": [
+        "packages/all.ts"
+      ],
+      "@types": [
+        "types/all"
+      ],
+      "@styles/*": [
+        "styles/*"
+      ],
+      "@packages/*": [
+        "packages/*"
+      ],
     },
     "lib": [
       "esnext",

@@ -146,7 +146,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance, VxeTablePropTypes, VxeColumnPropTypes, VxePagerEvents, VxeButtonEvents } from 'vxe-table'
+import { VxeTableInstance, VxeTablePropTypes, VxeColumnPropTypes, VxePagerEvents, VxeButtonEvents } from '@types'
 
 export default defineComponent({
   setup () {

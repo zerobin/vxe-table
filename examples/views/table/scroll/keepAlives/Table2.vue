@@ -19,7 +19,7 @@
 
 <script lang="tsx">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
-import { VxeTableInstance } from 'vxe-table'
+import { VxeTableInstance } from '@types'
 
 export default defineComponent({
   setup () {

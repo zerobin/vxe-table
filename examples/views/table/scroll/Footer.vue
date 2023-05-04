@@ -15,7 +15,7 @@
 
 <script lang="tsx">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeGridInstance, VxeGridPropTypes, VxeGridProps } from 'vxe-table'
+import { VxeGridInstance, VxeGridPropTypes, VxeGridProps } from '@types'
 
 export default defineComponent({
   setup () {

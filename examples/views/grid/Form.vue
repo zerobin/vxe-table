@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeGridProps, VxeGridListeners } from 'vxe-table'
+import { VxeGridProps, VxeGridListeners } from '@types'
 
 export default defineComponent({
   setup () {

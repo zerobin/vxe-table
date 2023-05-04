@@ -42,7 +42,8 @@ import i18n from '../../i18n'
 import router from '../../router'
 import XEUtils from 'xe-utils'
 
-import { VXETable, VxeGridInstance, VxeGridProps } from 'vxe-table'
+import { VXETable } from 'vxe-table'
+import { VxeGridInstance, VxeGridProps } from '@types'
 
 import XEClipboard from 'xe-clipboard'
 import iconAPI from '../../api/icon'

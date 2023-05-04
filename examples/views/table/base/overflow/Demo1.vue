@@ -21,7 +21,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { VxeTablePropTypes } from 'vxe-table'
+import { VxeTablePropTypes } from '@types'
 
 const tableData = ref([
   { name: 'Test1', role: '前端', date: '内容显示原生 title', rate: 5, address: 'address1' },

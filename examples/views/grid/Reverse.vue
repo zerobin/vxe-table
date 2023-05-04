@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeGridProps } from 'vxe-table'
+import { VxeGridProps } from '@types'
 
 export default defineComponent({
   setup () {
@@ -122,7 +122,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
-        import { VxeGridProps } from 'vxe-table'
+        import { VxeGridProps } from '@types'
 
         export default defineComponent({
           setup () {
@@ -163,7 +163,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
-        import { VxeGridProps } from 'vxe-table'
+        import { VxeGridProps } from '@types'
 
         export default defineComponent({
           setup () {

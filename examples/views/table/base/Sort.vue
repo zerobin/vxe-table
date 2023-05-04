@@ -141,7 +141,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VxeColumnPropTypes, VxeTableEvents, VxeTablePropTypes } from 'vxe-table'
+import { VxeColumnPropTypes, VxeTableEvents, VxeTablePropTypes } from '@types'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
@@ -386,7 +386,7 @@ export default defineComponent({
               { name: '老徐11', role: '前端', num: 8, num1: 4636677, num2: '4636677' },
               { name: '小明111111', role: '测试', num: 7, num1: 5783537, num2: '5783537' }
             ])
-            
+
             const formatterNum2: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
               return XEUtils.commafy(Number(cellValue), { digits: 2 })
             }
@@ -420,7 +420,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, ref } from 'vue'
-        import { VxeTablePropTypes } from 'vxe-table'
+        import { VxeTablePropTypes } from '@types'
 
         export default defineComponent({
           setup () {

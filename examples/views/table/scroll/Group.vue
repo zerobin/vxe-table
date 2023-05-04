@@ -71,7 +71,7 @@
 
 <script lang="tsx">
 import { defineComponent, reactive, ref, onMounted, nextTick } from 'vue'
-import { VxeTableInstance } from 'vxe-table'
+import { VxeTableInstance } from '@types'
 
 export default defineComponent({
   setup () {
@@ -177,7 +177,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref, onMounted, nextTick } from 'vue'
-        import { VxeTableInstance } from 'vxe-table'
+        import { VxeTableInstance } from '@types'
 
         export default defineComponent({
           setup () {

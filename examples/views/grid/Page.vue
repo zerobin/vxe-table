@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeGridProps, VxePagerEvents } from 'vxe-table'
+import { VxeGridProps, VxePagerEvents } from '@types'
 
 export default defineComponent({
   setup () {

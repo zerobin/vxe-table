@@ -32,7 +32,7 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
-import { VxeGridInstance, VxeGridProps } from 'vxe-table'
+import { VxeGridInstance, VxeGridProps } from '@types'
 import XEUtils from 'xe-utils'
 
 const serveApiUrl = 'https://api.vxetable.cn/demo'

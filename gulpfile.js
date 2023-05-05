@@ -308,3 +308,10 @@ gulp.task('build', gulp.series('build_clean', 'copy_pack', 'build_modules', 'bui
     'es/index.common.js'
   ])
 }))
+
+gulp.task('build_examples', () => {
+  return gulp.src([
+    'examples/views/**/Demo*.vue'
+  ])
+    .pipe(gulp.dest('public/example'))
+})

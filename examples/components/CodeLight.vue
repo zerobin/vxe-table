@@ -58,7 +58,10 @@ const loadCode = () => {
       loading.value = false
     } else {
       loading.value = true
-      return fetch(`${process.env.BASE_URL}example/${compPath}.vue?v=${process.env.VUE_APP_DATE_NOW}`).then(response => response.text()).then(text => {
+      console.log(`${process.env.BASE_URL}example/${compPath}.vue?v=${process.env.VUE_APP_DATE_NOW}`)
+      return fetch(`/example/${compPath}.vue`).then(response => {
+        return response.text()
+      }).then(text => {
         codeText.value = text || ''
         codeMaps[compPath] = codeText.value
         buildCode()

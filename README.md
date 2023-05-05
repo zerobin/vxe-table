@@ -185,3 +185,17 @@ npm run lib
 
 
 #### 注意vscode使用volar插件格式化和禁用prettier插件校验
+
+
+#### 项目构建顺序
+```
+npm run lib:pack
+npm run lib:modules
+
+&& 
+npm run lib
+```
+#### 文档修改后对应需要执行gulp命令生成新的文件地址,CodeLight组件会引用publish中的example文件
+```
+lib:buildexamples
+```
